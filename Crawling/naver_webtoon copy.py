@@ -21,9 +21,9 @@ soup = bs(html, "html.parser")
 first_login = True
 
 # Genres = driver.find_elements(By.CLASS_NAME, "TagGroup__tag--xu0OH")
-Genres = ['일상', '스릴러', '개그', '무협&사극', '드라마', '감성', '스포츠', '먼치킨', '학원로맨스', '로판', '게임판타지',  '연예계', '이세계']
-Genres_for_Link = ['DAILY', 'THRILL', 'COMIC', 'HISTORICAL', 'DRAMA', 'SENSIBILITY', 'SPORTS', '먼치킨', '학원로맨스', '로판', '게임판타지', '연예계', '이세계']
-# 끝난 장르 : 로맨스, 판타지, 액션
+Genres = [ '드라마', '감성', '스포츠', '먼치킨', '학원로맨스', '로판', '게임판타지']
+Genres_for_Link = ['DRAMA', 'SENSIBILITY', 'SPORTS', '먼치킨', '학원로맨스', '로판', '게임판타지']
+# 끝난 장르 : 로맨스, 판타지, 액션, '일상', '스릴러', '개그', '무협&사극',
 
 # for g in Genres:
     # filename = 'naver_webtoon_{}'.format(g)
