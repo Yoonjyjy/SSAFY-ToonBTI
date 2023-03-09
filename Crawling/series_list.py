@@ -6,14 +6,14 @@ from bs4 import BeautifulSoup
 driver = webdriver.Chrome()
 
 # load the webpage
-base_url = "https://series.naver.com/novel/categoryProductList.series?categoryTypeCode=genre&genreCode=203&page={}"
+base_url = "https://series.naver.com/novel/categoryProductList.series?categoryTypeCode=all&page={}"
 page_num = 1
-Genre = '미스터리'
-filename = 'naver_novels_{}'.format(Genre)
+filename = 'naver_novels'
 
 # open the CSV file for writing
 with open(filename+'.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['Content', 'Link', 'Score', 'Author', 'Title', 'Genre', 'Image Source']
+    fieldnames = ['Content', 'Link', 'Score',
+                  'Author', 'Title', 'Image Source']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
 
@@ -44,7 +44,8 @@ with open(filename+'.csv', 'w', newline='', encoding='utf-8') as csvfile:
             title = titles[i+3]["title"] if i < len(titles) else ""
             img_src = img_srcs[i+3]["src"] if i < len(img_srcs) else ""
 
-            writer.writerow({'Content': content, 'Link': link, 'Score': score, 'Author': author, 'Title': title, 'Genre': Genre, 'Image Source': img_src})
+            writer.writerow({'Content': content, 'Link': link, 'Score': score,
+                            'Author': author, 'Title': title, 'Image Source': img_src})
 
         # break
         next_button = soup.select_one('p.pagenate > span.next > a[href]')
