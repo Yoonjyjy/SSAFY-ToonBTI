@@ -21,9 +21,9 @@ soup = bs(html, "html.parser")
 first_login = True
 
 # Genres = driver.find_elements(By.CLASS_NAME, "TagGroup__tag--xu0OH")
-Genres = ['일상', '스릴러', '개그', '무협&사극', '드라마', '감성', '스포츠', '먼치킨', '학원로맨스', '로판', '게임판타지',  '연예계', '이세계']
-Genres_for_Link = ['DAILY', 'THRILL', 'COMIC', 'HISTORICAL', 'DRAMA', 'SENSIBILITY', 'SPORTS', '먼치킨', '학원로맨스', '로판', '게임판타지', '연예계', '이세계']
-# 끝난 장르 : 로맨스, 판타지, 액션
+Genres = ['게임판타지']
+Genres_for_Link = ['게임판타지']
+# 끝난 장르 : 로맨스, 판타지, 액션, '일상', '스릴러', '개그', '무협&사극',, 드라마
 
 # for g in Genres:
     # filename = 'naver_webtoon_{}'.format(g)
@@ -128,6 +128,7 @@ for i in range(len(Genres_for_Link)):
             
             # 이미지 정보 가져오기
             while not soup.find('img', {'class': 'Poster__image--d9XTI'}):
+                print('a')
                 time.sleep(0.1)
             image = soup.find('img', {'class': 'Poster__image--d9XTI'})['src']
             # 제목 정보 가져오기
@@ -158,7 +159,6 @@ for i in range(len(Genres_for_Link)):
                 # print('writers[0].find : ', writers[0].find('span'))
                 # print('여기',writers[0].find('span').getText())
                 if writers[0].find('a'):
-                
                     story_author = writers[0].find('a').getText()
                 elif writers[0].find('span'):
                     story_author = writers[0].find('span').getText()
@@ -175,19 +175,33 @@ for i in range(len(Genres_for_Link)):
                     if writers[0].find('a').getText() == '글/그림':
                         story_author = writers[0].find('a').getText()
                         painting_author = writers[0].find('a').getText()
-                        author = writers[1].find('a').getText()
+                        if writers[1].find('a'):
+                            author = writers[1].find('a').getText()
+                        else:
+                            author = writers[1].find('span').getText()
+                            
                     else:
                         story_author = writers[0].find('a').getText()
-                        painting_author = writers[1].find('a').getText()
+                        if writers[1].find('a'):
+                            painting_author = writers[1].find('a').getText()
+                        else:
+                            painting_author = writers[1].find('span').getText()
                         author = ''
-                elif writers[0].find('span'):
+                else:
                     if writers[0].find('span').getText() == '글/그림':
                         story_author = writers[0].find('span').getText()
                         painting_author = writers[0].find('span').getText()
-                        author = writers[1].find('span').getText()
+                        if writers[1].find('a'):
+                            author = writers[1].find('a').getText()
+                        else:
+                            author = writers[1].find('span').getText()
+                            
                     else:
                         story_author = writers[0].find('span').getText()
-                        painting_author = writers[1].find('span').getText()
+                        if writers[1].find('a'):
+                            painting_author = writers[1].find('a').getText()
+                        else:
+                            painting_author = writers[1].find('span').getText()
                         author = ''
             
             # 작품소개 정보 가져오기
