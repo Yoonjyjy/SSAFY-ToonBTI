@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Route, Routes } from 'react-router-dom';
 import styled from "styled-components";
 import "./App.css";
-import { Header, Modal } from "./components";
+import { Header, Modal } from './components';
 import { Home } from "./pages";
 function App() {
   const [modal, setModal] = useState<boolean>(false);
@@ -11,17 +11,10 @@ function App() {
 
   return (
     <AppDiv>
-      <Header modal={modal} setModal={setModal}/>
+      <Header modal={modal} setModal={setModal} setType={setType} setUrl={setUrl}/>
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
-      {modal && 
-        <Modal 
-          type={type} 
-          modal={modal} 
-          setModal={setModal} 
-          url={url}/>
-      }
     </AppDiv>
   );
 }
