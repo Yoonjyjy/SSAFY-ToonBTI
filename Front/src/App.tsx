@@ -1,34 +1,33 @@
-import React from "react";
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import React, { useState } from "react";
+import { Route, Routes } from 'react-router-dom';
+import styled from "styled-components";
 import "./App.css";
+import { Header, Modal } from "./components";
+import { Home } from "./pages";
 function App() {
-  const [count, setCount] = useState(0);
+  const [modal, setModal] = useState<boolean>(false);
+  const [type, setType] = useState<String>("");
+  const [url, setUrl] = useState<String>("");
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <AppDiv>
+      <Header modal={modal} setModal={setModal}/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+      {modal && 
+        <Modal 
+          type={type} 
+          modal={modal} 
+          setModal={setModal} 
+          url={url}/>
+      }
+    </AppDiv>
   );
 }
+
+const AppDiv = styled.div`
+
+`
 
 export default App;
