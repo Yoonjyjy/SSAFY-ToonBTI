@@ -1,2 +1,0 @@
-const REACT_APP_NAVER_REDIRET_URI = "http://localhost:5173/oauth/naver/callback";
-export const NAVER_AUTH_URL = `	https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&state=${STATE_STRING}&redirect_uri=${REACT_APP_NAVER_REDIRET_URI}`
