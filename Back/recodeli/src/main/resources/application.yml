@@ -8,31 +8,31 @@ spring:
             enable: 'true'
           auth: 'true'
     host: smtp.gmail.com
-    password: bljiyyyveuairlmb
+    password: odhzjtjonepisuqm
     port: '587'
   security:
     oauth2:
       client:
         registration:
           kakao:
-            client-secret: wKas7eenfnZjKdSnDMMMv0nLwZvCuass
+            client-secret: sOfXzlb5VqZ53F8fXBE093VaGqxQ3QJM
             authorization-grant-type: authorization_code
-            client-id: 0018c14a3078270bc96ab118d3b5571a
+            client-id: 5198c023eb72403d4f51b7b007cef5e3
             scope: profile_nickname,account_email
             client-authentication-method: POST
-            redirect-uri: https://togetdog.site/oauth2/code/{registrationId}
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
             client-name: Kakao
           naver:
-            client-id: 7fC7r9ej9wWJa4f_FEb_
+            client-id: aXsmLMcjsQENHcuX_ANv
             client-name: Naver
-            redirect-uri: https://togetdog.site/oauth2/code/{registrationId}
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
             authorization-grant-type: authorization_code
             scope: email,nickname
-            client-secret: yhagYvWP16
+            client-secret: fV4mRVk2_5
           google:
-            client-id: 1075413009852-5g0hlfila6rpqtjpnv06b8ispbdorb6e.apps.googleusercontent.com
-            client-secret: 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
-            redirect-uri: https://togetdog.site/oauth2/code/{registrationId}
+            client-id: 673256025189-gfisd4bv96rbcf20ruio1l9k8odf053d.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
             scope: email,profile
         provider:
           naver:
@@ -55,15 +55,18 @@ spring:
       connection-timeout: '5000'
       max-lifetime: '1800000'
       minimum-idle: '10'
-    password: ??a302
+    password: xmrghka302
     url: jdbc:mysql://43.200.255.205:3333/recodeli?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: unni
   jpa:
+    open-in-view: 'false'
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-    open-in-view: 'false'
+        format_sql: true
+        hbm2ddl:
+          auto: create-drop
   servlet:
     multipart:
       max-request-size: 50MB
