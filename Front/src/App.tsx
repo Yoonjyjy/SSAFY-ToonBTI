@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Route, Routes } from 'react-router-dom';
 import styled from "styled-components";
 import "./App.css";
-import { Header, SocialLogin } from './components';
+import { GoogleOauth2Login, Header, KakaoOauth2Login, NaverOauth2Login, SocialLogin } from './components';
 import { Home } from "./pages";
 
 function App() {
@@ -14,7 +14,9 @@ function App() {
       <Header modal={modal} setModal={setModal} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="redirect" element={<SocialLogin />} />
+        <Route path="/auth/kakao/callback" element={<KakaoOauth2Login />} />
+        <Route path="/auth/naver/callback" element={<NaverOauth2Login />} />
+        <Route path="/auth/google/callback" element={<GoogleOauth2Login />} />
       </Routes>
     </div>
   );

@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { KAKAO_AUTH_URL } from "../../shared/OAuthKakao.js";
+import { NAVER_AUTH_URL } from "../../shared/OAuthNaver.js";
+import { GOOGLE_AUTH_URL } from "../../shared/OAuthGoogle.js";
 
 interface HomeModalProps{
     type: string;
@@ -19,17 +22,17 @@ function Modal({ type, modal } : HomeModalProps){
       <Wrapper modal={modal}>
         <ModalDiv onClick={(e) => e.stopPropagation()}>
           <div>
-            <a href=""> {/* BACKEND 카카오 로그인 url */}
+            <a href={KAKAO_AUTH_URL}> {/* BACKEND 카카오 로그인 url */}
               {/* 카카오 로고 */}
             </a>
           </div>
           <div>
-            <a href=""> {/* BACKEND 네이버 로그인 url */}
+            <a href={NAVER_AUTH_URL}> {/* BACKEND 네이버 로그인 url */}
               {/* 네이버 로고 */}
             </a>
           </div>
           <div>
-              <a href=""> {/* BACKEND 구글 로그인 url */}
+              <a href={GOOGLE_AUTH_URL}> {/* BACKEND 구글 로그인 url */}
                 {/* 구글 로고 */}
               </a>
           </div>
