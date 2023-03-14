@@ -2,13 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 interface ModalProps {
-    onClick: () => void;
+  setModal: (value: boolean) => void;
 }
 
-function Dimmer({ onClick } : ModalProps){
-   
+function Dimmer({ setModal } : ModalProps){
+
+  function handleClick(){
+    setModal(false);
+  }
+  
   return (
-    <DimmerDiv onClick={onClick}></DimmerDiv>
+    <DimmerDiv onClick={handleClick}></DimmerDiv>
   )
 }
 

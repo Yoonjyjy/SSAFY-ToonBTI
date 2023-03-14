@@ -1,40 +1,36 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import styled from "styled-components";
 
-// interface HomeModalProps{
-//     type: String;
-//     // children: ReactNode;
-//     modal: boolean;
-//     url: String;
-//     setModal?: (value:boolean) => void;
-// }
+interface HomeModalProps{
+    type: string;
+    modal: boolean;
+    setModal?: (value:boolean) => void;
+}
 /**
-  Modal창 
+  Modal창을 만드는 모듈입니다. 
   @param(string) type : 모달의 종류
   @param(boolean) modal : 모달의 개폐 여부
 */ 
-function Modal({ type, modal }){ 
+
+function Modal({ type, modal } : HomeModalProps){ 
 
   if (type === 'login'){
     return (
       <Wrapper modal={modal}>
         <ModalDiv onClick={(e) => e.stopPropagation()}>
           <div>
-            <a href="">
+            <a href=""> {/* BACKEND 카카오 로그인 url */}
               {/* 카카오 로고 */}
-              <p>카카오 로그인</p>
             </a>
           </div>
           <div>
-            <a href="">
+            <a href=""> {/* BACKEND 네이버 로그인 url */}
               {/* 네이버 로고 */}
-              <p>네이버 로그인</p>
             </a>
           </div>
           <div>
-              <a href="">
+              <a href=""> {/* BACKEND 구글 로그인 url */}
                 {/* 구글 로고 */}
-                <p>구글 로그인</p>
               </a>
           </div>
         </ModalDiv>
@@ -49,7 +45,7 @@ function Modal({ type, modal }){
 }
 
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ modal: boolean }>`  
   width: 100%;
   height: 100%;
   overflow: ${(props) => props.modal? "hidden" : "auto" }

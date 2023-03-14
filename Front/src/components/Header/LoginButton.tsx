@@ -2,8 +2,12 @@ import React from "react";
 import { Dimmer, Modal } from "..";
 import styled from "styled-components";
 
-function LoginButton(props){
-    const { modal, setModal } = props;
+interface LoginBtnProps {
+    modal: boolean;
+    setModal: (value: boolean) => void;
+};
+
+function LoginButton({ modal, setModal } : LoginBtnProps){
 
     function openModal(){
         if(modal){
@@ -17,7 +21,7 @@ function LoginButton(props){
             <div onClick={openModal}>Login</div>
             {modal && 
                 <>
-                <Dimmer setModal={setModal} onClick={()=>setModal()} />
+                <Dimmer setModal={setModal} />
                 <Modal 
                     type="login" 
                     modal={modal} 
