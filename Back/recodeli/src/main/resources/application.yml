@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    default: local
   mail:
     username: ssafy.recodeli@gmail.com
     properties:
@@ -55,18 +57,9 @@ spring:
       connection-timeout: '5000'
       max-lifetime: '1800000'
       minimum-idle: '10'
-    password: xmrghka302
-    url: jdbc:mysql://43.200.255.205:3333/recodeli?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: unni
   jpa:
     open-in-view: 'false'
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        hbm2ddl:
-          auto: create-drop
   servlet:
     multipart:
       max-request-size: 50MB

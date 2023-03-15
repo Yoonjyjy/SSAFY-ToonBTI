@@ -1,0 +1,25 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
+          naver:
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
+          google:
+            redirect-uri: http://localhost:8080/oauth2/code/{registrationId}
+  datasource:
+    username: unni
+    password: xmrghka302
+    url: jdbc:mysql://43.200.255.205:3333/recodeli?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
