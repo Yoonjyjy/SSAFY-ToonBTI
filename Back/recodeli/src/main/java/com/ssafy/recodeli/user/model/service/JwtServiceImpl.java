@@ -49,12 +49,12 @@ public class JwtServiceImpl implements JwtService {
 
 	@Override
 	public <T> String createAccessToken(long userId) {
-		return create(userId, "togetDog", 1000 * 60 * 60 * 24 * ACCESS_TOKEN_EXPIRE_MINUTES);
+		return create(userId, "recodeli", 1000 * 60 * 60 * 24 * ACCESS_TOKEN_EXPIRE_MINUTES);
 	}
 	
 	@Override
 	public <T> String createAccessToken(long userId, String role) {
-		return create(userId, "togetDog", 1000 * 10 * 60 * 24 * ACCESS_TOKEN_EXPIRE_MINUTES, role);
+		return create(userId, "recodeli", 1000 * 10 * 60 * 24 * ACCESS_TOKEN_EXPIRE_MINUTES, role);
 	}
 
 	@Override

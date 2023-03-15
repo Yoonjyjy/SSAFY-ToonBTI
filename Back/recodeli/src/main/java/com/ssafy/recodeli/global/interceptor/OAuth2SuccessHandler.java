@@ -40,7 +40,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             logger.debug("Response를 이미 받으셨습니다. 다음URL에 리다이렉트 할 수 없습니다. URL: " + targetUrl);
             return;
         }
-		getRedirectStrategy().sendRedirect(request, response, targetUrl);
+		getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000"+targetUrl);
 	}
 	
 	protected String getTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
