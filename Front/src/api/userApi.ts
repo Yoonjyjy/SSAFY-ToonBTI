@@ -10,4 +10,12 @@ export default {
 
   // 구글 로그인
   googleLogin: () => api.get(`구글 로그인 be url`),
+
+  signUp: (token: string | null, formData: any) =>
+    api.post(`소셜 유저 회원가입 be url`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: token,
+      },
+    }),
 }
