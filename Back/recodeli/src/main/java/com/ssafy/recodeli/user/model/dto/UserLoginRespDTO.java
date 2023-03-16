@@ -19,14 +19,12 @@ public class UserLoginRespDTO {
 	private String email;
 	private long userId;
 	private String nickName;
-	private String address;
 	
     public static UserLoginRespDTO of(User user) {
     	return UserLoginRespDTO.builder()
     			.email(user.getEmail())
     			.userId(user.getUserId())
     			.nickName(user.getNickName())
-    			.address(user.getAddress())
     			.build();
     }
 }

@@ -51,35 +51,22 @@ public class User implements UserDetails {
     @Column(name = "nickname", length = 16, unique = true)
     private String nickName;
     
+    @Column(name = "age", length = 4)
+    private String userAge;
+
     @JsonIgnore
     @Column(name = "password", length = 64)
     @NotNull
     private String password;
-    
-    @Column(name = "user_birth", length = 4)
-    private String userBirth;
-    
-    @Column(name = "user_gender", length = 1)
+
+    @Column(name = "gender", length = 1)
     @Size(min = 1, max = 1)
     private String gender;
-    
-    @Column(name = "address", length = 100)
-    private String address;
-    
-    @Column(name = "region_code", length = 5)
-    @Size(min = 5, max = 5)
-    private String regionCode;
-    
+
     // g구글, k카카오, n네이버, o일반가입
     @Column(name = "social")
     @Enumerated(EnumType.STRING)
     private ProviderType social;
-    
-    @Column(name = "rating_sum")
-    private long ratingSum;
-    
-    @Column(name = "rating_count")
-    private long ratingCount;
     
     @Column(name = "ROLE_TYPE", length = 20)
     @Enumerated(EnumType.STRING)
