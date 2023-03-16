@@ -36,21 +36,21 @@ function Login() {
     <>
       <h4>소셜 로그인</h4>
       <p>간편하게 가지고 계신 소셜 계정으로 이용하세요!</p>
-      <div onClick={() => handleLoginClick('kakao')}>
-        <a href={base_url + 'kakao'}>
-          <LoginButton src={kakao_btn} />
-        </a>
-      </div>
-      <div onClick={() => handleLoginClick('naver')}>
-        <a href={base_url + 'naver'}>
-          <LoginButton src={naver_btn} />
-        </a>
-      </div>
-      <div onClick={() => handleLoginClick('google')}>
-        <a href={base_url + 'google'}>
-          <LoginButton src={google_btn} />
-        </a>
-      </div>
+      {/* <div onClick={() => handleLoginClick('kakao')}> */}
+      <a href={base_url + 'kakao'}>
+        <LoginButton src={kakao_btn} />
+      </a>
+      {/* </div> */}
+      {/* <div onClick={() => handleLoginClick('naver')}> */}
+      <a href={base_url + 'naver'}>
+        <LoginButton src={naver_btn} />
+      </a>
+      {/* </div> */}
+      {/* <div onClick={() => handleLoginClick('google')}> */}
+      <a href={base_url + 'google'}>
+        <LoginButton src={google_btn} />
+      </a>
+      {/* </div> */}
     </>
   )
 }
