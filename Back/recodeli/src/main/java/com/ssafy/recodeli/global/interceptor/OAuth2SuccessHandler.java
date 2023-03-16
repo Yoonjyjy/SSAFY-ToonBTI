@@ -40,7 +40,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             logger.debug("Response를 이미 받으셨습니다. 다음URL에 리다이렉트 할 수 없습니다. URL: " + targetUrl);
             return;
         }
-		getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000"+targetUrl);
+		getRedirectStrategy().sendRedirect(request, response, "http://127.0.0.1:5173"+targetUrl);
 	}
 	
 	protected String getTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -73,7 +73,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					.nickName(userPrincipal.getAttribute("nickname"))
 					.social(userPrincipal.getAttribute("social"))
 					.build();
-			return UriComponentsBuilder.fromUriString("/socialsignup")
+			return UriComponentsBuilder.fromUriString("/signup")
 	                .queryParam("user", UserSocialLoginRespDTO.of(user))
 	                .build()
 	                .encode()

@@ -23,6 +23,9 @@ repositories {
 }
 
 dependencies {
+	// graphql
+	implementation 'org.springframework.boot:spring-boot-starter-graphql'
+
 	// jdbc, jpa, db setting
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'

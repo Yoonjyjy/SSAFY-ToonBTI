@@ -21,9 +21,7 @@ public class UserSocialRegistParamDTO {
 	private String email;
 	private String nickname;
 	private String gender;
-	private String birth;
-	private String address;
-	private String regionCode;
+	private String age;
 	private String social;
 	
 	public static User of(UserSocialRegistParamDTO userDTO) {
@@ -34,12 +32,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.K)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		} else if (receivedSocial.equals("G")) {
@@ -48,12 +42,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.G)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		} else {
@@ -62,12 +52,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.N)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		}
