@@ -67,6 +67,7 @@ spring:
   graphql:
     graphiql:
       enabled: true
+      path: /graphiql
 jwt:
   secret: SeC51aWtGJk235jGHw412agHsGQ2asdfaw25asdfaAGAS
 logging:

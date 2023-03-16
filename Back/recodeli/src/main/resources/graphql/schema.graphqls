@@ -1,25 +1,25 @@
-type Query{
-    user: User
-}
-type Mutation {
-    addUser(user: UserInput): User
+schema {
+    query: Query,
+    mutation: Mutation
 }
 
-input UserInput {
-    nickname: String!
-    email: String!
-    gender: String!
-    age: String!
-    social: String!
+type Mutation {
+    registerUser(
+        nickname: String!
+
+    ): User
+}
+type Query{
+    userById(id: ID): User
 }
 
 type User {
-    userId: ID
-    nickName: String
-    email: String
-    gender: String
-    userAge: Int
-    social: String
-    roleType: String
-    password: String
+    id: ID
+    nickname: String!
+    email: String!
+    gender: String!
+    age: Int!
+    address: String!
+    regionCode: Int!
+    roleType: String!
 }

@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			int birth = Integer.parseInt(userDTO.getAge());
 //			LocalDate now = LocalDate.now();
-			if (birth > 60 || birth < 0) {
+			if (birth > 100 || birth < 0) {
 				throw new InvalidInputException("생년월일 값이 올바르지 않습니다.");
 			}
 		} catch (NumberFormatException e) {
@@ -188,6 +188,7 @@ public class UserServiceImpl implements UserService {
 	public void checkUpdateValidation(UserUpdateParamDTO userDTO) {
 		String nicknameRegexp = "^[a-zA-Z가-힇0-9]{2,16}$";
 		String genderRegexp = "^female$|^male$|^none$";
+		String regionCodeRegexp = "(^[0-9]{5}$)";
 		
 		// null check
 		if (userDTO.getNickName() == null) {
@@ -211,7 +212,8 @@ public class UserServiceImpl implements UserService {
 		// birth check
 		try {
 			int birth = Integer.parseInt(userDTO.getAge());
-			if (birth > 60 || birth < 0) {
+			LocalDate now = LocalDate.now();
+			if (birth > now.getYear() || birth < 1900) {
 				throw new InvalidInputException("생년월일 값이 올바르지 않습니다.");
 			}
 		} catch (NumberFormatException e) {
