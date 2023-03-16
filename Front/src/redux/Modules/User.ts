@@ -1,7 +1,7 @@
 // Redux User
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { useNavigate } from 'react-router-dom'
+import { gql, useQuery } from '@apollo/client'
 import UserAPI from '../../api/userApi'
 
 export const asyncLogin = createAsyncThunk(
@@ -32,7 +32,7 @@ export const asyncSignUp = createAsyncThunk(
   // type
   'userSlice/asyncSignUp',
   // function
-  async (userData) => {
+  async (userData: FormData) => {
     const token = localStorage.getItem('token')
     const signUpRes = await UserAPI.signUp(token, userData)
     if (!signUpRes) {

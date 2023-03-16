@@ -1,11 +1,10 @@
-import React from "react";
+import React from 'react'
 
-function Home(){
-  
-  return (
-    <div>
-    </div>
-  )
+interface HomeProps {
+  isLogin: boolean
+}
+function Home({ isLogin }: HomeProps) {
+  return <div></div>
 }
 
-export default Home;
+export default Home

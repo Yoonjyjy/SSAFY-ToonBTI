@@ -24,6 +24,10 @@ interface InputType {
   dislikeG: string[]
 }
 
+interface SignUpProps {
+  isLogin: boolean
+}
+
 const genderBtnList: GenderBtnType[] = [
   {
     btn_id: 1,
@@ -82,7 +86,7 @@ const genreBtnList: GenreBtnType[] = [
   },
 ]
 
-const SignUp = () => {
+const SignUp = ({ isLogin }: SignUpProps) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const [profilePreview, setProfilePreview] = useState(download)
@@ -182,13 +186,15 @@ const SignUp = () => {
     // redux-toolkit
     e.preventDefault()
     const formData = new FormData()
-    formData.append('profileImg', inputs.profileImg)
+    // formData.append('profileImg', inputs.profileImg)
     formData.append('age', inputs.age.toString())
     formData.append('gender', inputs.gender)
     formData.append('favoriteG', JSON.stringify(inputs.favoriteG))
     formData.append('dislikeG', JSON.stringify(inputs.dislikeG))
 
-    dispatch(asyncSignUp(formData)).then(navigate('/'))
+    dispatch(asyncSignUp(formData)).then(() => {
+      navigate('/')
+    })
   }
 
   return (
