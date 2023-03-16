@@ -23,6 +23,9 @@ repositories {
 }
 
 dependencies {
+	// valid
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	// graphql
 	implementation 'org.springframework.boot:spring-boot-starter-graphql'
 
