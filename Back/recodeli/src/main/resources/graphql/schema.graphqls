@@ -9,16 +9,17 @@ input UserInput {
     nickname: String!
     email: String!
     gender: String!
-    age: Int!
-    address: String!
+    age: String!
     social: String!
 }
 
 type User {
-    id: ID
-    nickname: String!
-    email: String!
-    gender: String!
-    age: Int!
-    address: String!
+    userId: ID
+    nickName: String
+    email: String
+    gender: String
+    userAge: Int
+    social: String
+    roleType: String
+    password: String
 }
