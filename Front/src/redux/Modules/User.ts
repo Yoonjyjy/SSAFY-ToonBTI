@@ -1,32 +1,30 @@
 // Redux User
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { gql, useQuery } from '@apollo/client'
 import UserAPI from '../../api/userApi'
 
-export const asyncLogin = createAsyncThunk(
-  // type
-  'userSlice/asyncLogin',
-  // function
-  async (type: string) => {
-    let response
+// export const asyncLogin = createAsyncThunk(
+//   // type
+//   'userSlice/asyncLogin',
+//   // function
+//   async (type: string) => {
+//     let response
 
-    if (type === 'kakao') {
-      response = await UserAPI.kakaoLogin()
-    } else if (type === 'naver') {
-      response = await UserAPI.naverLogin()
-    } else if (type === 'google') {
-      response = await UserAPI.naverLogin()
-    }
+//     if (type === 'kakao') {
+//       response = await UserAPI.kakaoLogin()
+//     } else if (type === 'naver') {
+//       response = await UserAPI.naverLogin()
+//     } else if (type === 'google') {
+//       response = await UserAPI.naverLogin()
+//     }
 
-    if (!response) {
-      throw new Error('err')
-    }
-    // 로그인한거라면
-    localStorage.setItem('token', response.data.token)
-    return response.data.token
-  },
-)
+//     if (!response) {
+//       throw new Error('err')
+//     }
+//     // 로그인한거라면
+//     localStorage.setItem('token', response.data.token)
+//     return response.data.token
+//   },
+// )
 
 export const asyncSignUp = createAsyncThunk(
   // type
@@ -41,6 +39,20 @@ export const asyncSignUp = createAsyncThunk(
     return signUpRes.data
   },
 )
+
+export const asyncGetUser = createAsyncThunk(
+  // type
+  'userSlice/asyncGetUser',
+  // function
+  async () => {
+    const response = await UserAPI.getUser()
+    if (!response) {
+      throw new Error('err')
+    }
+    return response.data
+  },
+)
+
 // reducer
 
 const userSlice = createSlice({
@@ -52,17 +64,17 @@ const userSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    //async login
-    builder.addCase(asyncLogin.pending, (state) => {
-      state.is_loading = 'pending'
-    })
-    builder.addCase(asyncLogin.fulfilled, (state, action) => {
-      state.is_loading = 'succeeded'
-      state.user = action.payload
-    })
-    builder.addCase(asyncLogin.rejected, (state) => {
-      state.is_loading = 'failed'
-    })
+    // async login
+    // builder.addCase(asyncLogin.pending, (state) => {
+    //   state.is_loading = 'pending'
+    // })
+    // builder.addCase(asyncLogin.fulfilled, (state, action) => {
+    //   state.is_loading = 'succeeded'
+    //   state.user = action.payload
+    // })
+    // builder.addCase(asyncLogin.rejected, (state) => {
+    //   state.is_loading = 'failed'
+    // })
     //async signup
     builder.addCase(asyncSignUp.pending, (state) => {
       state.is_loading = 'pending'

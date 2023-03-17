@@ -1,9 +1,14 @@
 .selected {
-  border: 1px solid blue;
+  border: 1px solid antiquewhite;
+  background-color: antiquewhite;
   width: 100px;
+  border-radius: 10px;
+  margin: 2px;
 }
 
 .unselected {
-  border: 1px solid black;
+  border: 1px solid darkgray;
+  border-radius: 10px;
+  margin: 2px;
   width: 100px;
 }
