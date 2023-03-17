@@ -122,7 +122,6 @@ const SignUp = ({ isLogin }: SignUpProps) => {
   }, [])
 
   // const [profilePreview, setProfilePreview] = useState(download)
-  const profileImgRef = useRef<HTMLInputElement>(null)
   // const [inputs, setInputs] = useState<InputType>({
   //   profileImg: null,
   //   gender: '',
@@ -131,6 +130,8 @@ const SignUp = ({ isLogin }: SignUpProps) => {
   //   dislikeG: [],
   // })
   function checkDuplicate() {}
+
+  const profileImgRef = useRef<HTMLInputElement>(null)
   function handleInputClick() {
     if (profileImgRef.current !== null) {
       profileImgRef.current.click()
@@ -204,11 +205,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
 
   const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setInputs({
-        ...inputs,
-        profileImg: e.target.files[0],
-      })
-      encodeToBase64(e.target.files[0])
+      ;(profileImgRef = e.target.files[0]), encodeToBase64(e.target.files[0])
     }
   }
 
@@ -222,10 +219,10 @@ const SignUp = ({ isLogin }: SignUpProps) => {
     formData.append('nickname', nicknameRef.current)
     formData.append('social', social)
     formData.append('email', email)
-    formData.append('age', inputs.age.toString())
-    formData.append('gender', inputs.gender)
-    formData.append('favoriteG', JSON.stringify(inputs.favoriteG))
-    formData.append('dislikeG', JSON.stringify(inputs.dislikeG))
+    formData.append('age', ageRef)
+    formData.append('gender', genderRef)
+    formData.append('favoriteG', JSON.stringify(favoriteGRef.current))
+    formData.append('dislikeG', JSON.stringify(dislikeGRef.current))
 
     dispatch(asyncSignUp(formData)).then(() => {
       navigate('/')
@@ -234,7 +231,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
   const signUpWNoData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData()
-    formData.append('nickname', nickname.current)
+    formData.append('nickname', nicknameRef.current)
     formData.append('social', social)
     formData.append('email', email)
 
@@ -248,10 +245,10 @@ const SignUp = ({ isLogin }: SignUpProps) => {
         <form onSubmit={signUp}>
           <legend>회원가입</legend>
           <ProfileImgDiv>
-            {profilePreview && (
+            {profilePreviewRef && (
               <ProfileImg
                 onClick={handleInputClick}
-                src={profilePreview.current}
+                src={profilePreviewRef.current}
               ></ProfileImg>
             )}
             <input
@@ -265,10 +262,10 @@ const SignUp = ({ isLogin }: SignUpProps) => {
           <div>
             <input
               type="text"
-              defaultValue={nickname.current}
+              defaultValue={nicknameRef.current}
               placeholder="닉네임을 입력해주세요"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onChange(e, nickname)
+                onChange(e, nicknameRef)
               }
             />
             <button onClick={checkDuplicate}>중복 확인</button>
@@ -284,7 +281,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleGenderClick(item.value)
                   }}
                   className={
-                    item.value === inputs?.gender ? 'selected' : 'unselected'
+                    item.value === genderRef ? 'selected' : 'unselected'
                   }
                 >
                   {item.name}
@@ -315,7 +312,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleFavGenreClick(item.value)
                   }}
                   className={
-                    inputs?.favoriteG.includes(item.value)
+                    favoriteGRef.current.includes(item.value)
                       ? 'selected'
                       : 'unselected'
                   }
@@ -336,7 +333,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleDislikeGenreClick(item.value)
                   }}
                   className={
-                    inputs?.dislikeG.includes(item.value)
+                    dislikeGRef.current.includes(item.value)
                       ? 'selected'
                       : 'unselected'
                   }
