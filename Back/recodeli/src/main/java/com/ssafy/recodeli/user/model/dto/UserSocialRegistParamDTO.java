@@ -40,6 +40,7 @@ public class UserSocialRegistParamDTO {
 	private String social;
 
 	public static User of(UserSocialRegistParamDTO userDTO) {
+		System.out.println("userdto:" + userDTO);
 		String receivedSocial = userDTO.getSocial().toUpperCase();
 		if (receivedSocial.equals("K")) {
 			return User.builder()
