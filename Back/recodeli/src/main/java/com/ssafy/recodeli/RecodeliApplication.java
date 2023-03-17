@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 //@EnableAutoConfiguration(exclude={dataSourceScriptDatabaseInitializer.class})
-public class TogetdogApplication {
+public class RecodeliApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TogetdogApplication.class, args);
+		SpringApplication.run(RecodeliApplication.class, args);
 	}
 
 }
