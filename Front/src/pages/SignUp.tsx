@@ -21,6 +21,9 @@ interface GenreBtnType {
 }
 
 interface InputType {
+  nickname: string
+  email: string
+  social: string
   profileImg: any
   gender: string
   age: number
@@ -100,90 +103,87 @@ const SignUp = ({ isLogin }: SignUpProps) => {
     }
   }, [])
 
-  const profilePreviewRef = useRef<any>(download)
-  const nicknameRef = useRef<string>('')
-  const genderRef = useRef<string>('')
-  const ageRef = useRef<string>('')
-  const favoriteGRef = useRef<string[]>([])
-  const dislikeGRef = useRef<string[]>([])
-  const [social, setSocial] = useState('')
-  const [email, setEmail] = useState('')
-
-  useEffect(() => {
-    let [email, nickname, social] = params
-      .slice(35, params.length - 1)
-      .split(', ')
-    nickname = nickname.slice(9, nickname.length)
-    social = social.substring(social.length - 1)
-
-    nicknameRef.current = nickname
-    setEmail(email)
-    setSocial(social)
-  }, [])
-
-  // const [profilePreview, setProfilePreview] = useState(download)
-  // const [inputs, setInputs] = useState<InputType>({
-  //   profileImg: null,
-  //   gender: '',
-  //   age: 0,
-  //   favoriteG: [],
-  //   dislikeG: [],
-  // })
-  function checkDuplicate() {}
-
+  const [profilePreview, setProfilePreview] = useState(download)
   const profileImgRef = useRef<HTMLInputElement>(null)
+  const [inputs, setInputs] = useState<InputType>({
+    nickname: '',
+    email: '',
+    social: '',
+    profileImg: null,
+    gender: '',
+    age: 0,
+    favoriteG: [],
+    dislikeG: [],
+  })
+
+  // useEffect(() => {
+  //   let [email, nickname, social] = params
+  //     .slice(35, params.length - 1)
+  //     .split(', ')
+  //   nickname = nickname.slice(9, nickname.length)
+  //   social = social.substring(social.length - 1)
+
+  //   setInputs({ ...inputs, nickname })
+  //   setInputs({ ...inputs, email })
+  //   setInputs({ ...inputs, social })
+  // }, [])
+
+  function checkDuplicate() {}
   function handleInputClick() {
     if (profileImgRef.current !== null) {
       profileImgRef.current.click()
     }
   }
   function handleGenderClick(gender: string) {
-    // setInputs({
-    //   ...inputs,
-    //   gender: gender,
-    // })
-    genderRef.current = gender
-  }
-
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: React.MutableRefObject<string>,
-  ) => {
-    const value = e.target.value
-    type.current = value
+    setInputs({
+      ...inputs,
+      gender: gender,
+    })
   }
 
   const handleFavGenreClick = (genre: string) => {
-    const new_array = favoriteGRef.current.includes(genre)
-      ? favoriteGRef.current.filter((item) => item !== genre)
-      : [...favoriteGRef.current, genre]
+    const new_array = inputs.favoriteG.includes(genre)
+      ? inputs.favoriteG.filter((item) => item !== genre)
+      : [...inputs.favoriteG, genre]
 
     let new_array2
-    if (new_array.includes(genre) && dislikeGRef.current.includes(genre)) {
-      new_array2 = dislikeGRef.current.filter((item: string) => item !== genre)
+    if (new_array.includes(genre) && inputs.dislikeG.includes(genre)) {
+      new_array2 = inputs.dislikeG.filter((item) => item !== genre)
     }
     if (new_array2) {
-      favoriteGRef.current = new_array
-      dislikeGRef.current = new_array2
+      setInputs({
+        ...inputs,
+        favoriteG: new_array,
+        dislikeG: new_array2,
+      })
     } else {
-      favoriteGRef.current = new_array
+      setInputs({
+        ...inputs,
+        favoriteG: new_array,
+      })
     }
   }
 
   const handleDislikeGenreClick = (genre: string) => {
-    const new_array = dislikeGRef.current.includes(genre)
-      ? dislikeGRef.current.filter((item) => item !== genre)
-      : [...dislikeGRef.current, genre]
+    const new_array = inputs.dislikeG.includes(genre)
+      ? inputs.dislikeG.filter((item) => item !== genre)
+      : [...inputs.dislikeG, genre]
 
     let new_array2
-    if (new_array.includes(genre) && favoriteGRef.current.includes(genre)) {
-      new_array2 = favoriteGRef.current.filter((item) => item !== genre)
+    if (new_array.includes(genre) && inputs.favoriteG.includes(genre)) {
+      new_array2 = inputs.favoriteG.filter((item) => item !== genre)
     }
     if (new_array2) {
-      dislikeGRef.current = new_array
-      favoriteGRef.current = new_array2
+      setInputs({
+        ...inputs,
+        favoriteG: new_array2,
+        dislikeG: new_array,
+      })
     } else {
-      dislikeGRef.current = new_array
+      setInputs({
+        ...inputs,
+        dislikeG: new_array,
+      })
     }
   }
 
@@ -194,7 +194,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
       reader.onload = () => {
         const resultString = reader.result?.toString()
         if (resultString) {
-          profilePreviewRef.current = resultString
+          setProfilePreview(resultString)
         } else {
           throw new Error('Failed to read file')
         }
@@ -205,35 +205,35 @@ const SignUp = ({ isLogin }: SignUpProps) => {
 
   const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      ;(profileImgRef = e.target.files[0]), encodeToBase64(e.target.files[0])
+      setInputs({
+        ...inputs,
+        profileImg: e.target.files[0],
+      })
+      encodeToBase64(e.target.files[0])
     }
   }
 
   const signUp = (e: React.FormEvent<HTMLFormElement>) => {
     // redux-toolkit
     e.preventDefault()
-
     const formData = new FormData()
-
-    formData.append('profileImg', profileImgRef)
-    formData.append('nickname', nicknameRef.current)
-    formData.append('social', social)
-    formData.append('email', email)
-    formData.append('age', ageRef)
-    formData.append('gender', genderRef)
-    formData.append('favoriteG', JSON.stringify(favoriteGRef.current))
-    formData.append('dislikeG', JSON.stringify(dislikeGRef.current))
+    formData.append('profileImg', inputs.profileImg)
+    formData.append('age', inputs.age.toString())
+    formData.append('gender', inputs.gender)
+    formData.append('favoriteG', JSON.stringify(inputs.favoriteG))
+    formData.append('dislikeG', JSON.stringify(inputs.dislikeG))
 
     dispatch(asyncSignUp(formData)).then(() => {
       navigate('/')
     })
   }
+
   const signUpWNoData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData()
-    formData.append('nickname', nicknameRef.current)
-    formData.append('social', social)
-    formData.append('email', email)
+    formData.append('nickname', inputs.nickname)
+    formData.append('social', inputs.social)
+    formData.append('email', inputs.email)
 
     dispatch(asyncSignUp(formData)).then(() => {
       navigate('/')
@@ -245,10 +245,10 @@ const SignUp = ({ isLogin }: SignUpProps) => {
         <form onSubmit={signUp}>
           <legend>회원가입</legend>
           <ProfileImgDiv>
-            {profilePreviewRef && (
+            {profilePreview && (
               <ProfileImg
                 onClick={handleInputClick}
-                src={profilePreviewRef.current}
+                src={profilePreview}
               ></ProfileImg>
             )}
             <input
@@ -259,18 +259,6 @@ const SignUp = ({ isLogin }: SignUpProps) => {
               hidden
             />
           </ProfileImgDiv>
-          <div>
-            <input
-              type="text"
-              defaultValue={nicknameRef.current}
-              placeholder="닉네임을 입력해주세요"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onChange(e, nicknameRef)
-              }
-            />
-            <button onClick={checkDuplicate}>중복 확인</button>
-          </div>
-
           <div className="gender_select">
             {genderBtnList.map((item) => {
               return (
@@ -281,10 +269,10 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleGenderClick(item.value)
                   }}
                   className={
-                    item.value === genderRef ? 'selected' : 'unselected'
+                    item.value === inputs?.gender ? 'selected' : 'unselected'
                   }
                 >
-                  {item.name}
+                  {item.value}
                 </div>
               )
             })}
@@ -292,13 +280,13 @@ const SignUp = ({ isLogin }: SignUpProps) => {
           <div>
             <label htmlFor="age">연령대</label>
             <select name="age" id="age">
-              <option value="0">--선택--</option>
-              <option value="10">10대</option>
-              <option value="20">20대</option>
-              <option value="30">30대</option>
-              <option value="40">40대</option>
-              <option value="50">50대</option>
-              <option value="60">60대 이상</option>
+              <option value="">--선택--</option>
+              <option value="10s">10대</option>
+              <option value="20s">20대</option>
+              <option value="30s">30대</option>
+              <option value="40s">40대</option>
+              <option value="50s">50대</option>
+              <option value="60s">60대 이상</option>
             </select>
           </div>
           <div className="favorite_genre_box">
@@ -312,7 +300,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleFavGenreClick(item.value)
                   }}
                   className={
-                    favoriteGRef.current.includes(item.value)
+                    inputs?.favoriteG.includes(item.value)
                       ? 'selected'
                       : 'unselected'
                   }
@@ -333,7 +321,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
                     handleDislikeGenreClick(item.value)
                   }}
                   className={
-                    dislikeGRef.current.includes(item.value)
+                    inputs?.dislikeG.includes(item.value)
                       ? 'selected'
                       : 'unselected'
                   }
@@ -345,9 +333,7 @@ const SignUp = ({ isLogin }: SignUpProps) => {
           </div>
           <div>
             <button type="submit">submit</button>
-            <button type="button" onClick={(e) => signUpWNoData}>
-              정보 설정 다음에 하기
-            </button>
+            <button>다음에 하기</button>
           </div>
         </form>
       </SignUpDiv>

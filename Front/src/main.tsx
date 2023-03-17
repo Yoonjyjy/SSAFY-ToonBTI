@@ -7,14 +7,21 @@ import store from './redux/configStore'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import './index.css'
 
+const client = new ApolloClient({
+  uri: 'https://flyby-router-demo.herokuapp.com/',
+  cache: new InMemoryCache(),
+})
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    {/* redux */}
-    <Provider store={store}>
-      {/* router */}
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
+    <ApolloProvider client={client}>
+      {/* redux */}
+      <Provider store={store}>
+        {/* router */}
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>,
 )
