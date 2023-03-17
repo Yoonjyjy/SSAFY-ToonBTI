@@ -12,7 +12,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -26,8 +25,11 @@ public class UserGrapController {
 	private final UserService userService;
 
 	@MutationMapping
-	User addUser(@Argument @Valid UserSocialRegistParamDTO userDTO){
-		logger.info("Social Regist Info : {}", userDTO);
-		return userRepository.save(UserSocialRegistParamDTO.of(userDTO));
+	public User addUser(@Argument @Valid UserSocialRegistParamDTO user){
+//	public String addUser(@Argument @Valid Map<?,?> userDTO){
+
+		logger.info("Social Regist Info : {}", user);
+		return userRepository.save(UserSocialRegistParamDTO.of(user));
+//		return user;
 	}
 }
