@@ -9,6 +9,7 @@ import QuizQuestions from './Quiz/QuizQuestions'
 import QuizEnd from './Quiz/QuizEnd'
 import Survey from './Survey/Survey'
 import SearchBar from './common/SearchBar'
+import InfiniteScroll from './common/InfiniteScroll'
 
 export {
   Container,
@@ -16,6 +17,7 @@ export {
   QuizQuestions,
   QuizEnd,
   SearchBar,
+  InfiniteScroll,
   Survey,
   Header,
   LoginButton,
