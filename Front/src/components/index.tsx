@@ -5,5 +5,21 @@ import LoginButton from './Header/LoginButton'
 import Dimmer from './common/Dimmer'
 import Modal from './common/Modal'
 import Profile from './Header/Profile'
+import QuizQuestions from './Quiz/QuizQuestions'
+import QuizEnd from './Quiz/QuizEnd'
+import Survey from './Survey/Survey'
+import SearchBar from './common/SearchBar'
 
-export { Container, Login, Header, LoginButton, Modal, Dimmer, Profile }
+export {
+  Container,
+  Login,
+  QuizQuestions,
+  QuizEnd,
+  SearchBar,
+  Survey,
+  Header,
+  LoginButton,
+  Modal,
+  Dimmer,
+  Profile,
+}

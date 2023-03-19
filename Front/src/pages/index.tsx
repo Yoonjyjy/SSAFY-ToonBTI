@@ -1,5 +1,5 @@
 import Home from './Home'
-import Ranking from './Ranking'
+import Quiz from './Quiz'
 import SignUp from './SignUp'
 import Statistics from './Statistics'
-export { Home, Ranking, SignUp, Statistics }
+export { Home, Quiz, SignUp, Statistics }
