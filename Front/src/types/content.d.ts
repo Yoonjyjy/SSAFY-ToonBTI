@@ -3,3 +3,7 @@ interface ItemType {
   id: number
   imgUrl: string
 }
+
+interface SurveyItemType extends ItemType {
+  clicked: boolean
+}

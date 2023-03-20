@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Item from './Item'
 
 interface ItemListProps {
-  itemList: ItemType[]
-
-  setClickedItem: (ItemType: ItemType) => void
+  itemList: SurveyItemType[]
+  setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>
 }
-const ItemList = ({ itemList, setClickedItem }: ItemListProps) => {
+const ItemList = ({ itemList, setList }: ItemListProps) => {
+  //   useEffect(() => {
+  //     console.log('item list', itemList)
+  //   }, [itemList])
+
+  const clickHandle = (item: SurveyItemType) => {
+    setList((prev) => {
+      return prev.map((el) => {
+        if (el.id === item.id) {
+          el.clicked = !el.clicked
+        }
+        return el
+      })
+    })
+  }
+
   return (
     <>
-      {itemList?.map((item: ItemType) => {
-        return (
-          <Item key={item.id} item={item} setClickedItem={setClickedItem} />
-        )
+      {itemList.map((item) => {
+        return <Item key={item.id} item={item} onClickItem={clickHandle} />
       })}
     </>
   )
