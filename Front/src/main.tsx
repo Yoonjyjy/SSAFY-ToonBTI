@@ -8,6 +8,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import './index.css'
 
 const client = new ApolloClient({
+  //TODO: url 주소 변경
   uri: 'http://localhost:8080/',
   cache: new InMemoryCache(),
 })

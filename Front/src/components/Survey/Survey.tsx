@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import React, { useState } from 'react'
+import ItemList from '../common/ItemList'
 import SearchBar from '../common/SearchBar'
 
 const getResults = gql`
@@ -9,20 +10,16 @@ const getResults = gql`
     }
   }
 `
+/**
+ * 독자 유형 테스트 페이지
+ * @returns
+ */
 const Survey = () => {
   const [keyword, setKeyword] = useState<string>('')
-  const getSurveyList = () => {
-    const [list, setList] = useState([])
+  const [list, setList] = useState<ItemType[]>([])
+  const [clickedList, setClickedList] = useState<ItemType[]>([])
+  const [clickedItem, setClickedItem] = useState<ItemType | null>(null)
 
-    const { loading, error, data } = useQuery(getResults)
-    if (loading) {
-      return <p>spinner</p>
-    }
-    if (error) {
-      return <p>{error.message}</p>
-    }
-    return <div>{data}</div>
-  }
   return (
     <>
       <SearchBar
@@ -30,7 +27,7 @@ const Survey = () => {
         keyword={keyword}
         setKeyword={setKeyword}
       />
-      <div>{getSurveyList()}</div>
+      <ItemList itemList={list} setClickedItem={setClickedItem} />
     </>
   )
 }
