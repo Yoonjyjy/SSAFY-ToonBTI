@@ -47,8 +47,8 @@ for i in range(len(Genres_for_Link)):
         
         # 최초 로그인
         if first_login:
-            username = "wlsghsla94"
-            password = "K1j2h31994!"
+            username = "" # 네이버 아이디 입력
+            password = "" # 네이버 비밀번호 입력
             # 로그인 버튼 클릭
             toLogin = driver.find_element('id', 'gnb_login_button')
             toLogin.click()
