@@ -3,8 +3,8 @@ import Item from "./Item";
 import styled from "styled-components";
 
 interface ItemListProps {
-  itemList: SurveyItemType[];
-  setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
+  dataList: SurveyItemType[];
+  setDataList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 
 const addedMockData = [
@@ -25,11 +25,9 @@ const addedMockData = [
   },
 ];
 
-export default function ItemList({ itemList, setList }: ItemListProps) {
-  console.log(itemList);
-
+export default function ItemList({ dataList, setDataList }: ItemListProps) {
   const clickHandle = (item: SurveyItemType) => {
-    setList((prev) =>
+    setDataList((prev) =>
       prev.map((el) => {
         if (el.id === item.id) {
           el = { ...el, clicked: !el.clicked };
@@ -37,7 +35,7 @@ export default function ItemList({ itemList, setList }: ItemListProps) {
         return el;
       })
     );
-    setList((prev) => {
+    setDataList((prev) => {
       const newPrev = [...prev];
       const clickedIndex = newPrev.findIndex((el) => el.id === item.id);
       newPrev.splice(
@@ -51,12 +49,8 @@ export default function ItemList({ itemList, setList }: ItemListProps) {
 
   return (
     <ItemListBox>
-      {itemList.map((item) => {
-        return (
-          <>
-            <Item key={item.id} item={item} onClickItem={clickHandle} />
-          </>
-        );
+      {dataList.map((item) => {
+        return <Item key={item.id} item={item} onClickItem={clickHandle} />;
       })}
     </ItemListBox>
   );

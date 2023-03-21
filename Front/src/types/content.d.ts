@@ -1,9 +1,14 @@
 interface ItemType {
-  name: string
-  id: number
-  imgUrl: string
+  name: string;
+  id: number;
+  imgUrl: string;
 }
 
 interface SurveyItemType extends ItemType {
-  clicked: boolean
+  clicked: boolean;
+}
+
+interface KeywordType {
+  keyword: string;
+  id: number;
 }

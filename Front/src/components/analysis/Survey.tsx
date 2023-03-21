@@ -3,39 +3,6 @@ import styled from "styled-components";
 import ItemList from "./ItemList";
 // import SearchBar from "../common/SearchBar";
 
-const mockdata = [
-  {
-    id: 1,
-    name: "호랑이행님1",
-    imgUrl: "imgUrl",
-  },
-  {
-    id: 2,
-    name: "호랑이행님2",
-    imgUrl: "imgUrl",
-  },
-  {
-    id: 3,
-    name: "호랑이행님3",
-    imgUrl: "imgUrl",
-  },
-  {
-    id: 4,
-    name: "호랑이행님4",
-    imgUrl: "imgUrl",
-  },
-  {
-    id: 5,
-    name: "호랑이행님5",
-    imgUrl: "imgUrl",
-  },
-  {
-    id: 6,
-    name: "호랑이행님5",
-    imgUrl: "imgUrl",
-  },
-];
-
 /**
  * 독자 유형 테스트 페이지
  * @returns
@@ -43,27 +10,30 @@ const mockdata = [
 
 interface SurveyProps {
   setComp: React.Dispatch<React.SetStateAction<number>>;
+  dataList: SurveyItemType[];
+  setDataList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 
-export default function Survey({ setComp }: SurveyProps) {
-  const [list, setList] = useState<SurveyItemType[]>(
-    mockdata.map((e) => ({ ...e, clicked: false }))
-  );
-
+export default function Survey({
+  setComp,
+  dataList,
+  setDataList,
+}: SurveyProps) {
   const [cnt, setCnt] = useState<number>(0);
+
   function handleClick() {
     setComp((prev) => prev + 1);
   }
 
   useEffect(() => {
     let cnt = 0;
-    list.map((item) => {
+    dataList.map((item) => {
       if (item.clicked === true) {
         cnt += 1;
       }
     });
     setCnt(cnt);
-  }, [list]);
+  }, [dataList]);
 
   return (
     <>
@@ -74,7 +44,7 @@ export default function Survey({ setComp }: SurveyProps) {
           선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
         </RightP>
       </RightDiv>
-      <ItemList itemList={list} setList={setList} />
+      <ItemList dataList={dataList} setDataList={setDataList} />
       <button onClick={() => handleClick()}>다음으로</button>
     </>
   );
@@ -88,7 +58,7 @@ export default function Survey({ setComp }: SurveyProps) {
  * - 연관 아이템이란 무엇인가? 장르인가 상세 태그인가
  */
 const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 500;
 `;
 const RightDiv = styled.div`
