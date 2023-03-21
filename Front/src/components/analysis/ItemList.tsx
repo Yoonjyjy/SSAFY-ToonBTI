@@ -25,32 +25,38 @@ const addedMockData = [
   },
 ];
 
-
 export default function ItemList({ itemList, setList }: ItemListProps) {
+  console.log(itemList);
+
   const clickHandle = (item: SurveyItemType) => {
-    setList((prev) => 
-      // const newPrev = [...prev]
-      // const clickedIndex = newPrev.findIndex((el) => el.id === item.id);
-      // newPrev.splice(clickedIndex+1, 0, ...addedMockData.map((e) => ({ ...e, clicked: false })))
+    setList((prev) =>
       prev.map((el) => {
         if (el.id === item.id) {
           el = { ...el, clicked: !el.clicked };
         }
         return el;
       })
-    )
+    );
     setList((prev) => {
-      const newPrev = [...prev]
+      const newPrev = [...prev];
       const clickedIndex = newPrev.findIndex((el) => el.id === item.id);
-      newPrev.splice(clickedIndex+1, 0, ...addedMockData.map((e) => ({ ...e, clicked: false })))
+      newPrev.splice(
+        clickedIndex + 1,
+        0,
+        ...addedMockData.map((e) => ({ ...e, clicked: false }))
+      );
       return newPrev;
-    })
+    });
   };
 
   return (
     <ItemListBox>
       {itemList.map((item) => {
-        return <Item key={item.id} item={item} onClickItem={clickHandle} />;
+        return (
+          <>
+            <Item key={item.id} item={item} onClickItem={clickHandle} />
+          </>
+        );
       })}
     </ItemListBox>
   );
@@ -61,4 +67,4 @@ const ItemListBox = styled.div`
   flex-wrap: wrap;
   flex-direction: true;
   justify-content: center;
-`
+`;

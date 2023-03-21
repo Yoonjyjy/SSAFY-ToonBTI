@@ -2,7 +2,7 @@ import React from "react";
 import { Progress } from "antd";
 
 interface ProgressiveBarProps {
-  progress?: number;
+  progress: number;
 }
 
 export default function ProgressiveBar({ progress }: ProgressiveBarProps) {

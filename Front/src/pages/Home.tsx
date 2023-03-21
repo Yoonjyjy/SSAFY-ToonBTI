@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Survey } from "../components/analysis";
 import capture from "../assets/capture.png";
+import SurveyPage from "./SurveyPage";
 
 // const isLogin = localStorage.getItem('token') ? true : false
 export default function Home() {
@@ -24,16 +25,16 @@ export default function Home() {
             </button>
           </div>
         )}
-        {comp === 1 && <Survey />}
+        {comp === 1 && <SurveyPage />}
       </>
     </div>
   );
 }
-//FIXME: 
+
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 700;
-`
+`;
 
 const ImageLogo = styled.div<{ imgUrl: string }>`
   width: 300px;
