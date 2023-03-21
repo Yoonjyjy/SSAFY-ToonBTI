@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import Item from './Item'
+import React, { useEffect } from "react";
+import Item from "./Item";
 
 interface ItemListProps {
-  itemList: SurveyItemType[]
-  setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>
+  itemList: SurveyItemType[];
+  setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 const ItemList = ({ itemList, setList }: ItemListProps) => {
   //   useEffect(() => {
@@ -14,20 +14,20 @@ const ItemList = ({ itemList, setList }: ItemListProps) => {
     setList((prev) => {
       return prev.map((el) => {
         if (el.id === item.id) {
-          el.clicked = !el.clicked
+          el.clicked = !el.clicked;
         }
-        return el
-      })
-    })
-  }
+        return el;
+      });
+    });
+  };
 
   return (
     <>
       {itemList.map((item) => {
-        return <Item key={item.id} item={item} onClickItem={clickHandle} />
+        return <Item key={item.id} item={item} onClickItem={clickHandle} />;
       })}
     </>
-  )
-}
+  );
+};
 
-export default ItemList
+export default ItemList;
