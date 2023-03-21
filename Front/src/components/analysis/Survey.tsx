@@ -28,7 +28,13 @@ const mockdata = [
     name: "호랑이행님5",
     imgUrl: "imgUrl",
   },
+  {
+    id: 6,
+    name: "호랑이행님5",
+    imgUrl: "imgUrl",
+  },
 ];
+
 
 /**
  * 독자 유형 테스트 페이지
@@ -39,7 +45,10 @@ export default function Survey() {
     mockdata.map((e) => ({ ...e, clicked: false }))
   );
 
-  return <ItemList itemList={list} setList={setList} />;
+  return (
+  <>
+    <ItemList itemList={list} setList={setList} />;
+  </>)
 }
 
 /**

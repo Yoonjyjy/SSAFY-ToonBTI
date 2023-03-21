@@ -24,5 +24,14 @@ export default function Item({ item, onClickItem }: ItemProps) {
 
 const Selected = styled.div<{ isClicked: boolean }>`
   border: ${(props) =>
-    props.isClicked ? "1px solid pink" : "1px solid black"};
+    props.isClicked ? "1px solid blue" : "1px solid darkgrey"};
+  height: 8rem;
+  width: calc(height * 0.7);
+  margin: .25rem;
+  border-radius: 4px;
 `;
+
+// TODO: 추가되면 애니메이션 슬라이드 인
+// clickedIndex%3 === 0 : 2개 오른쪽 추가 아래 한 개 추가 
+// clickedIndex%3 === 1 : 1개 오른쪽 추가 아래 두 개 추가
+// clickedIndex%3 === 2 : 아래 3개 추가
