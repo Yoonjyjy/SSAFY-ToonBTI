@@ -1,7 +1,7 @@
-import { gql, useQuery } from '@apollo/client'
-import React, { useEffect, useRef, useState } from 'react'
-import ItemList from '../common/ItemList'
-import SearchBar from '../common/SearchBar'
+import { gql, useQuery } from "@apollo/client";
+import React, { useEffect, useRef, useState } from "react";
+import ItemList from "../common/ItemList";
+import SearchBar from "../common/SearchBar";
 
 const getResults = gql`
   query getResults {
@@ -9,45 +9,45 @@ const getResults = gql`
       id
     }
   }
-`
+`;
 
 const mockdata = [
   {
     id: 1,
-    name: '호랑이행님1',
-    imgUrl: 'imgUrl',
+    name: "호랑이행님1",
+    imgUrl: "imgUrl",
   },
   {
     id: 2,
-    name: '호랑이행님2',
-    imgUrl: 'imgUrl',
+    name: "호랑이행님2",
+    imgUrl: "imgUrl",
   },
   {
     id: 3,
-    name: '호랑이행님3',
-    imgUrl: 'imgUrl',
+    name: "호랑이행님3",
+    imgUrl: "imgUrl",
   },
   {
     id: 4,
-    name: '호랑이행님4',
-    imgUrl: 'imgUrl',
+    name: "호랑이행님4",
+    imgUrl: "imgUrl",
   },
   {
     id: 5,
-    name: '호랑이행님5',
-    imgUrl: 'imgUrl',
+    name: "호랑이행님5",
+    imgUrl: "imgUrl",
   },
-]
+];
 
 /**
  * 독자 유형 테스트 페이지
  * @returns
  */
 const Survey = () => {
-  const [keyword, setKeyword] = useState<string>('')
+  const [keyword, setKeyword] = useState<string>("");
   const [list, setList] = useState<SurveyItemType[]>(
-    mockdata.map((e) => ({ ...e, clicked: false })),
-  ) // 처음 받아오는 리스트, 추후에 added됨
+    mockdata.map((e) => ({ ...e, clicked: false }))
+  ); // 처음 받아오는 리스트, 추후에 added됨
 
   return (
     <>
@@ -58,10 +58,10 @@ const Survey = () => {
       /> */}
       <ItemList itemList={list} setList={setList} />
     </>
-  )
-}
+  );
+};
 
-export default Survey
+export default Survey;
 
 /**
  * 아이템을 누르면 해당 아이템과 관련된 아이템들 가져오기
