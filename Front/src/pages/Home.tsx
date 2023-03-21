@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { Survey } from '../components'
 
-interface HomeProps {
-  isLogin: boolean
-}
-
-function Home({ isLogin }: HomeProps) {
+const isLogin = localStorage.getItem('token') ? true : false
+function Home() {
   const [comp, setComp] = useState(0)
 
   const handleClick = () => {
@@ -14,26 +12,26 @@ function Home({ isLogin }: HomeProps) {
 
   return (
     <div className="Home">
-      {!isLogin ? (
-        <>
-          {comp === 0 && (
-            <div>
-              <p>
-                웹툰 웹소설을 좋아하세요? <br />
-                당신의 취향 유형을 알려드릴게요!
-              </p>
-              <button onClick={handleClick}>시작하기</button>
-            </div>
-          )}
-          {comp === 1 && <Survey />}
-        </>
-      ) : (
-        <div>
-          <p>로그아웃</p>
-        </div>
-      )}
+      <>
+        {comp === 0 && (
+          <div>
+            <h1>웹툰 독자 유형 테스트</h1>
+            <ImageLogo imgUrl=""/>
+            <button onClick={handleClick}>
+              <p>시작하기</p>
+              <p>지금까지 {}명이 참여했어요!</p>
+              </button>
+          </div>
+        )}
+        {comp === 1 && <Survey />}
+      </>
     </div>
   )
 }
 
+const ImageLogo = styled.div<{imgUrl:string}>`
+  background-image: url(${props => props.imgUrl});
+  background-size: contain;
+  background-position: center;
+`
 export default Home
