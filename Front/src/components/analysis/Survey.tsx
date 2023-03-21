@@ -1,15 +1,6 @@
-import { gql, useQuery } from "@apollo/client";
-import React, { useEffect, useRef, useState } from "react";
-import ItemList from "../common/ItemList";
-import SearchBar from "../common/SearchBar";
-
-const getResults = gql`
-  query getResults {
-    results {
-      id
-    }
-  }
-`;
+import React, { useState } from "react";
+import ItemList from "./ItemList";
+// import SearchBar from "../common/SearchBar";
 
 const mockdata = [
   {
@@ -43,25 +34,13 @@ const mockdata = [
  * 독자 유형 테스트 페이지
  * @returns
  */
-const Survey = () => {
-  const [keyword, setKeyword] = useState<string>("");
+export default function Survey() {
   const [list, setList] = useState<SurveyItemType[]>(
     mockdata.map((e) => ({ ...e, clicked: false }))
-  ); 
-
-  return (
-    <>
-      {/* <SearchBar
-        type="keyword_search"
-        keyword={keyword}
-        setKeyword={setKeyword}
-      /> */}
-      <ItemList itemList={list} setList={setList} />
-    </>
   );
-};
 
-export default Survey;
+  return <ItemList itemList={list} setList={setList} />;
+}
 
 /**
  * 아이템을 누르면 해당 아이템과 관련된 아이템들 가져오기

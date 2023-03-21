@@ -11,7 +11,7 @@ interface ItemProps {
   onClickItem: (item: SurveyItemType) => void;
 }
 
-const Item = ({ item, onClickItem }: ItemProps) => {
+export default function Item({ item, onClickItem }: ItemProps) {
   return (
     <Selected isClicked={item.clicked} onClick={() => onClickItem(item)}>
       <div>
@@ -20,10 +20,9 @@ const Item = ({ item, onClickItem }: ItemProps) => {
       </div>
     </Selected>
   );
-};
+}
 
 const Selected = styled.div<{ isClicked: boolean }>`
   border: ${(props) =>
     props.isClicked ? "1px solid pink" : "1px solid black"};
 `;
-export default Item;

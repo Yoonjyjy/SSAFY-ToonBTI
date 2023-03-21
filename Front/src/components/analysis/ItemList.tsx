@@ -5,7 +5,8 @@ interface ItemListProps {
   itemList: SurveyItemType[];
   setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
-const ItemList = ({ itemList, setList }: ItemListProps) => {
+
+export default function ItemList({ itemList, setList }: ItemListProps) {
   const clickHandle = (item: SurveyItemType) => {
     setList((prev) =>
       prev.map((el) => {
@@ -24,6 +25,4 @@ const ItemList = ({ itemList, setList }: ItemListProps) => {
       })}
     </>
   );
-};
-
-export default ItemList;
+}
