@@ -8,13 +8,13 @@ interface ContainerProps {
 
 function Container ({ type, children } : ContainerProps) {
 
-  if (type === 'nav'){
+  if( type === '' ){
     return (
       <>
-        <NavContainerBox>
-          {children}
-        </NavContainerBox>
-      </>
+      <div>
+        {children}
+      </div>
+    </>
     )
   }
   return (
@@ -38,10 +38,5 @@ const ContainerBox = styled.div`
   padding: 16px;
   width: 100%;
   min-width: 360px;
-`
-const NavContainerBox = styled.div`
-  min-width: 360px;
-  width: 100%;
-  height: 56px;
 `
 export default Container;

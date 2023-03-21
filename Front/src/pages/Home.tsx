@@ -18,7 +18,7 @@ function Home() {
             <h1>웹툰 독자 유형 테스트</h1>
             <ImageLogo imgUrl=""/>
             <button onClick={handleClick}>
-              <p>시작하기</p>
+              <b>시작하기</b>
               <p>지금까지 {}명이 참여했어요!</p>
               </button>
           </div>

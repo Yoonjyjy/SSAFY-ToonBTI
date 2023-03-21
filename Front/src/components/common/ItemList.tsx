@@ -6,9 +6,6 @@ interface ItemListProps {
   setList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 const ItemList = ({ itemList, setList }: ItemListProps) => {
-  //   useEffect(() => {
-  //     console.log('item list', itemList)
-  //   }, [itemList])
 
   const clickHandle = (item: SurveyItemType) => {
     setList((prev) => {

@@ -47,7 +47,7 @@ const Survey = () => {
   const [keyword, setKeyword] = useState<string>("");
   const [list, setList] = useState<SurveyItemType[]>(
     mockdata.map((e) => ({ ...e, clicked: false }))
-  ); // 처음 받아오는 리스트, 추후에 added됨
+  ); 
 
   return (
     <>
