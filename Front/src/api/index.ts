@@ -1,9 +1,6 @@
-import axios from 'axios'
-axios.defaults.withCredentials = true
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 
-// server url
-const api = axios.create({
-  baseURL: '',
-})
-
-export default api
+export default new ApolloClient({
+  uri: import.meta.env.VITE_BASE_URI,
+  cache: new InMemoryCache(),
+});

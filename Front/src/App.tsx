@@ -1,22 +1,16 @@
-import React, { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import styled from 'styled-components'
-import './App.css'
-import { Home, Quiz } from './pages'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import { SurveyResult, SurveyTest, Home, MBTIResult, MBTITest } from "./pages";
 
-function App() {
-  const [modal, setModal] = useState<boolean>(false)
-
+export default function App() {
   return (
-    <div className="app">
-      <div className="MobileFullFrame">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/quiz" element={<Quiz />} />
-        </Routes>
-      </div>
-    </div>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/mbti" element={<MBTITest />} />
+      <Route path="/mbti/result" element={<MBTIResult />} />
+      <Route path="/survey" element={<SurveyTest />} />
+      <Route path="/survey/result" element={<SurveyResult />} />
+    </Routes>
+  );
 }
-
-export default App
