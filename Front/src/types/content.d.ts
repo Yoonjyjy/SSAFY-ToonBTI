@@ -9,6 +9,6 @@ interface SurveyItemType extends ItemType {
 }
 
 interface KeywordType {
-  keyword: string;
   id: number;
+  keyword: string;
 }

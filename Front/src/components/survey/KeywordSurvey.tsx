@@ -10,13 +10,32 @@ export default function KeywordSurvey({
   keywordList,
   setKeywordList,
 }: KeywordSurveyProps) {
-  const inputRef = useRef<string>(null);
+  const [value, setValue] = useState("");
   function addList() {
-    const keyword = inputRef.current?.value;
     setKeywordList((prev) => [
       ...prev,
-      { id: keywordList.length + 1, keyword: keyword },
+      { id: keywordList.length + 1, keyword: value },
     ]);
+    setValue("");
+  }
+
+  function handleSubmit() {
+    keywordList.map((item) => {
+      console.log(item.keyword);
+    });
+  }
+  function handleEnter(event: React.KeyboardEvent) {
+    if (event.key === "Enter") {
+      setKeywordList((prev) => [
+        ...prev,
+        { id: keywordList.length + 1, keyword: value },
+      ]);
+      setValue("");
+    }
+  }
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
   }
   return (
     <>
@@ -25,13 +44,25 @@ export default function KeywordSurvey({
         즐겨보는 웹툰의 분위기나 장르를 입력해보세요.
         <br />더 자세한 결과를 얻을 수 있어요.
       </p>
-      <form>
-        <Input type="text" placeholder="ex) 잔잔한, 힐링" ref={inputRef} />
-        <AddButton onClick={addList}>추가</AddButton>
-        <div>{}</div>
+      <form onSubmit={submit}>
+        <Input
+          type="text"
+          placeholder="ex) 잔잔한, 힐링"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyUp={(e) => handleEnter(e)}
+        />
+        <AddButton type="button" onClick={addList}>
+          추가
+        </AddButton>
+        <div>
+          {keywordList?.map((item) => {
+            return <p key={item.id}>{item.keyword}</p>;
+          })}
+        </div>
         <ButtonOuterBox>
-          <Buttons>건너뛰기</Buttons>
-          <Buttons>다음으로</Buttons>
+          <Buttons onClick={submit}>건너뛰기</Buttons>
+          <Buttons onClick={submit}>다음으로</Buttons>
         </ButtonOuterBox>
       </form>
     </>

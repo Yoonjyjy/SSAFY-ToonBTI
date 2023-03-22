@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Survey } from "../components/analysis";
-import KeywordSurvey from "../components/analysis/KeywordSurvey";
+import { Survey, KeywordSurvey } from "../components/survey";
 
 const mockdata = [
   {
