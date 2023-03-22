@@ -53,4 +53,5 @@ const StyledContent = styled(Content)`
   text-align: center;
   min-height: 120;
   line-height: 120px;
+  padding: 2rem;
 `;
