@@ -2,7 +2,8 @@ import pandas as pd
 import re
 
 # Read the CSV file
-df = pd.read_csv('naver_all.csv')
+# df = pd.read_csv('naver_all.csv')
+df = pd.read_csv('tags_info.csv')
 
 # Extract the tags column
 tags_col = df['tags']
