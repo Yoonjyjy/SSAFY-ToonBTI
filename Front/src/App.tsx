@@ -1,13 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import {
-  AnalysisResult,
-  AnalysisTest,
-  Home,
-  MBTIResult,
-  MBTITest,
-} from "./pages";
+import { SurveyResult, SurveyTest, Home, MBTIResult, MBTITest } from "./pages";
 
 export default function App() {
   return (
@@ -15,8 +9,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/mbti" element={<MBTITest />} />
       <Route path="/mbti/result" element={<MBTIResult />} />
-      <Route path="/analysis" element={<AnalysisTest />} />
-      <Route path="/analysis/result" element={<AnalysisResult />} />
+      <Route path="/survey" element={<SurveyTest />} />
+      <Route path="/survey/result" element={<SurveyResult />} />
     </Routes>
   );
 }

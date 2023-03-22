@@ -41,7 +41,11 @@ export default function ItemList({ dataList, setDataList }: ItemListProps) {
       newPrev.splice(
         clickedIndex + 1,
         0,
-        ...addedMockData.map((e) => ({ ...e, clicked: false }))
+        ...addedMockData.map((e) => ({
+          ...e,
+          id: Math.random(),
+          clicked: false,
+        }))
       );
       return newPrev;
     });

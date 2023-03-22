@@ -34,7 +34,7 @@ const mockdata = [
   },
 ];
 
-export default function SurveyPage() {
+export default function SurveyTest() {
   const [comp, setComp] = useState<number>(0);
   const [dataList, setDataList] = useState<SurveyItemType[]>(
     mockdata.map((e) => ({ ...e, clicked: false }))

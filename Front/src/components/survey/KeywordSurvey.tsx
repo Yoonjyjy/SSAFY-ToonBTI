@@ -1,3 +1,4 @@
+import { Button, Space } from "antd";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -60,10 +61,10 @@ export default function KeywordSurvey({
             return <p key={item.id}>{item.keyword}</p>;
           })}
         </div>
-        <ButtonOuterBox>
-          <Buttons onClick={submit}>건너뛰기</Buttons>
-          <Buttons onClick={submit}>다음으로</Buttons>
-        </ButtonOuterBox>
+        <BtnContainer>
+          <StyledButton onClick={submit}>건너뛰기</StyledButton>
+          <StyledButton onClick={submit}>다음으로</StyledButton>
+        </BtnContainer>
       </form>
     </>
   );
@@ -86,12 +87,14 @@ const AddButton = styled.button`
   color: #e3e4e6;
   margin: 0;
 `;
-const ButtonOuterBox = styled.div`
+const BtnContainer = styled(Space)`
+  line-height: 4rem;
   width: 100%;
   position: fixed;
   bottom: 20px;
 `;
-const Buttons = styled.button`
-  width: 90%;
-  margin: 0.55rem 0;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  height: 3rem;
 `;
