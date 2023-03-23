@@ -1,7 +1,8 @@
+import { Button, Space } from "antd";
 import React from "react";
 import styled from "styled-components";
+import Text from "../common/Text";
 import ItemList from "./ItemList";
-// import SearchBar from "../common/SearchBar";
 
 /**
  * 독자 유형 테스트 페이지
@@ -21,15 +22,16 @@ export default function Survey(props: SurveyProps) {
 
   return (
     <>
-      <Title>웹툰 취향 분석 테스트</Title>
-      <p>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</p>
+      <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
       <RightDiv>
-        <RightP>
+        <Text>
           선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
-        </RightP>
+        </Text>
       </RightDiv>
       <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
-      <button onClick={props.onClickNext}>다음으로</button>
+      <BtnContainer direction="vertical">
+        <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+      </BtnContainer>
     </>
   );
 }
@@ -41,19 +43,22 @@ export default function Survey(props: SurveyProps) {
  * - 부드러운 애니메이션 필요(추가되는 부분에 대한 슬라이드 animation)
  * - 연관 아이템이란 무엇인가? 장르인가 상세 태그인가
  */
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 500;
-`;
+
 const RightDiv = styled.div`
   display: flex;
   justify-content: end;
 `;
-const RightP = styled.p`
-  padding: 0;
-  margin: 0;
-`;
 const CountSpan = styled.span`
   color: #1890ff;
   font-weight: 700;
+`;
+
+const BtnContainer = styled(Space)`
+  line-height: 4rem;
+  width: 100%;
+`;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  height: 3rem;
 `;

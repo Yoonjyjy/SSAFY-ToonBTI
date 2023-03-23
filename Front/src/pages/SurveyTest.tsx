@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { Layout } from "../components/common";
 import { Survey, KeywordSurvey } from "../components/survey";
 
 const mockdata = [
@@ -123,18 +124,22 @@ export default function SurveyTest() {
   switch (step) {
     case 0:
       return (
-        <Survey
-          dataList={formData.dataList}
-          onClickNext={nextHandler}
-          onClickItem={itemClickHandler}
-        />
+        <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
+          <Survey
+            dataList={formData.dataList}
+            onClickNext={nextHandler}
+            onClickItem={itemClickHandler}
+          />
+        </Layout>
       );
     // case 1:
     //   return (
+    // <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
     //     <KeywordSurvey
     //       keywordList={formData.keywordList}
     //       setKeywordList={setKeywordList}
     //     />
+    // </Layout>
     //   );
 
     default:

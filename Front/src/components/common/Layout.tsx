@@ -10,11 +10,35 @@ interface PropType {
   title: string;
   hasPrevious?: boolean;
   children: React.ReactNode;
+  type?: string;
 }
 
 export default function CommonLayout(props: PropType) {
   const navigate = useNavigate();
 
+  if (props?.type === "survey") {
+    return (
+      <StyledLayout>
+        <StyledHeader>
+          {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
+          {props.title}
+        </StyledHeader>
+        <SurveyPageContent>{props.children}</SurveyPageContent>
+      </StyledLayout>
+    );
+  }
+
+  if (props?.type === "keywordSurvey") {
+    return (
+      <StyledLayout>
+        <StyledHeader>
+          {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
+          {props.title}
+        </StyledHeader>
+        <KeywordPageContent>{props.children}</KeywordPageContent>
+      </StyledLayout>
+    );
+  }
   return (
     <StyledLayout>
       <StyledHeader>
@@ -53,5 +77,16 @@ const StyledContent = styled(Content)`
   text-align: center;
   min-height: 120;
   line-height: 120px;
+  padding: 2rem;
+`;
+
+const SurveyPageContent = styled(Content)`
+  text-align: center;
+  min-height: 120;
+  padding: 2rem;
+`;
+const KeywordPageContent = styled(Content)`
+  text-align: center;
+  min-height: 120;
   padding: 2rem;
 `;

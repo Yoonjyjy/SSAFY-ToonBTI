@@ -1,6 +1,7 @@
 import { Button, Space } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
+import Text from "../common/Text";
 
 interface KeywordSurveyProps {
   keywordList: KeywordType[];
@@ -20,13 +21,13 @@ export default function KeywordSurvey({
     setValue("");
   }
 
-  function handleSubmit() {
-    keywordList.map((item) => {
+  function handleSubmit(arr: KeywordType[]) {
+    arr.map((item) => {
       console.log(item.keyword);
     });
   }
   function handleEnter(event: React.KeyboardEvent) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && value !== "") {
       setKeywordList((prev) => [
         ...prev,
         { id: keywordList.length + 1, keyword: value },
@@ -37,11 +38,11 @@ export default function KeywordSurvey({
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
+    handleSubmit(keywordList);
   }
   return (
     <>
-      <Title>웹툰 취향 분석 테스트</Title>
-      <p>
+      <p style={{ color: "black" }}>
         즐겨보는 웹툰의 분위기나 장르를 입력해보세요.
         <br />더 자세한 결과를 얻을 수 있어요.
       </p>
@@ -53,45 +54,63 @@ export default function KeywordSurvey({
           onChange={(e) => setValue(e.target.value)}
           onKeyUp={(e) => handleEnter(e)}
         />
-        <AddButton type="button" onClick={addList}>
+        <AddButton type="text" onClick={addList}>
           추가
         </AddButton>
-        <div>
-          {keywordList?.map((item) => {
-            return <p key={item.id}>{item.keyword}</p>;
+        <KeywordListBox direction="vertical">
+          {keywordList?.map((item, idx) => {
+            return (
+              <Text type="keyword" key={idx}>
+                {item.keyword}
+              </Text>
+            );
           })}
-        </div>
-        <BtnContainer>
-          <StyledButton onClick={submit}>건너뛰기</StyledButton>
-          <StyledButton onClick={submit}>다음으로</StyledButton>
+        </KeywordListBox>
+        <BtnContainer direction="vertical">
+          {keywordList.length === 0 ? (
+            <StyledButton onClick={submit}>건너뛰기</StyledButton>
+          ) : (
+            <StyledButton disabled>건너뛰기</StyledButton>
+          )}
+          {keywordList.length === 0 ? (
+            <StyledButton disabled>다음으로</StyledButton>
+          ) : (
+            <StyledButton onClick={submit}>다음으로</StyledButton>
+          )}
         </BtnContainer>
       </form>
     </>
   );
 }
 
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 500;
-`;
 const Input = styled.input`
   border-radius: 4px;
-  background-color: #e3e4e6;
+  background-color: #f5f5f5;
   border: none;
-  width: 60%;
+  width: 80%;
   margin: 0 0.25rem 0 0;
   padding: 0.74rem 1rem;
 `;
-const AddButton = styled.button`
+const AddButton = styled(Button)`
   background-color: #1890ff;
   color: #e3e4e6;
   margin: 0;
+  height: 2.5rem;
+`;
+const KeywordListBox = styled(Space)`
+  width: 100%;
+  gap: 0.5rem;
+  margin: 1.5rem auto 0 auto;
+  max-height: 450px;
+  overflow-y: scroll;
 `;
 const BtnContainer = styled(Space)`
   line-height: 4rem;
-  width: 100%;
+  width: 90%;
   position: fixed;
-  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
 `;
 
 const StyledButton = styled(Button)`

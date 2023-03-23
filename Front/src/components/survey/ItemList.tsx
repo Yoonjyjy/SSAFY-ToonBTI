@@ -10,6 +10,7 @@ interface ItemListProps {
 export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   return (
     <ItemListBox>
+      {/* {dataList} */}
       {dataList.map((item) => {
         return <Item key={item.id} item={item} onClickItem={onClickItem} />;
       })}

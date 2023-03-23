@@ -1,5 +1,7 @@
+import { Content } from "antd/es/layout/layout";
 import React from "react";
 import styled from "styled-components";
+import Text from "../common/Text";
 
 /**
  * 웹툰 선택 설문조사에서 웹툰 리스트 안의 각 아이템을 나타내는 컴포넌트
@@ -14,10 +16,8 @@ interface ItemProps {
 export default function Item({ item, onClickItem }: ItemProps) {
   return (
     <Selected isClicked={item.clicked} onClick={() => onClickItem(item.id)}>
-      <div>
-        <p>{item.name}</p>
-        <img src={item.imgUrl} alt={item.name} />
-      </div>
+      <Text>{item.name}</Text>
+      {/* <img src={item.imgUrl} alt={item.name} /> */}
     </Selected>
   );
 }
