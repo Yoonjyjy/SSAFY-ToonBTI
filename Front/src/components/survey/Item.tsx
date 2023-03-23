@@ -1,4 +1,3 @@
-import { Content } from "antd/es/layout/layout";
 import React from "react";
 import styled from "styled-components";
 import Text from "../common/Text";
