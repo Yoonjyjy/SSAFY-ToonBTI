@@ -5,19 +5,19 @@ import Text from "../common/Text";
 
 interface KeywordSurveyProps {
   keywordList: KeywordType[];
-  setKeywordList: React.Dispatch<React.SetStateAction<KeywordType[]>>;
+  addKeyword: (value: KeywordType) => void;
 }
 
 export default function KeywordSurvey({
   keywordList,
-  setKeywordList,
+  addKeyword,
 }: KeywordSurveyProps) {
   const [value, setValue] = useState("");
   function addList() {
-    setKeywordList((prev) => [
-      ...prev,
-      { id: keywordList.length + 1, keyword: value },
-    ]);
+    addKeyword({
+      id: 1,
+      keyword: value,
+    });
     setValue("");
   }
 
@@ -28,10 +28,10 @@ export default function KeywordSurvey({
   }
   function handleEnter(event: React.KeyboardEvent) {
     if (event.key === "Enter" && value !== "") {
-      setKeywordList((prev) => [
-        ...prev,
-        { id: keywordList.length + 1, keyword: value },
-      ]);
+      addKeyword({
+        id: 1,
+        keyword: value,
+      });
       setValue("");
     }
   }
@@ -42,11 +42,11 @@ export default function KeywordSurvey({
   }
   return (
     <>
-      <p style={{ color: "black" }}>
+      <Text type="desc">
         즐겨보는 웹툰의 분위기나 장르를 입력해보세요.
         <br />더 자세한 결과를 얻을 수 있어요.
-      </p>
-      <form onSubmit={submit}>
+      </Text>
+      <form onSubmit={submit} style={{ marginTop: "2rem" }}>
         <StyledInput
           type="text"
           placeholder="ex) 잔잔한, 힐링"
@@ -60,9 +60,13 @@ export default function KeywordSurvey({
         <KeywordListBox direction="vertical">
           {keywordList?.map((item, idx) => {
             return (
-              <Text type="keyword" key={idx}>
-                {item.keyword}
-              </Text>
+              <div
+                key={idx}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Text type="keyword">{item.keyword}</Text>
+                <Button danger>del</Button>
+              </div>
             );
           })}
         </KeywordListBox>
@@ -84,16 +88,12 @@ export default function KeywordSurvey({
 }
 
 const StyledInput = styled(Input)`
-  /* border-radius: 4px;
-  background-color: #f5f5f5;
-  border: none; */
   width: 80%;
   margin: 0 0.25rem 0 0;
-  /* padding: 0.74rem 1rem; */
 `;
 const AddButton = styled(Button)`
   background-color: #1890ff;
-  color: #e3e4e6;
+  color: #ffffff;
   margin: 0;
   height: 2rem;
 `;
@@ -101,8 +101,17 @@ const KeywordListBox = styled(Space)`
   width: 100%;
   gap: 0.5rem;
   margin: 1.5rem auto 0 auto;
-  max-height: 450px;
+  height: 53vh;
   overflow-y: scroll;
+  @media (min-width: 320px) and (max-width: 380px) {
+    height: 40vh;
+  }
+  @media (min-width: 380px) and (max-width: 390px) {
+    height: 54vh;
+  }
+  @media (min-width: 400px) and (max-width: 500px) {
+    height: 56vh;
+  }
 `;
 const BtnContainer = styled(Space)`
   line-height: 4rem;

@@ -22,8 +22,8 @@ const KeywordText = styled(Typography.Text)`
 `;
 const StyledText = styled(Typography.Text)`
   line-height: 1rem;
+  align-items: center;
 `;
 const DescText = styled(Typography.Text)`
   line-height: 1rem;
-  margin-bottom: 30px;
 `;

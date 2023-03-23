@@ -19,7 +19,8 @@ const addedMockData = [
 
 enum ActionKind {
   FETCH_DATA_LIST = "fetchdatalist",
-  SET_KEYWORD_LIST = "setkeywordlist",
+  ADD_KEYWORD_LIST = "addkeywordlist",
+  REMOVE_KEYWORD_LIST = "removekeywordlist",
   CLICK_AN_ITEM = "clickanitem",
   FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
 }
@@ -40,6 +41,7 @@ interface ActionType {
     dataList?: SurveyItemType[];
     keywordList?: KeywordType[];
     itemId?: number;
+    keyword?: KeywordType;
   };
 }
 
@@ -58,7 +60,19 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
         confirmed: isConfirmed,
       };
     }
-    case ActionKind.SET_KEYWORD_LIST: {
+    //TODO: add keyword func
+    case ActionKind.ADD_KEYWORD_LIST: {
+      if (!payload?.keyword) return state;
+      if (state.keywordList.includes(payload.keyword)) {
+        return state;
+      }
+      return {
+        ...state,
+        keywordList: [...state.keywordList, payload.keyword],
+      };
+    }
+    //TODO: remove keyword func
+    case ActionKind.REMOVE_KEYWORD_LIST: {
       if (!payload?.keywordList) return state;
       return {
         ...state,
@@ -121,6 +135,10 @@ export default function SurveyTest() {
     });
   }
 
+  function addKeywordHandler(keyword: KeywordType) {
+    dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
+  }
+
   switch (step) {
     case 0:
       return (
@@ -132,15 +150,15 @@ export default function SurveyTest() {
           />
         </Layout>
       );
-    // case 1:
-    //   return (
-    // <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
-    //     <KeywordSurvey
-    //       keywordList={formData.keywordList}
-    //       setKeywordList={setKeywordList}
-    //     />
-    // </Layout>
-    //   );
+    case 1:
+      return (
+        <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
+          <KeywordSurvey
+            keywordList={formData.keywordList}
+            addKeyword={addKeywordHandler}
+          />
+        </Layout>
+      );
 
     default:
       return <></>;
