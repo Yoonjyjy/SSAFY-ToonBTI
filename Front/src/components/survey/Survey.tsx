@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import ItemList from "./ItemList";
 // import SearchBar from "../common/SearchBar";
@@ -9,31 +9,15 @@ import ItemList from "./ItemList";
  */
 
 interface SurveyProps {
-  setComp: React.Dispatch<React.SetStateAction<number>>;
+  onClickNext: () => void;
+  onClickItem: (itemId: number) => void;
   dataList: SurveyItemType[];
-  setDataList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 
-export default function Survey({
-  setComp,
-  dataList,
-  setDataList,
-}: SurveyProps) {
-  const [cnt, setCnt] = useState<number>(0);
-
-  function handleClick() {
-    setComp((prev) => prev + 1);
-  }
-
-  useEffect(() => {
-    let cnt = 0;
-    dataList.map((item) => {
-      if (item.clicked === true) {
-        cnt += 1;
-      }
-    });
-    setCnt(cnt);
-  }, [dataList]);
+export default function Survey(props: SurveyProps) {
+  const cnt: number = props.dataList
+    .map((el) => (el.clicked ? 1 : 0))
+    .reduce((a: number, b) => a + b, 0);
 
   return (
     <>
@@ -44,8 +28,8 @@ export default function Survey({
           선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
         </RightP>
       </RightDiv>
-      <ItemList dataList={dataList} setDataList={setDataList} />
-      <button onClick={() => handleClick()}>다음으로</button>
+      <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
+      <button onClick={props.onClickNext}>다음으로</button>
     </>
   );
 }
