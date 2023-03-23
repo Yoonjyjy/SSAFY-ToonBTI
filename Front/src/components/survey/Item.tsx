@@ -1,3 +1,5 @@
+import { Col } from "antd";
+import QueueAnim from "rc-queue-anim";
 import React from "react";
 import styled from "styled-components";
 import Text from "../common/Text";
@@ -14,23 +16,31 @@ interface ItemProps {
 
 export default function Item({ item, onClickItem }: ItemProps) {
   return (
-    <Selected isClicked={item.clicked} onClick={() => onClickItem(item.id)}>
-      <Text>{item.name}</Text>
-      {/* <img src={item.imgUrl} alt={item.name} /> */}
-    </Selected>
+    <QueueAnim type={["left", "right"]} duration={900}>
+      <ItemBox
+        key={item.id}
+        span={6}
+        isClicked={item.clicked}
+        onClick={() => onClickItem(item)}
+      >
+        <Text>{item.name}</Text>
+        {/* <img src={item.imgUrl} alt={item.name} /> */}
+      </ItemBox>
+    </QueueAnim>
   );
 }
 
-const Selected = styled.div<{ isClicked: boolean }>`
+const ItemBox = styled(Col)<{ isClicked: boolean }>`
   border: ${(props) =>
-    props.isClicked ? "1px solid blue" : "1px solid darkgrey"};
-  height: 8rem;
+    props.isClicked ? "1px solid #1890ff" : "1px solid darkgrey"};
   width: calc(height * 0.7);
+  height: 8rem;
   margin: 0.25rem;
   border-radius: 4px;
+  grid: 1fr 1fr;
+  max-width: none;
 `;
-
-// TODO: 추가되면 애니메이션 슬라이드 인
+// FIXME: 추가되면 애니메이션 슬라이드 인
 // clickedIndex%3 === 0 : 2개 오른쪽 추가 아래 한 개 추가
 // clickedIndex%3 === 1 : 1개 오른쪽 추가 아래 두 개 추가
 // clickedIndex%3 === 2 : 아래 3개 추가

@@ -5,8 +5,10 @@ import Text from "../common/Text";
 import ItemList from "./ItemList";
 
 /**
- * 독자 유형 테스트 페이지
- * @returns
+ * 독자 유형 테스트 페이지 (작품 선택 페이지)
+ * @setComp : 컴포넌트 변경을 위한 setter 함수
+ * @dataList : 선택한 작품 리스트
+ * @setDataList : 작품 리스트 아이템 추가 및 삭제
  */
 
 interface SurveyProps {
@@ -21,7 +23,7 @@ export default function Survey(props: SurveyProps) {
     .reduce((a: number, b) => a + b, 0);
 
   return (
-    <>
+    <OuterBox>
       <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
       <RightDiv>
         <Text>
@@ -29,10 +31,17 @@ export default function Survey(props: SurveyProps) {
         </Text>
       </RightDiv>
       <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
-      <BtnContainer direction="vertical">
-        <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
-      </BtnContainer>
-    </>
+      {/* dataList의 길이가 다르면 스타일링 다르게 하기 위함 */}
+      {props.dataList.length > 6 ? (
+        <BtnContainer direction="vertical">
+          <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+        </BtnContainer>
+      ) : (
+        <BtnScrollContainer direction="vertical">
+          <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+        </BtnScrollContainer>
+      )}
+    </OuterBox>
   );
 }
 
@@ -43,10 +52,13 @@ export default function Survey(props: SurveyProps) {
  * - 부드러운 애니메이션 필요(추가되는 부분에 대한 슬라이드 animation)
  * - 연관 아이템이란 무엇인가? 장르인가 상세 태그인가
  */
-
+const OuterBox = styled.div`
+  height: 100%;
+`;
 const RightDiv = styled.div`
   display: flex;
   justify-content: end;
+  margin: 1rem 0;
 `;
 const CountSpan = styled.span`
   color: #1890ff;
@@ -55,7 +67,17 @@ const CountSpan = styled.span`
 
 const BtnContainer = styled(Space)`
   line-height: 4rem;
-  width: 100%;
+  width: 85%;
+  position: relative;
+  transform: translateY(-20%);
+`;
+const BtnScrollContainer = styled(Space)`
+  line-height: 4rem;
+  width: 85%;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
 `;
 
 const StyledButton = styled(Button)`

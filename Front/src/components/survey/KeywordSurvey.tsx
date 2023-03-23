@@ -1,4 +1,4 @@
-import { Button, Space } from "antd";
+import { Button, Input, Space } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Text from "../common/Text";
@@ -47,7 +47,7 @@ export default function KeywordSurvey({
         <br />더 자세한 결과를 얻을 수 있어요.
       </p>
       <form onSubmit={submit}>
-        <Input
+        <StyledInput
           type="text"
           placeholder="ex) 잔잔한, 힐링"
           value={value}
@@ -83,19 +83,19 @@ export default function KeywordSurvey({
   );
 }
 
-const Input = styled.input`
-  border-radius: 4px;
+const StyledInput = styled(Input)`
+  /* border-radius: 4px;
   background-color: #f5f5f5;
-  border: none;
+  border: none; */
   width: 80%;
   margin: 0 0.25rem 0 0;
-  padding: 0.74rem 1rem;
+  /* padding: 0.74rem 1rem; */
 `;
 const AddButton = styled(Button)`
   background-color: #1890ff;
   color: #e3e4e6;
   margin: 0;
-  height: 2.5rem;
+  height: 2rem;
 `;
 const KeywordListBox = styled(Space)`
   width: 100%;

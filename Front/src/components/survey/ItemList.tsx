@@ -1,6 +1,8 @@
 import React from "react";
 import Item from "./Item";
 import styled from "styled-components";
+import { Row } from "antd";
+import QueueAnim from "rc-queue-anim";
 
 interface ItemListProps {
   dataList: SurveyItemType[];
@@ -9,8 +11,7 @@ interface ItemListProps {
 
 export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   return (
-    <ItemListBox>
-      {/* {dataList} */}
+    <ItemListBox gutter={[16, 16]} key="1">
       {dataList.map((item) => {
         return <Item key={item.id} item={item} onClickItem={onClickItem} />;
       })}
@@ -18,9 +19,7 @@ export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   );
 }
 
-const ItemListBox = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: true;
+const ItemListBox = styled(Row)`
   justify-content: center;
+  margin: 0 0 30px 0;
 `;
