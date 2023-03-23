@@ -8,6 +8,9 @@ interface PropType {
 }
 
 export default function Text(props: PropType) {
+  if (props.type === "desc") {
+    return <DescText>{props.children}</DescText>;
+  }
   if (props.type === "keyword") {
     return <KeywordText>{props.children}</KeywordText>;
   }
@@ -19,4 +22,8 @@ const KeywordText = styled(Typography.Text)`
 `;
 const StyledText = styled(Typography.Text)`
   line-height: 1rem;
+`;
+const DescText = styled(Typography.Text)`
+  line-height: 1rem;
+  margin-bottom: 30px;
 `;

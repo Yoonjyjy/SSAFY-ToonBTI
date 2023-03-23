@@ -32,15 +32,10 @@ export default function Survey(props: SurveyProps) {
       </RightDiv>
       <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
       {/* dataList의 길이가 다르면 스타일링 다르게 하기 위함 */}
-      {props.dataList.length > 6 ? (
-        <BtnContainer direction="vertical">
-          <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
-        </BtnContainer>
-      ) : (
-        <BtnScrollContainer direction="vertical">
-          <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
-        </BtnScrollContainer>
-      )}
+      {/* //TODO: 10개 넘는지 확인 */}
+      <BtnContainer direction="vertical">
+        <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+      </BtnContainer>
     </OuterBox>
   );
 }
@@ -70,14 +65,6 @@ const BtnContainer = styled(Space)`
   width: 85%;
   position: relative;
   transform: translateY(-20%);
-`;
-const BtnScrollContainer = styled(Space)`
-  line-height: 4rem;
-  width: 85%;
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 20px;
 `;
 
 const StyledButton = styled(Button)`

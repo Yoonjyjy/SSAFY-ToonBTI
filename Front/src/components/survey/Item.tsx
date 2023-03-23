@@ -20,8 +20,8 @@ export default function Item({ item, onClickItem }: ItemProps) {
       <ItemBox
         key={item.id}
         span={6}
-        isClicked={item.clicked}
-        onClick={() => onClickItem(item)}
+        selected={item.clicked}
+        onClick={() => onClickItem(item.id)}
       >
         <Text>{item.name}</Text>
         {/* <img src={item.imgUrl} alt={item.name} /> */}
@@ -30,9 +30,9 @@ export default function Item({ item, onClickItem }: ItemProps) {
   );
 }
 
-const ItemBox = styled(Col)<{ isClicked: boolean }>`
+const ItemBox = styled(Col)<{ selected: boolean }>`
   border: ${(props) =>
-    props.isClicked ? "1px solid #1890ff" : "1px solid darkgrey"};
+    props.selected ? "1px solid #1890ff" : "1px solid darkgrey"};
   width: calc(height * 0.7);
   height: 8rem;
   margin: 0.25rem;

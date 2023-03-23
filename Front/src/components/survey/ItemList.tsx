@@ -2,7 +2,6 @@ import React from "react";
 import Item from "./Item";
 import styled from "styled-components";
 import { Row } from "antd";
-import QueueAnim from "rc-queue-anim";
 
 interface ItemListProps {
   dataList: SurveyItemType[];
