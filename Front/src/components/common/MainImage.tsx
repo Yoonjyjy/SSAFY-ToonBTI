@@ -8,14 +8,18 @@ interface PropType {
 
 export default function MainImage(props: PropType) {
   return (
-    <div>
+    <StyledDiv>
       <Image src={props.src} size={props.size} />
-    </div>
+    </StyledDiv>
   );
 }
 
 const Image = styled.img<{ size: number }>`
-  width: ${(props) => props.size}%;
+  // width: ${(props) => props.size}%;
   height: ${(props) => props.size}vw;
   border-radius: 10px;
+`;
+
+const StyledDiv = styled.div`
+  line-height: 0px;
 `;
