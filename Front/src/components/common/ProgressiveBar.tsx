@@ -6,5 +6,5 @@ interface ProgressiveBarProps {
 }
 
 export default function ProgressiveBar({ progress }: ProgressiveBarProps) {
-  return <Progress percent={progress} status="active" />;
+  return <Progress percent={progress} showInfo={false} status="active" />;
 }

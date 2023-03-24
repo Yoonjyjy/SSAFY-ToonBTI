@@ -1,5 +1,6 @@
 import { Button, Input, Space } from "antd";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Text from "../common/Text";
 
@@ -12,6 +13,7 @@ export default function KeywordSurvey({
   keywordList,
   addKeyword,
 }: KeywordSurveyProps) {
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
   function addList() {
     addKeyword({
@@ -21,11 +23,6 @@ export default function KeywordSurvey({
     setValue("");
   }
 
-  function handleSubmit(arr: KeywordType[]) {
-    arr.map((item) => {
-      console.log(item.keyword);
-    });
-  }
   function handleEnter(event: React.KeyboardEvent) {
     if (event.key === "Enter" && value !== "") {
       addKeyword({
@@ -38,7 +35,8 @@ export default function KeywordSurvey({
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    handleSubmit(keywordList);
+    //TODO: 데이터 서버로 보내기
+    navigate("/survey/result");
   }
   return (
     <>
