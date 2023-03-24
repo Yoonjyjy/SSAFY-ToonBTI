@@ -1,52 +1,42 @@
-import React, { useEffect, useState } from "react";
+import { Button, Space } from "antd";
+import React from "react";
 import styled from "styled-components";
+import Text from "../common/Text";
 import ItemList from "./ItemList";
-// import SearchBar from "../common/SearchBar";
 
 /**
- * 독자 유형 테스트 페이지
- * @returns
+ * 독자 유형 테스트 페이지 (작품 선택 페이지)
+ * @setComp : 컴포넌트 변경을 위한 setter 함수
+ * @dataList : 선택한 작품 리스트
+ * @setDataList : 작품 리스트 아이템 추가 및 삭제
  */
 
 interface SurveyProps {
-  setComp: React.Dispatch<React.SetStateAction<number>>;
+  onClickNext: () => void;
+  onClickItem: (itemId: number) => void;
   dataList: SurveyItemType[];
-  setDataList: React.Dispatch<React.SetStateAction<SurveyItemType[]>>;
 }
 
-export default function Survey({
-  setComp,
-  dataList,
-  setDataList,
-}: SurveyProps) {
-  const [cnt, setCnt] = useState<number>(0);
-
-  function handleClick() {
-    setComp((prev) => prev + 1);
-  }
-
-  useEffect(() => {
-    let cnt = 0;
-    dataList.map((item) => {
-      if (item.clicked === true) {
-        cnt += 1;
-      }
-    });
-    setCnt(cnt);
-  }, [dataList]);
+export default function Survey(props: SurveyProps) {
+  const cnt: number = props.dataList
+    .map((el) => (el.clicked ? 1 : 0))
+    .reduce((a: number, b) => a + b, 0);
 
   return (
-    <>
-      <Title>웹툰 취향 분석 테스트</Title>
-      <p>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</p>
+    <OuterBox>
+      <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
       <RightDiv>
-        <RightP>
+        <Text>
           선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
-        </RightP>
+        </Text>
       </RightDiv>
-      <ItemList dataList={dataList} setDataList={setDataList} />
-      <button onClick={() => handleClick()}>다음으로</button>
-    </>
+      <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
+      {/* dataList의 길이가 다르면 스타일링 다르게 하기 위함 */}
+      {/* //TODO: 10개 넘는지 확인 */}
+      <BtnContainer direction="vertical">
+        <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+      </BtnContainer>
+    </OuterBox>
   );
 }
 
@@ -57,19 +47,27 @@ export default function Survey({
  * - 부드러운 애니메이션 필요(추가되는 부분에 대한 슬라이드 animation)
  * - 연관 아이템이란 무엇인가? 장르인가 상세 태그인가
  */
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 500;
+const OuterBox = styled.div`
+  height: 100%;
 `;
 const RightDiv = styled.div`
   display: flex;
   justify-content: end;
-`;
-const RightP = styled.p`
-  padding: 0;
-  margin: 0;
+  margin: 1rem 0;
 `;
 const CountSpan = styled.span`
   color: #1890ff;
   font-weight: 700;
+`;
+
+const BtnContainer = styled(Space)`
+  line-height: 4rem;
+  width: 85%;
+  position: relative;
+  transform: translateY(-20%);
+`;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  height: 3rem;
 `;
