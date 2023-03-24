@@ -2,7 +2,7 @@ import React from "react";
 import { Layout } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { MainImage } from ".";
+import { MainImage } from "../common";
 import tiger from "/tiger.jpg";
 
 interface PropType {
