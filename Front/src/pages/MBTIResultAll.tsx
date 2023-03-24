@@ -100,15 +100,13 @@ export default function MBTIResultAll() {
         </InfoDesContainer>
       </InfoContainer>
 
-      <TextContainer direction="vertical" size={5}>
-        <StyledContent>
-          잠깐!
-          <br />
-          지금까지 본 웹툰을 알려주시면
-          <br />
-          <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
-        </StyledContent>
-      </TextContainer>
+      <StyledContent>
+        잠깐!
+        <br />
+        지금까지 본 웹툰을 알려주시면
+        <br />
+        <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
+      </StyledContent>
 
       <BtnContainer direction="vertical">
         <StyledButton onClick={clickSurveyHandler}>
