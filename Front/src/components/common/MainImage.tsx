@@ -15,7 +15,7 @@ export default function MainImage(props: PropType) {
 }
 
 const Image = styled.img<{ size: number }>`
-  width: ${(props) => props.size}%;
+  // width: ${(props) => props.size}%;
   height: ${(props) => props.size}vw;
   border-radius: 10px;
 `;

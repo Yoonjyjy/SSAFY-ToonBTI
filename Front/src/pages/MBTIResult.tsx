@@ -10,9 +10,12 @@ export default function MBTIResult() {
   const navigate = useNavigate();
 
   function clickHandler() {
-    navigate("/analysis");
+    navigate("/survey");
   }
 
+  function clickResultAllHandler() {
+    navigate("/mbti/result/all");
+  }
   return (
     <Layout title="당신의 독자 유형은?" hasPrevious>
       <MainImage src={tiger} size={75} />
@@ -20,6 +23,9 @@ export default function MBTIResult() {
         <StyledButton onClick={clickHandler}>
           웹툰 취향 분석하기
           <SwapRightOutlined />
+        </StyledButton>
+        <StyledButton onClick={clickResultAllHandler}>
+          독자 유형 전체 보기
         </StyledButton>
         <StyledButton onClick={clickHandler}>
           독자 유형 테스트 다시하기
