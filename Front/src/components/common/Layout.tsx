@@ -64,6 +64,11 @@ const StyledHeader = styled(Header)`
   background-color: #f5f5f5;
   font-weight: bold;
   font-size: 1rem;
+
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1;
 `;
 
 const LeftButton = styled(LeftOutlined)`
@@ -78,6 +83,7 @@ const StyledContent = styled(Content)`
   min-height: 120;
   line-height: 120px;
   padding: 2rem;
+  margin-top: 4rem;
 `;
 
 const SurveyPageContent = styled(Content)`
