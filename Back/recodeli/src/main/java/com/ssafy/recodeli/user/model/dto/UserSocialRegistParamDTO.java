@@ -10,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
@@ -18,15 +22,25 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class UserSocialRegistParamDTO {
+
+	@NotNull(message = "email를 입력해주세요")
+	@Email
 	private String email;
+
+	@NotNull(message = "별명을 입력해주세요")
 	private String nickname;
+
+	@NotNull(message = "성별을 입력해주세요")
 	private String gender;
-	private String birth;
-	private String address;
-	private String regionCode;
+
+	@NotNull(message = "나이대를 입력해주세요")
+	private String age;
+
+	@NotNull(message = "소셜종류가 null입니다")
 	private String social;
-	
+
 	public static User of(UserSocialRegistParamDTO userDTO) {
+		System.out.println("userdto:" + userDTO);
 		String receivedSocial = userDTO.getSocial().toUpperCase();
 		if (receivedSocial.equals("K")) {
 			return User.builder()
@@ -34,12 +48,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.K)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		} else if (receivedSocial.equals("G")) {
@@ -48,12 +58,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.G)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		} else {
@@ -62,12 +68,8 @@ public class UserSocialRegistParamDTO {
 					.nickName(userDTO.getNickname())
 					.password("=====social=====")
 					.gender(userDTO.getGender().charAt(0) + "")
-					.userBirth(userDTO.getBirth())
-					.address(userDTO.getAddress())
-					.regionCode(userDTO.getRegionCode())
+					.userAge(userDTO.getAge())
 					.social(ProviderType.N)
-					.ratingSum(0)
-					.ratingCount(0)
 					.roleType(RoleType.USER)
 					.build();
 		}

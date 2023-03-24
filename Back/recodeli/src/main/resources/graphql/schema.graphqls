@@ -1,0 +1,26 @@
+type Query{
+    userById(id: ID!): User
+}
+
+type Mutation{
+#    addUser(UserSocialRegistParamDTO: UserInput): User
+    addUser(user: UserInput): User
+}
+
+input UserInput {
+    nickname: String!
+    email: String!
+    gender: String!
+    age: Int!
+    address: String!
+    social: String!
+}
+
+type User {
+    id: ID
+    nickname: String!
+    email: String!
+    gender: String!
+    age: Int!
+    address: String!
+}

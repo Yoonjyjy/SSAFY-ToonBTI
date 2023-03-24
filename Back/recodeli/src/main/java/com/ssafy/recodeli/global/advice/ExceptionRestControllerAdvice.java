@@ -38,7 +38,7 @@ import io.jsonwebtoken.io.IOException;
  */
 
 @RestControllerAdvice(basePackages = {
-		"com.ssafy.togetdog.user.controller"})
+		"com.ssafy.recodeli.user.controller"})
 public class ExceptionRestControllerAdvice extends ResponseEntityExceptionHandler {
 
 	private static final String FAIL = "fail";

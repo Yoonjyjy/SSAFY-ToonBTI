@@ -16,17 +16,13 @@ import lombok.ToString;
 public class UserUpdateParamDTO {
 	private String nickName;
 	private String gender;
-	private String birth;
-	private String address;
-	private String regionCode;
+	private String age;
 	
 	public static UserUpdateParamDTO of(UserUpdateParamDTO userDTO) {
 		return UserUpdateParamDTO.builder()
 				.nickName(userDTO.getNickName())
 				.gender(userDTO.getGender().charAt(0) + "")
-				.birth(userDTO.getBirth())
-				.address(userDTO.getAddress())
-				.regionCode(userDTO.getRegionCode())
+				.age(userDTO.getAge())
 				.build();
 	}
 }

@@ -21,12 +21,9 @@ import lombok.ToString;
 public class UserInfoRespDTO {
 	private String email;
 	private String nickName;
-	private String birth;
+	private String age;
 	private String userGender;
-	private String address;
-	private String regionCode;
 	private String social;
-	private double rating;
 
 	public static UserInfoRespDTO of(User user) {
 		String gender = user.getGender();
@@ -43,20 +40,12 @@ public class UserInfoRespDTO {
 			social = "kakao";
 		else if (beforeSocial.equals(ProviderType.G))
 			social = "google";
-
-		double rating = 0;
-		if (user.getRatingCount() != 0) {
-			rating = (int) user.getRatingSum() / user.getRatingCount();
-		}
 		return UserInfoRespDTO.builder()
 				.email(user.getEmail())
 				.nickName(user.getNickName())
-				.birth(user.getUserBirth())
+				.age(user.getUserAge())
 				.userGender(gender)
-				.address(user.getAddress())
-				.regionCode(user.getRegionCode())
 				.social(social)
-				.rating(rating)
 				.build();
 	}
 }
