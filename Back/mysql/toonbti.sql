@@ -45,7 +45,6 @@ CREATE TABLE `webtoon` (
 	`img`	VARCHAR(255)	NULL,
 	`platform`	CHAR(5)	NULL,
 	`end_flag`	BOOLEAN	NULL,
-	`award_flag`	BOOLEAN	NULL,
 	`rate`	INT	NULL,
 	`view`	INT	NULL,
 	PRIMARY KEY (`id`),
