@@ -6,3 +6,6 @@ import MBTIResultAll from "./MBTIResultAll";
 import MBTITest from "./MBTITest";
 
 export { Home, SurveyResult, SurveyTest, MBTIResult, MBTIResultAll, MBTITest };
+
+window.Kakao.init(import.meta.env.VITE_KAKAO_SHARE_KEY);
+window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다

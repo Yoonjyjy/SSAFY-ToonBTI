@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Layout, MBTILayout } from "../components/common";
 import { SwapRightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import ShareButton from "../components/common/ShareButton";
 
 const { Title, Text } = Typography;
 
@@ -100,13 +101,15 @@ export default function MBTIResultAll() {
         </InfoDesContainer>
       </InfoContainer>
 
-      <StyledContent>
-        잠깐!
-        <br />
-        지금까지 본 웹툰을 알려주시면
-        <br />
-        <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
-      </StyledContent>
+      <TextContainer direction="vertical" size={5}>
+        <StyledContent>
+          잠깐!
+          <br />
+          지금까지 본 웹툰을 알려주시면
+          <br />
+          <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
+        </StyledContent>
+      </TextContainer>
 
       <BtnContainer direction="vertical">
         <StyledButton onClick={clickSurveyHandler}>
@@ -116,6 +119,11 @@ export default function MBTIResultAll() {
         <StyledButton onClick={clickHomeHandler}>
           독자 유형 테스트 다시하기
         </StyledButton>
+        <ShareButton
+          text="웹툰 독자 유형만 공유하기"
+          src="http://localhost:5173"
+          param="mbti/result"
+        />
       </BtnContainer>
     </Layout>
   );
@@ -124,6 +132,7 @@ export default function MBTIResultAll() {
 const BtnContainer = styled(Space)`
   line-height: 4rem;
   width: 100%;
+  margin-bottom: 60px;
 `;
 
 const InfoContainer = styled(Space)`
