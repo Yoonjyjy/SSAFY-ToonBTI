@@ -14,11 +14,89 @@ import {
 } from "chart.js";
 import { useNavigate } from "react-router-dom";
 import tiger from "/tiger.jpg";
+import test1 from "/test1.png";
 
 //TODO: data fetch
-const data = {};
+const data = {
+  reader_category_img: test1,
+  reader_category_name: "개척하는 모험가",
+  read_books_num: 77,
+  total_reader_cnt: 3023,
+  reader_percentage: 23.5,
+  reader_title_list: [
+    {
+      id: 1,
+      title: "로판 전문가",
+      color: "#99CCFF",
+    },
+    { id: 2, title: "카카오 매니아", color: "#FFD45B" },
+    { id: 3, title: "완결작 킬러", color: "#757575" },
+  ],
+  platform_ratio: {
+    Kakao: 63.5,
+    Naver: 36.5,
+  },
+  finished_ratio: {
+    finished: 43.7,
+    ongoing: 57.3,
+  },
+  genre_analysis: {
+    판타지: 31,
+    드라마: 21,
+    로맨스: 10,
+    로맨스판타지: 30,
+    현대판타지: 9,
+    "액션/무협": 33,
+    "소년/감성": 11,
+    "일상/개그": 50,
+    "공포/추리": 3,
+    스포츠: 0,
+  },
+  keywords: [
+    {
+      id: 1,
+      keyword: "잔잔한",
+    },
+    {
+      id: 2,
+      keyword: "일상",
+    },
+    {
+      id: 3,
+      keyword: "힐링",
+    },
+  ],
+  favorite_genre: "판타지",
+  favorite_genre_author: {
+    name: "판타지",
+    main_author: "SIU",
+    author_list: ["SIU", "Omin", "테미스"],
+    main_work_title: ["신의 탑", "언니", "그만훼"],
+    main_genre: ["판타지"],
+    main_author_img: tiger,
+  },
+  preferred_authors_list: [
+    {
+      name: "SIU",
+      main_work: "신의 탑",
+      img_url: tiger,
+    },
+    {
+      name: "SIU",
+      main_work: "신의 탑",
+      img_url: tiger,
+    },
+    {
+      name: "SIU",
+      main_work: "신의 탑",
+      img_url: tiger,
+    },
+  ],
+  accuracy: 73.2,
+};
 export default function AnalysisResult() {
   const navigate = useNavigate();
+  // TODO: 장르 비율 계산
 
   const data = {
     type: "bar",
@@ -81,20 +159,19 @@ export default function AnalysisResult() {
   return (
     <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
       <TitleText>당신의 독자 유형은?</TitleText>
-      <Image url="" /> {/* data */}
+      <Image url={data.reader_category_img} /> {/* data */}
       <article>
         <StyledSection>
           <Text>웹툰 취향 분석 결과는...</Text>
-          <Text bold size="1.7rem">
-            개척하는 모험가
+          <Text bold="true" size="1.7rem">
+            {data.reader_category_name}
           </Text>
-          {/* data */}
         </StyledSection>
         <StyledSection>
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
             <Text size="1.5rem">
-              <PointSpan>77</PointSpan>개{/* data */}
+              <PointSpan>{data.read_books_num}</PointSpan>개{/* data */}
             </Text>
           </CallOutDiv>
           <Text>제법 많이 보셨군요!</Text> {/* 읽은 권수에 따른 다른 text */}
@@ -102,50 +179,53 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text>
             현재
-            <PointSpan>N명</PointSpan>의 분석 독자들 중...
+            <PointSpan>{data.total_reader_cnt}</PointSpan>명의 분석 독자들 중...
           </Text>
           <div style={{ width: "90%", margin: "auto" }}>
-            <ProgressiveBar type="top" progress={90}></ProgressiveBar>
+            <ProgressiveBar
+              type="top"
+              progress={data.reader_percentage}
+            ></ProgressiveBar>
           </div>
           <Text>
-            <GradientText>상위 NN.N%</GradientText>에 해당해요!
+            <GradientText>상위 {data.reader_percentage}%</GradientText>에
+            해당해요!
           </Text>
         </StyledSection>
         <StyledSection>
           <Text size="1.3rem">나의 전문가 수치</Text>
           <RoundUpperDiv>
-            <RoundDiv color="#99CCFF">
-              <Text color="#ffffff" size="1.2rem" bold>
-                로판 전문가
-              </Text>
-            </RoundDiv>
-            <RoundDiv color="#FFD400">
-              <Text color="#ffffff" size="1.2rem" bold>
-                카카오 매니아
-              </Text>
-            </RoundDiv>
-            <RoundDiv color="#5a5b5c">
-              <Text color="#ffffff" size="1.2rem" bold>
-                완결작 킬러
-              </Text>
-            </RoundDiv>
+            {/* //FIXME: 원형 모양 반응형 */}
+            {data.reader_title_list.map((item) => (
+              <RoundDiv color={item.color} key={item.id}>
+                <Text color="#ffffff" size="1.2rem" bold="true">
+                  {item.title}
+                </Text>
+              </RoundDiv>
+            ))}
           </RoundUpperDiv>
         </StyledSection>
         <StyledSection>
           <Text size="1.3rem">플랫폼 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="#FFBC00">카카오페이지 NN%</RatioText>
-              <RatioText color="#2DB400">네이버 NN%</RatioText>
+              <RatioText color="#FFBC00">
+                카카오페이지 {data.platform_ratio.Kakao}%
+              </RatioText>
+              <RatioText color="#2DB400">
+                네이버 {data.platform_ratio.Naver}%
+              </RatioText>
             </RatioTextBox>
-            <ProgressiveBar type="platform" progress={73}></ProgressiveBar>
+            <ProgressiveBar
+              type="platform"
+              progress={data.platform_ratio.Kakao}
+            ></ProgressiveBar>
             <RatioTextBox>
-              {/* {data.kakao > data.naver ? (
+              {data.platform_ratio.Kakao > data.platform_ratio.Naver ? (
                 <RatioText color="#FFBC00">카카오페이지</RatioText>
               ) : (
                 <RatioText color="#2DB400">네이버</RatioText>
-              )} */}
-              <RatioText color="#FFBC00">카카오페이지</RatioText>
+              )}
               <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
             </RatioTextBox>
           </div>
@@ -154,17 +234,32 @@ export default function AnalysisResult() {
           <Text size="1.3rem">완결작 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="#FF6C6C">완결작 NN%</RatioText>
-              <RatioText color="#1E9EFF">연재작 NN%</RatioText>
+              <RatioText color="#FF6C6C">
+                완결작 {data.finished_ratio.finished}%
+              </RatioText>
+              <RatioText color="#1E9EFF">
+                연재작 {data.finished_ratio.ongoing}%
+              </RatioText>
             </RatioTextBox>
-            <ProgressiveBar type="endedOrOngoin" progress={43}></ProgressiveBar>
-
-            <RatioTextBox>
-              <RatioText color="#1E9EFF">연재작 </RatioText>
-              <RatioText>보다 더&nbsp;</RatioText>
-              <RatioText color="#FF6C6C"> 완결작</RatioText>
-              <RatioText>을 더 선호해요.</RatioText>
-            </RatioTextBox>
+            <ProgressiveBar
+              type="endedOrOngoin"
+              progress={data.finished_ratio.finished}
+            ></ProgressiveBar>
+            {data.finished_ratio.finished < data.finished_ratio.ongoing ? (
+              <RatioTextBox>
+                <RatioText color="#FF6C6C"> 완결작</RatioText>
+                <RatioText>보다 더&nbsp;</RatioText>
+                <RatioText color="#1E9EFF"> 연재작</RatioText>
+                <RatioText>을 더 선호해요.</RatioText>
+              </RatioTextBox>
+            ) : (
+              <RatioTextBox>
+                <RatioText color="#1E9EFF">연재작 </RatioText>
+                <RatioText>보다 더&nbsp;</RatioText>
+                <RatioText color="#FF6C6C"> 완결작</RatioText>
+                <RatioText>을 더 선호해요.</RatioText>
+              </RatioTextBox>
+            )}
           </div>
         </StyledSection>
         <StyledSection>
@@ -179,69 +274,84 @@ export default function AnalysisResult() {
                 <GenreDiv>
                   <GenreText preferred>#판타지</GenreText>
                   <GenreHr preferred />
-                  <GenreText preferred>38 (13.9%)</GenreText>
+                  <GenreText preferred>
+                    {data.genre_analysis.판타지} (13.9%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
                   <GenreText>#드라마</GenreText>
                   <GenreHr />
-                  <GenreText>21 (7.7%)</GenreText>
+                  <GenreText>{data.genre_analysis.드라마} (7.7%)</GenreText>
                 </GenreDiv>
                 <GenreDiv>
                   <GenreText>#로맨스</GenreText>
                   <GenreHr />
-                  <GenreText>10 (3.6%)</GenreText>
+                  <GenreText>{data.genre_analysis.로맨스} (3.6%)</GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText preferred>#판타지</GenreText>
+                  <GenreText preferred>#로맨스판타지</GenreText>
                   <GenreHr preferred />
-                  <GenreText preferred>38 (13.9%)</GenreText>
+                  <GenreText preferred>
+                    {data.genre_analysis.로맨스판타지} (13.9%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText>#드라마</GenreText>
+                  <GenreText>#공포/추리</GenreText>
                   <GenreHr />
-                  <GenreText>21 (7.7%)</GenreText>
+                  <GenreText>
+                    {data.genre_analysis["공포/추리"]} (7.7%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText preferred>#로맨스</GenreText>
+                  <GenreText preferred>#소년/감성</GenreText>
                   <GenreHr preferred />
-                  <GenreText preferred>10 (3.6%)</GenreText>
+                  <GenreText preferred>
+                    {data.genre_analysis["소년/감성"]} (3.6%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText preferred>#판타지</GenreText>
+                  <GenreText preferred>#스포츠</GenreText>
                   <GenreHr preferred />
-                  <GenreText preferred>38 (13.9%)</GenreText>
+                  <GenreText preferred>
+                    {data.genre_analysis.스포츠} (13.9%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText>#드라마</GenreText>
+                  <GenreText>#액션/무협</GenreText>
                   <GenreHr />
-                  <GenreText>21 (7.7%)</GenreText>
+                  <GenreText>
+                    {data.genre_analysis["액션/무협"]} (7.7%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText>#로맨스</GenreText>
+                  <GenreText>#일상/개그</GenreText>
                   <GenreHr />
-                  <GenreText>10 (3.6%)</GenreText>
+                  <GenreText>
+                    {data.genre_analysis["일상/개그"]} (3.6%)
+                  </GenreText>
                 </GenreDiv>
                 <GenreDiv>
-                  <GenreText>#로맨스</GenreText>
+                  <GenreText>#현대판타지</GenreText>
                   <GenreHr />
-                  <GenreText>10 (3.6%)</GenreText>
+                  <GenreText>{data.genre_analysis.현대판타지} (3.6%)</GenreText>
                 </GenreDiv>
               </GenreSect>
             </section>
             <RatioTextBox>
-              <Text bold size="1.1rem">
-                주로
+              <Text bold="true" size="1.1rem">
+                주로&nbsp;
                 <span style={{ color: "#FF6C6C" }}>
                   로맨스 판타지, 판타지, 일상/개그
                 </span>
-                장르를 <br />더 선호하시네요!
+                &nbsp;장르를 <br />더 선호하시네요!
               </Text>
             </RatioTextBox>
           </div>
         </StyledSection>
         <StyledSection>
           <Text size="1.1rem">
-            <BoldSpan>로맨스판타지</BoldSpan> 장르를 좋아하는 독자들의 선택
+            <BoldSpan>{data.favorite_genre}</BoldSpan> 장르를 좋아하는 독자들의
+            선택
           </Text>
           <section>
             <RecommendItemList
@@ -259,26 +369,13 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text>사용자가 즐겨보는 키워드</Text>
           <KeywordSection>
-            <KeywordDiv>
-              <Text type="keyword" bold>
-                #잔잔한
-              </Text>
-            </KeywordDiv>
-            <KeywordDiv>
-              <Text type="keyword" bold>
-                #힐링
-              </Text>
-            </KeywordDiv>
-            <KeywordDiv>
-              <Text type="keyword" bold>
-                #일상
-              </Text>
-            </KeywordDiv>
-            <KeywordDiv>
-              <Text type="keyword" bold>
-                #호랑이
-              </Text>
-            </KeywordDiv>
+            {data.keywords.map((item) => (
+              <KeywordDiv key={item.id}>
+                <Text type="keyword" bold="true">
+                  # {item.keyword}
+                </Text>
+              </KeywordDiv>
+            ))}
           </KeywordSection>
         </StyledSection>
         <StyledSection>
@@ -288,20 +385,55 @@ export default function AnalysisResult() {
           ></RecommendItemList>
         </StyledSection>
         <StyledSection>
-          <Text bold>로맨스 판타지 장르 독자들이 선호하는 대표 작가</Text>
-          <Image url="" width="10rem" height="14rem" borderRadius={4}></Image>
-          <Text bold>
-            <PointSpan>취향저격율 89.4%</PointSpan>
+          <Text bold="true">
+            {data.favorite_genre} 장르 독자들이 선호하는 대표 작가
+          </Text>
+          <Image
+            url={data.favorite_genre_author.main_author_img}
+            width="10rem"
+            height="14rem"
+            borderRadius={4}
+          ></Image>
+          <Text bold="true">
+            <PointSpan>취향저격율 {data.accuracy}%</PointSpan>
           </Text>
           <Text>
-            <BoldSpan>박태준주식회사 / 송펄 / 마이노 </BoldSpan>
-            작가
+            <BoldSpan>
+              {data.favorite_genre_author.author_list.map((item, idx) => {
+                let res = item;
+                if (idx != data.favorite_genre_author.author_list.length - 1) {
+                  res += " / ";
+                }
+                return res;
+              })}
+            </BoldSpan>
+            &nbsp;작가
           </Text>
-          <Text>대표작 - 작품1, 작품2</Text>
-          <Text>주요 연재 장르 - 장르1, 장르2</Text>
+          <Text>
+            대표작 -
+            {data.favorite_genre_author.main_work_title.map((item, idx) => {
+              let res = item;
+              if (idx != data.favorite_genre_author.author_list.length - 1) {
+                res += ", ";
+              }
+              return res;
+            })}
+          </Text>
+          <Text>
+            주요 연재 장르 -{" "}
+            {data.favorite_genre_author.main_genre.map((item, idx) => {
+              let res = item;
+              if (idx != data.favorite_genre_author.main_genre.length - 1) {
+                res += ", ";
+              }
+              return res;
+            })}
+          </Text>
         </StyledSection>
         <StyledSection>
-          <Text bold>로맨스 판타지 장르 독 자들이 선호하는 작가들</Text>
+          <Text bold="true">
+            {data.favorite_genre} 장르 독자들이 선호하는 작가들
+          </Text>
           <section>
             <AuthorsDiv>
               <Image url={tiger} width="6rem" height="8rem" />
@@ -356,6 +488,7 @@ const StyledSection = styled.section`
 `;
 const TitleText = styled.h1`
   margin: 0 auto 2rem auto;
+  font-size: 1.5rem;
 `;
 const CallOutDiv = styled.div`
   border-radius: 10px;
@@ -418,6 +551,7 @@ const RatioText = styled.p<{ color?: string }>`
   color: ${(props) => (props.color ? props.color : "black")};
   font-weight: 700;
   display: flex;
+  margin: 0.2rem;
 `;
 const GradientText = styled.span`
   margin-bottom: 0.5rem;

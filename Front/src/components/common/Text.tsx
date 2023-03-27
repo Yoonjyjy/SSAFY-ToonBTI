@@ -7,7 +7,7 @@ interface PropType {
   type?: string;
   color?: string;
   size?: string;
-  bold?: boolean;
+  bold?: string;
 }
 
 export default function Text(props: PropType) {
@@ -24,7 +24,7 @@ export default function Text(props: PropType) {
   );
 }
 
-const KeywordText = styled(Typography.Text)<{ bold?: boolean }>`
+const KeywordText = styled(Typography.Text)<{ bold?: string }>`
   display: flex;
   margin: 0.25rem;
   font-weight: ${(props) => (props.bold ? "600" : "500")};
@@ -32,7 +32,7 @@ const KeywordText = styled(Typography.Text)<{ bold?: boolean }>`
 const StyledText = styled.p<{
   color?: string;
   size?: string;
-  bold?: boolean;
+  bold?: string;
 }>`
   font-size: ${(props) => (props.size ? props.size : "1rem")};
   font-weight: ${(props) => (props.bold ? "700" : "500")};
