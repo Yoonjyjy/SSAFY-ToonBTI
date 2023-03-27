@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
+import RecommendItemList from "../components/survey/RecommendItemList";
 import {
   Chart as ChartJS,
   BarElement,
@@ -46,6 +47,38 @@ export default function AnalysisResult() {
       },
     },
   };
+  const CompleRecomData = [
+    {
+      name: "작품1",
+      id: 1,
+      imgUrl: "/tiger.jpg",
+      per: 89.4,
+    },
+    {
+      name: "작품2",
+      id: 2,
+      imgUrl: "/tiger.jpg",
+      per: 79.4,
+    },
+    {
+      name: "작품3",
+      id: 3,
+      imgUrl: "/tiger.jpg",
+      per: 69.4,
+    },
+    {
+      name: "작품4",
+      id: 4,
+      imgUrl: "/tiger.jpg",
+      per: 59.4,
+    },
+    {
+      name: "작품5",
+      id: 5,
+      imgUrl: "/tiger.jpg",
+      per: 49.4,
+    },
+  ];
   return (
     <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
       <TitleText>당신의 독자 유형은?</TitleText>
@@ -127,12 +160,16 @@ export default function AnalysisResult() {
             <b>&quot;로맨스판타지&quot;</b> 장르를 좋아하는 독자들의 선택
           </Text>
           <section>
-            <Text>완결작 중 추천 웹툰</Text>
-            <div>작품리스트</div>
+            <RecommendItemList
+              text="완결작 중 추천 웹툰"
+              dataList={CompleRecomData}
+            ></RecommendItemList>
           </section>
           <section>
-            <Text>연재작 중 추천 웹툰</Text>
-            <div>작품리스트</div>
+            <RecommendItemList
+              text="연재작 중 추천 웹툰"
+              dataList={CompleRecomData}
+            ></RecommendItemList>
           </section>
         </StyledSection>
         <StyledSection>
@@ -153,11 +190,10 @@ export default function AnalysisResult() {
           </section>
         </StyledSection>
         <StyledSection>
-          <Text>
-            <span>&quot;#호랑이&quot;</span>
-            키워드와 유사한 키워드의 작품
-          </Text>
-          <div>작품리스트</div>
+          <RecommendItemList
+            text="#호랑이 키워드와 유사한 키워드의 작품"
+            dataList={CompleRecomData}
+          ></RecommendItemList>
         </StyledSection>
         <StyledSection>
           <Text>
