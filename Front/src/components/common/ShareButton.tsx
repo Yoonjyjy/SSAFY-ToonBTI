@@ -1,5 +1,7 @@
 import React from "react";
-import { Button } from "antd";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 import styled from "styled-components";
 
 interface PropType {
@@ -28,24 +30,27 @@ export default function ShardButton(props: PropType) {
 
   return (
     <StyledDiv>
-      {props.text}
-      <StyledButton onClick={clickCopyHandler}>텍스트 복사</StyledButton>
-      <StyledButton onClick={shareKakao}>카카오톡 공유</StyledButton>
-      {/* <button onClick={shareKakao}>
-        <img
-          src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
-          alt="카카오링크 보내기 버튼"
-        />
-      </button> */}
+      <StyledHeader level={5}>{props.text}</StyledHeader>
+      <StyledImage onClick={clickCopyHandler} src="/url.png" />
+      <StyledImage onClick={shareKakao} src="/kakao.png" />
     </StyledDiv>
   );
 }
 
 const StyledDiv = styled.div`
   line-height: 4rem;
+  // margin: 30px;
 `;
 
-const StyledButton = styled(Button)`
-  width: 50%;
+const StyledImage = styled.img`
   height: 3rem;
+  margin: 5px;
+`;
+
+const StyledHeader = styled(Title)`
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 20px;
+  // height: 3rem;
 `;

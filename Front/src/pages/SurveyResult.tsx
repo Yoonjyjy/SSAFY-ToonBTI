@@ -5,6 +5,7 @@ import { Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
+import ShareButton from "../components/common/ShareButton";
 import {
   Chart as ChartJS,
   BarElement,
@@ -478,7 +479,11 @@ export default function AnalysisResult() {
           웹툰 취향 분석 다시하기
         </StyledButton>
       </article>
-      <StyledSection>결과 공유하기</StyledSection>
+      <ShareButton
+        text="웹툰 취향 분석 결과 공유하기"
+        src="http://localhost:5173"
+        param="mbti/result"
+      />
     </Layout>
   );
 }
