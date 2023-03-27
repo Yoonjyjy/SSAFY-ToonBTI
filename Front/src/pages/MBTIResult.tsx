@@ -5,6 +5,7 @@ import { Layout, MainImage } from "../components/common";
 import tiger from "/tiger.jpg";
 import { SwapRightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import ShareButton from "../components/common/ShareButton";
 
 const { Title, Text } = Typography;
 
@@ -90,6 +91,11 @@ export default function MBTIResult() {
         <StyledButton onClick={clickHomeHandler}>
           독자 유형 테스트 다시하기
         </StyledButton>
+        <ShareButton
+          text="웹툰 독자 유형만 공유하기"
+          src="http://localhost:5173"
+          param="mbti/result"
+        />
       </BtnContainer>
     </Layout>
   );
@@ -98,6 +104,7 @@ export default function MBTIResult() {
 const BtnContainer = styled(Space)`
   line-height: 4rem;
   width: 100%;
+  margin-bottom: 60px;
 `;
 
 const StyledButton = styled(Button)`
@@ -115,6 +122,7 @@ const StyledHeader = styled(Title)`
 const StyledContent = styled(Text)`
   text-align: center;
   line-height: 1.3rem;
+  word-break: keep-all;
 
   span {
     font-weight: 600;
@@ -132,5 +140,5 @@ const TextContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
   color: black;
-  padding-bottom: 00px;
+  padding-bottom: 0px;
 `;

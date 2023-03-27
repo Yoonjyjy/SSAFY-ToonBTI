@@ -1,7 +1,14 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { SurveyResult, SurveyTest, Home, MBTIResult, MBTITest, MBTIResultAll } from "./pages";
+import {
+  SurveyResult,
+  SurveyTest,
+  Home,
+  MBTIResult,
+  MBTITest,
+  MBTIResultAll,
+} from "./pages";
 
 export default function App() {
   return (
