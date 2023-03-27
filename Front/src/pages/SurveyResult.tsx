@@ -98,7 +98,7 @@ export default function AnalysisResult() {
   const navigate = useNavigate();
   // TODO: 장르 비율 계산
 
-  const data = {
+  const data2 = {
     type: "bar",
     labels: ["카카오페이지", "네이버"],
     datasets: [

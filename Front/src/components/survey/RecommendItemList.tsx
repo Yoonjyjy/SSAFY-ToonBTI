@@ -27,6 +27,7 @@ const ItemListBox = styled(Row)`
   justify-content: left;
   margin: 0 0 30px 0;
   overflow: auto;
+  flex-wrap: nowrap;
 `;
 
 const StyledHeader = styled(Title)`
