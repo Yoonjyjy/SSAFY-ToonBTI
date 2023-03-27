@@ -18,6 +18,7 @@ export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   );
 }
 
+//TODO: grid-template-columns : 1fr 1fr 1fr;
 const ItemListBox = styled(Row)`
   justify-content: center;
   margin: 0 0 30px 0;

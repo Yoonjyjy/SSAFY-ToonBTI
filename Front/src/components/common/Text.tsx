@@ -7,7 +7,7 @@ interface PropType {
   type?: string;
   color?: string;
   size?: string;
-  bold?: boolean;
+  bold?: string;
 }
 
 export default function Text(props: PropType) {
@@ -15,7 +15,7 @@ export default function Text(props: PropType) {
     return <DescText>{props.children}</DescText>;
   }
   if (props.type === "keyword") {
-    return <KeywordText>{props.children}</KeywordText>;
+    return <KeywordText bold={props.bold}>{props.children}</KeywordText>;
   }
   return (
     <StyledText bold={props.bold} color={props.color} size={props.size}>
@@ -24,13 +24,15 @@ export default function Text(props: PropType) {
   );
 }
 
-const KeywordText = styled(Typography.Text)`
-  display: block;
+const KeywordText = styled(Typography.Text)<{ bold?: string }>`
+  display: flex;
+  margin: 0.25rem;
+  font-weight: ${(props) => (props.bold ? "600" : "500")};
 `;
 const StyledText = styled.p<{
   color?: string;
   size?: string;
-  bold?: boolean;
+  bold?: string;
 }>`
   font-size: ${(props) => (props.size ? props.size : "1rem")};
   font-weight: ${(props) => (props.bold ? "700" : "500")};
@@ -38,7 +40,9 @@ const StyledText = styled.p<{
   color: ${(props) => (props.color ? props.color : "black")};
   /* line-height: 1rem; */
   align-items: center;
+  word-wrap: break-word;
 `;
 const DescText = styled(Typography.Text)`
   line-height: 1rem;
+  word-wrap: break-word;
 `;
