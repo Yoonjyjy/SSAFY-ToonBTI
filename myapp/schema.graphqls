@@ -1,0 +1,78 @@
+# scalar Date
+# scalar Long
+
+type Query {
+  getQuestions: [Question!]
+  getWebtoons(userType: MBTI): [Webtoon!]
+}
+
+# TODO: add createResult once Survey is submitted
+type Mutation {
+  createUser(userAnswer: UserAnswer): User
+  # createResult(webtoons: [Webtoon]!):
+}
+
+type Question {
+  questionNo: Int # Long!
+  question: String
+  image: String
+  answerList: [Answer]
+}
+
+type Answer {
+  answerId: ID!
+  question: Question
+  answer: String
+}
+
+type UserAnswer {
+  uuid: String
+  answers: [String!]
+}
+
+type User {
+  userType: MBTI!
+  description: String
+  image: String
+  count: Int
+}
+
+type Webtoon {
+  webtoonId: Int # Long!
+  webtoonTitle: String
+  image: String
+  similarity: String
+}
+
+# TODO: add this DTO type
+# type Result {
+#   kakao: Int
+#   naver: Int
+#   done: Int
+#   notDone: Int
+#   percent: [Int]
+# }
+
+# type Genre {
+#   id: ID!
+#   name: String!
+# }
+
+enum MBTI {
+  LSRA
+  LSRT
+  LSEA
+  LSET
+  LWRA
+  LWRT
+  LWEA
+  LWET
+  HSRA
+  HSRT
+  HSEA
+  HSET
+  HWRA
+  HWRT
+  HWEA
+  HWET
+}
