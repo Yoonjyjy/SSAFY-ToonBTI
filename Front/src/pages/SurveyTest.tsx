@@ -150,15 +150,15 @@ export default function SurveyTest() {
           />
         </Layout>
       );
-    case 1:
-      return (
-        <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
-          <KeywordSurvey
-            keywordList={formData.keywordList}
-            addKeyword={addKeywordHandler}
-          />
-        </Layout>
-      );
+    // case 1:
+    //   return (
+    //     <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
+    //       <KeywordSurvey
+    //         keywordList={formData.keywordList}
+    //         addKeyword={addKeywordHandler}
+    //       />
+    //     </Layout>
+    //   );
 
     default:
       return <></>;

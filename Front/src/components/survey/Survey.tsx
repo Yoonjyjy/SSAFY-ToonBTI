@@ -1,5 +1,6 @@
 import { Button, Space } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Text from "../common/Text";
 import ItemList from "./ItemList";
@@ -18,6 +19,7 @@ interface SurveyProps {
 }
 
 export default function Survey(props: SurveyProps) {
+  const navigate = useNavigate();
   const cnt: number = props.dataList
     .map((el) => (el.clicked ? 1 : 0))
     .reduce((a: number, b) => a + b, 0);
@@ -31,10 +33,16 @@ export default function Survey(props: SurveyProps) {
         </Text>
       </RightDiv>
       <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
-      {/* dataList의 길이가 다르면 스타일링 다르게 하기 위함 */}
-      {/* //TODO: 10개 넘는지 확인 */}
       <BtnContainer direction="vertical">
-        <StyledButton onClick={props.onClickNext}>다음으로</StyledButton>
+        <StyledButton
+          onClick={(e) => {
+            e.preventDefault();
+            //TODO: graphQL 데이터 서버로 보내기
+            navigate("/survey/result");
+          }}
+        >
+          나의 취향 분석하기
+        </StyledButton>
       </BtnContainer>
     </OuterBox>
   );
