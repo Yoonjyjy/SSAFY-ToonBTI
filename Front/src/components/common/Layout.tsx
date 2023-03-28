@@ -80,19 +80,25 @@ const LeftButton = styled(LeftOutlined)`
 
 const StyledContent = styled(Content)`
   text-align: center;
-  min-height: 120;
-  line-height: 120px;
+  // min-height: 120;
+  // line-height: 120px;
   padding: 2rem;
-  margin-top: 4rem;
+  padding-top: 8rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 `;
 
 const SurveyPageContent = styled(Content)`
   text-align: center;
   min-height: 120;
   padding: 2rem;
+  padding-top: 8rem;
 `;
 const KeywordPageContent = styled(Content)`
   text-align: center;
   min-height: 120;
   padding: 2rem;
+  padding-top: 8rem;
 `;
