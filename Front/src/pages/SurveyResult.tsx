@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import React from "react";
 import styled from "styled-components";
-import { Layout, ProgressiveBar } from "../components/common";
+import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
@@ -141,7 +141,7 @@ export default function AnalysisResult() {
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
             <Text size="1.5rem">
-              <PointSpan>{data.read_books_num}</PointSpan>개{/* data */}
+              <PointSpan>{data.read_books_num}</PointSpan>개
             </Text>
           </CallOutDiv>
           <Text>제법 많이 보셨군요!</Text> {/* 읽은 권수에 따른 다른 text */}
@@ -235,7 +235,9 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.3rem">사용자가 많이 본 장르</Text>
           <div>
-            <section className="genre_graph">육각형 그래프</section>
+            <section className="genre_graph">
+              <DoughnutChart dataList={data.genre_analysis} />
+            </section>
             <section className="genre_table">
               <GenreTableTitleDiv>
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
@@ -362,7 +364,8 @@ export default function AnalysisResult() {
         </StyledButton>
       </article>
       <ShareButton
-        text="웹툰 취향 분석 결과 공유하기"
+        // text="웹툰 취향 분석 결과 공유하기"
+        text=""
         src="http://localhost:5173"
         param="mbti/result"
       />

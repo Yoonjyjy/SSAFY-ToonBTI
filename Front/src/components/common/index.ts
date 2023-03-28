@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import MBTILayout from "../mbti/MBTILayout";
 import MainImage from "./MainImage";
 import ShareButton from "./ShareButton";
+import DoughnutChart from "./DoughnutChart";
 
 export {
   Header,
@@ -14,4 +15,5 @@ export {
   MBTILayout,
   MainImage,
   ShareButton,
+  DoughnutChart,
 };
