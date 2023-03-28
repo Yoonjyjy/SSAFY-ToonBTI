@@ -24,18 +24,21 @@ export default function MBTIResult() {
     navigate("/mbti/result/all");
   }
   return (
-    <Layout title="당신의 독자 유형은?" hasPrevious>
-      <MainImage src={tiger} size={80} />
-      <TextContainer direction="vertical" size={5}>
-        <StyledHeader level={4}>LSEA</StyledHeader>
+    <StyledLayout title="웹툰 독자 유형 결과" hasPrevious>
+      <StyledDiv>
+        <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
+        <MainImage src={tiger} size={80} />
+        <TextContainer direction="vertical" size={5}>
+          <StyledHeader level={4}>LSEA</StyledHeader>
 
-        <StyledContent>
-          유형에 대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에
-          대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에 대한
-          설명이 들어갈 자리
-        </StyledContent>
-        <br />
-      </TextContainer>
+          <StyledContent>
+            유형에 대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에
+            대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에 대한
+            설명이 들어갈 자리
+          </StyledContent>
+          <br />
+        </TextContainer>
+      </StyledDiv>
 
       <Row gutter={[16, 16]}>
         {[
@@ -73,38 +76,41 @@ export default function MBTIResult() {
         </StyledButton>
       </TextContainer>
 
-      <TextContainer direction="vertical" size={5}>
-        <StyledContent>
-          잠깐!
-          <br />
-          지금까지 본 웹툰을 알려주시면
-          <br />
-          <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
-        </StyledContent>
-      </TextContainer>
+      <StyledDiv>
+        <TextContainer direction="vertical" size={5}>
+          <StyledContent>
+            잠깐!
+            <br />
+            지금까지 본 웹툰을 알려주시면
+            <br />
+            <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
+          </StyledContent>
+        </TextContainer>
 
-      <BtnContainer direction="vertical">
-        <StyledButton onClick={clickHandler}>
-          웹툰 취향 분석하기
-          <SwapRightOutlined />
-        </StyledButton>
-        <StyledButton onClick={clickHomeHandler}>
-          독자 유형 테스트 다시하기
-        </StyledButton>
-        <ShareButton
-          text="웹툰 독자 유형만 공유하기"
-          src="http://localhost:5173"
-          param="mbti/result"
-        />
-      </BtnContainer>
-    </Layout>
+        <BtnContainer direction="vertical">
+          <StyledButton onClick={clickHandler}>
+            웹툰 취향 분석하기
+            <SwapRightOutlined />
+          </StyledButton>
+          <StyledButton onClick={clickHomeHandler}>
+            독자 유형 테스트 다시하기
+          </StyledButton>
+        </BtnContainer>
+      </StyledDiv>
+
+      <ShareButton
+        text="웹툰 독자 유형 공유하기"
+        src="http://localhost:5173"
+        param="mbti/result"
+      />
+    </StyledLayout>
   );
 }
 
 const BtnContainer = styled(Space)`
   line-height: 4rem;
   width: 100%;
-  margin-bottom: 60px;
+  // margin-bottom: 60px;
 `;
 
 const StyledButton = styled(Button)`
@@ -141,4 +147,19 @@ const TextContainer = styled(Space)`
   width: 100%;
   color: black;
   padding-bottom: 0px;
+`;
+
+const StyledLayout = styled(Layout)`
+  width: 100%;
+  height: 5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
