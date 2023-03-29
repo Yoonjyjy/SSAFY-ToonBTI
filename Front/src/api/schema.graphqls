@@ -1,48 +1,83 @@
-# TODO: To be moved into /java/main/resources
+# scalar Date
+# scalar Long
+
+input UserAnswerInput {
+  answers: [String!]
+}
 
 type Query {
-  # mbti
-  questions: [Question]!
-  mbtiById(id: ID!): MBTI
-  webtoonsByMbti(id: ID): [Webtoon]!
+  getQuestions: [Question!]
+  getWebtoons(userType: MBTI): [Webtoon!]
+  hello: String
+}
 
-  # survey
-  user: SurveyUser
-  platform: [Int]
-  doneRatio: [Int]
-  genres: [Genre]
+# TODO: add createResult once Survey is submitted
+type Mutation {
+  createUser(input: UserAnswerInput): User
+  # createResult(webtoons: [Webtoon]!):
 }
 
 type Question {
-  id: ID!
-  name: String!
-  answers: [String!]!
-  img: String
+  questionNo: Int # Long!
+  question: String
+  image: String
+  answerList: [Answer]
 }
 
-type MBTI {
-  id: ID!
-  mbti: String!
-  description: String!
-  img: String
-  bestUser: MBTI
-  worstUser: MBTI
-  topOne: MBTI
-  topTwo: MBTI
+type Answer {
+  answerId: ID!
+  question: Question
+  answer: String
+}
+
+type UserAnswer {
+  uuid: String
+  answers: [String!]
+}
+
+type User {
+  userType: MBTI!
+  description: String
+  image: String
+  count: Int
 }
 
 type Webtoon {
-  id: ID!
-  img: String
-  isDone: Boolean
+  webtoonId: Int # Long!
+  webtoonTitle: String
+  image: String
+  similarity: String
 }
 
-type SurveyUser {
-  name: String
-  size: Int
-}
+# TODO: add this DTO type
+# type Result {
+#   kakao: Int
+#   naver: Int
+#   done: Int
+#   notDone: Int
+#   percent: [Int]
+# }
 
-type Genre {
-  id: ID
-  size: Int
+# type Genre {
+#   id: ID!
+#   name: String!
+# }
+
+enum MBTI {
+  LSRA
+  LSRT
+  LSEA
+  LSET
+  LWRA
+  LWRT
+  LWEA
+  LWET
+  HSRA
+  HSRT
+  HSEA
+  HSET
+  HWRA
+  HWRT
+  HWEA
+  HWET
 }
