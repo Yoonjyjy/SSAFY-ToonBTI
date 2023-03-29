@@ -6,6 +6,7 @@ import MBTILayout from "../mbti/MBTILayout";
 import MainImage from "./MainImage";
 import ShareButton from "./ShareButton";
 import DoughnutChart from "./DoughnutChart";
+import ScrollControl from "./ScrollControl";
 
 export {
   Header,
@@ -16,4 +17,5 @@ export {
   MainImage,
   ShareButton,
   DoughnutChart,
+  ScrollControl,
 };
