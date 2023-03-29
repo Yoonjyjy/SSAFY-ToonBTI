@@ -1,3 +1,4 @@
+//FIXME:
 import React from "react";
 import styled from "styled-components";
 
@@ -19,7 +20,6 @@ const StyledDiv = styled.div`
   height: auto;
   margin: 8px;
   gap: 0px;
-  text-align: left;
 `;
 
 const StyledText = styled.p`
