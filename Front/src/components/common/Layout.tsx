@@ -10,7 +10,7 @@ interface PropType {
   title?: string;
   hasPrevious?: boolean;
   children: React.ReactNode;
-  type?: "survey" | "keywordSurvey";
+  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
 }
 
 export default function CommonLayout(props: PropType) {
@@ -30,7 +30,7 @@ export default function CommonLayout(props: PropType) {
 }
 
 function CustomContent(props: {
-  type?: "survey" | "keywordSurvey";
+  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
   children: React.ReactNode;
 }) {
   switch (props.type) {
@@ -38,6 +38,10 @@ function CustomContent(props: {
       return <SurveyPageContent>{props.children}</SurveyPageContent>;
     case "keywordSurvey":
       return <KeywordPageContent>{props.children}</KeywordPageContent>;
+    case "MbtiTest":
+      return <StyledTestContent>{props.children}</StyledTestContent>;
+    case "home":
+      return <StyledHomeContent>{props.children}</StyledHomeContent>;
     default:
       return <StyledContent>{props.children}</StyledContent>;
   }
@@ -82,6 +86,29 @@ const StyledContent = styled(Content)`
   display: flex;
   flex-direction: column;
   gap: 4rem;
+`;
+
+const StyledHomeContent = styled(Content)`
+  text-align: center;
+  // min-height: 120;
+  // line-height: 120px;
+  padding: 2rem;
+  padding-top: 8rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const StyledTestContent = styled(Content)`
+  height: auto;
+  text-align: center;
+  padding: 2rem;
+  padding-top: 5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const SurveyPageContent = styled(Content)`

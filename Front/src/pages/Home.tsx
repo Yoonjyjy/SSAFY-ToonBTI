@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <StyledLayout title="나의 웹툰 독자 유형 테스트">
+    <StyledLayout title="나의 웹툰 독자 유형 테스트" type="home">
       <MainImage src={tiger} size={100} />
       <BtnContainer direction="vertical">
         <StyledButton onClick={() => navigate("/mbti")}>
