@@ -35,4 +35,6 @@ const BtnContainer = styled(Space)`
 const StyledButton = styled(Button)`
   width: 100%;
   height: 5rem;
+  background: ${({ theme }) => theme.colors.yellow};
+  border: none;
 `;

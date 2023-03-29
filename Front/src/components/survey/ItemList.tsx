@@ -10,7 +10,7 @@ interface ItemListProps {
 
 export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   return (
-    <ItemListBox gutter={[16, 16]} key="1">
+    <ItemListBox>
       {dataList.map((item) => {
         return <Item key={item.id} item={item} onClickItem={onClickItem} />;
       })}
@@ -18,8 +18,8 @@ export default function ItemList({ dataList, onClickItem }: ItemListProps) {
   );
 }
 
-//TODO: grid-template-columns : 1fr 1fr 1fr;
-const ItemListBox = styled(Row)`
-  justify-content: center;
+const ItemListBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   margin: 0 0 30px 0;
 `;

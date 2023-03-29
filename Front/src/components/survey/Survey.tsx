@@ -28,9 +28,11 @@ export default function Survey(props: SurveyProps) {
     <OuterBox>
       <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
       <RightDiv>
-        <Text>
-          선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
-        </Text>
+        <SelectedNumDiv>
+          <Text>
+            선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
+          </Text>
+        </SelectedNumDiv>
       </RightDiv>
       <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
       <BtnContainer direction="vertical">
@@ -63,14 +65,21 @@ const RightDiv = styled.div`
   justify-content: end;
   margin: 1rem 0;
 `;
+
+const SelectedNumDiv = styled.div`
+  display: flex;
+  width: fit-content;
+  margin-left: 1rem;
+`;
+
 const CountSpan = styled.span`
-  color: #1890ff;
+  color: ${({ theme }) => theme.colors.orange};
   font-weight: 700;
 `;
 
 const BtnContainer = styled(Space)`
   line-height: 4rem;
-  width: 85%;
+  width: 100%;
   position: relative;
   transform: translateY(-20%);
 `;

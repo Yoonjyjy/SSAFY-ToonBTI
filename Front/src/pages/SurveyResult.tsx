@@ -68,6 +68,7 @@ export default function AnalysisResult() {
     .slice()
     .sort((a, b) => b.count - a.count)
     .splice(0, 3);
+
   const data2 = {
     type: "bar",
     labels: ["카카오페이지", "네이버"],
@@ -164,16 +165,17 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text size="1.3rem">나의 전문가 수치</Text>
-          <RoundUpperDiv>
-            {/* //FIXME: 원형 모양 반응형 */}
+          <RoundBoxDiv>
             {data.reader_title_list.map((item) => (
-              <RoundDiv color={item.color} key={item.id}>
-                <Text color="#ffffff" size="1.2rem" bold="true">
-                  {item.title}
-                </Text>
-              </RoundDiv>
+              <RoundUpperDiv key={item.id}>
+                <RoundDiv color={item.color}>
+                  <Text color="#ffffff" bold="true" type="responsive">
+                    {item.title}
+                  </Text>
+                </RoundDiv>
+              </RoundUpperDiv>
             ))}
-          </RoundUpperDiv>
+          </RoundBoxDiv>
         </StyledSection>
         <StyledSection>
           <Text size="1.3rem">플랫폼 비율</Text>
@@ -192,9 +194,9 @@ export default function AnalysisResult() {
             ></ProgressiveBar>
             <RatioTextBox>
               {data.platform_ratio.Kakao > data.platform_ratio.Naver ? (
-                <RatioText color="#FFBC00">카카오페이지</RatioText>
+                <RatioText color="kako">카카오페이지</RatioText>
               ) : (
-                <RatioText color="#2DB400">네이버</RatioText>
+                <RatioText color="naver">네이버</RatioText>
               )}
               <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
             </RatioTextBox>
@@ -235,9 +237,9 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.3rem">사용자가 많이 본 장르</Text>
           <div>
-            <section className="genre_graph">
+            <GenreGraphSection className="genre_graph">
               <DoughnutChart dataList={data.genre_analysis} />
-            </section>
+            </GenreGraphSection>
             <section className="genre_table">
               <GenreTableTitleDiv>
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
@@ -274,11 +276,21 @@ export default function AnalysisResult() {
               <Text bold="true" size="1.1rem">
                 주로&nbsp;
                 <>
-                  {rankList.map((item) => (
-                    <span key={item.id} style={{ color: "#FF6C6C" }}>
-                      {item.name}
-                    </span>
-                  ))}
+                  {rankList.map((item, idx) => {
+                    if (idx === rankList.length - 1) {
+                      return (
+                        <span key={item.id} style={{ color: "#FF6C6C" }}>
+                          {item.name}
+                        </span>
+                      );
+                    } else {
+                      return (
+                        <span key={item.id} style={{ color: "#FF6C6C" }}>
+                          {item.name},&nbsp;
+                        </span>
+                      );
+                    }
+                  })}
                 </>
                 &nbsp;장르를 <br />더 선호하시네요!
               </Text>
@@ -382,7 +394,7 @@ const TitleText = styled.h1`
 `;
 const CallOutDiv = styled.div`
   border-radius: 10px;
-  background-color: #eeeeee;
+  background-color: ${({ theme }) => theme.colors.yellowbg};
   min-height: 80px;
   display: flex;
   justify-content: center;
@@ -393,42 +405,36 @@ const StyledButton = styled(Button)`
   height: 3rem;
 `;
 const PointSpan = styled.span`
-  color: #1890ff;
+  color: ${({ theme }) => theme.colors.orange};
 `;
 
-const RoundUpperDiv = styled.div`
-  /* display: flex;
-  justify-content: space-evenly; */
-  display: flex;
-  /* grid-template-columns: 1fr 1fr 1fr; */
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
+const RoundBoxDiv = styled.div`
+  /* display: flex; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.5rem;
   width: 100%;
   justify-content: center;
+`;
+const RoundUpperDiv = styled.div`
+  width: 100%;
+  padding-bottom: 100%;
+  position: relative;
 `;
 const RoundDiv = styled.div<{ color?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: ${(props) => props.color};
   padding: 0.5rem;
   word-break: keep-all;
   margin: 0.25rem;
-  @media (min-width: 320px) and (max-width: 380px) {
-    width: 80px;
-    height: 80px;
-  }
-  @media (min-width: 380px) and (max-width: 390px) {
-    width: 100px;
-    height: 100px;
-  }
-  @media (min-width: 391px) {
-    width: 120px;
-    height: 120px;
-  }
 `;
 
 const RatioTextBox = styled.div<{ space?: boolean }>`
@@ -436,9 +442,12 @@ const RatioTextBox = styled.div<{ space?: boolean }>`
   justify-content: ${(props) => (props.space ? "space-between" : "center")};
   font-size: 1rem;
 `;
-
+//TODO: color에 다른 다른 theme불러와야됑
 const RatioText = styled.p<{ color?: string }>`
-  color: ${(props) => (props.color ? props.color : "black")};
+  color: ${(props) =>
+    props.color === "kakao"
+      ? ({ theme }) => theme.colors.kakao
+      : ({ theme }) => theme.colors.naver};
   font-weight: 700;
   display: flex;
   margin: 0.2rem;
@@ -481,29 +490,33 @@ const GenreTableTitle = styled.h4`
   margin: 0;
   text-align: start;
 `;
-const KeywordDiv = styled.div`
-  border-radius: 4px;
-  background-color: #eeeeee;
-  width: fit-content;
-`;
-const KeywordSection = styled.section`
-  justify-content: center;
-  gap: 0.5rem;
-  display: flex;
-`;
-const AuthorsDiv = styled.div`
-  width: 100%;
-  padding: 0.5rem 1rem;
+const GenreGraphSection = styled.section`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  background-color: #eeeeee;
-  border-radius: 8px;
 `;
-const DescAuthorDiv = styled.div`
-  width: 60%;
-`;
+// const KeywordDiv = styled.div`
+//   border-radius: 4px;
+//   background-color: #eeeeee;
+//   width: fit-content;
+// `;
+// const KeywordSection = styled.section`
+//   justify-content: center;
+//   gap: 0.5rem;
+//   display: flex;
+// `;
+// const AuthorsDiv = styled.div`
+//   width: 100%;
+//   padding: 0.5rem 1rem;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin-bottom: 0.5rem;
+//   background-color: #eeeeee;
+//   border-radius: 8px;
+// `;
+// const DescAuthorDiv = styled.div`
+//   width: 60%;
+// `;
 const BoldSpan = styled.span`
   font-weight: 700;
 `;

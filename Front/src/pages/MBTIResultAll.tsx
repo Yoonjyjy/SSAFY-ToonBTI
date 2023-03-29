@@ -112,7 +112,7 @@ export default function MBTIResultAll() {
       </TextContainer>
 
       <BtnContainer direction="vertical">
-        <StyledButton onClick={clickSurveyHandler}>
+        <StyledButton color="yellow" onClick={clickSurveyHandler}>
           웹툰 취향 분석하기
           <SwapRightOutlined />
         </StyledButton>
@@ -139,7 +139,7 @@ const InfoContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
   display: flexwrap;
-  background-color: #f5f5f5;
+  background-color: ${({ theme }) => theme.colors.yellowbg};
   padding: 30px 10px 30px 10px;
   border-radius: 10px;
 `;
@@ -157,9 +157,13 @@ const TextContainer = styled(Space)`
   padding: 20px 10px 0px 10px;
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<{ color?: string }>`
   width: 100%;
   height: 3rem;
+  background-color: ${(props) =>
+    props.color ? ({ theme }) => theme.colors.yellow : null};
+  border-color: ${(props) =>
+    props.color ? ({ theme }) => theme.colors.yellow : null};
 `;
 
 const StyledCol = styled(Col)`

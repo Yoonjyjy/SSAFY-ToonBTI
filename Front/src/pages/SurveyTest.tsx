@@ -1,6 +1,6 @@
 import React, { useReducer, useState } from "react";
 import { Layout } from "../components/common";
-import { Survey, KeywordSurvey } from "../components/survey";
+import { Survey } from "../components/survey";
 
 const mockdata = [
   { id: 1, name: "호랑이행님1", imgUrl: "imgUrl" },
@@ -23,14 +23,14 @@ enum ActionKind {
   REMOVE_KEYWORD_LIST = "removekeywordlist",
   CLICK_AN_ITEM = "clickanitem",
   FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
+  // FETCH_QUESTION_DATA_LIST = "fetchquestiondatalist",
 }
-
 interface FormDataType {
   dataList: SurveyItemType[];
   keywordList: KeywordType[];
   valid: {
     dataList: boolean;
-    keywordList: true;
+    // keywordList: true;
   };
   confirmed: boolean;
 }
@@ -39,7 +39,7 @@ interface ActionType {
   type: ActionKind;
   payload: {
     dataList?: SurveyItemType[];
-    keywordList?: KeywordType[];
+    // keywordList?: KeywordType[];
     itemId?: number;
     keyword?: KeywordType;
   };
@@ -60,25 +60,28 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
         confirmed: isConfirmed,
       };
     }
-    //TODO: add keyword func
-    case ActionKind.ADD_KEYWORD_LIST: {
-      if (!payload?.keyword) return state;
-      if (state.keywordList.includes(payload.keyword)) {
-        return state;
-      }
-      return {
-        ...state,
-        keywordList: [...state.keywordList, payload.keyword],
-      };
-    }
-    //TODO: remove keyword func
-    case ActionKind.REMOVE_KEYWORD_LIST: {
-      if (!payload?.keywordList) return state;
-      return {
-        ...state,
-        keywordList: { ...payload.keywordList },
-      };
-    }
+
+    // add keyword func
+    // case ActionKind.ADD_KEYWORD_LIST: {
+    //   if (!payload?.keyword) return state;
+    //   if (state.keywordList.includes(payload.keyword)) {
+    //     return state;
+    //   }
+    //   return {
+    //     ...state,
+    //     keywordList: [...state.keywordList, payload.keyword],
+    //   };
+    // }
+
+    //remove keyword func
+    // case ActionKind.REMOVE_KEYWORD_LIST: {
+    //   if (!payload?.keywordList) return state;
+    //   return {
+    //     ...state,
+    //     keywordList: { ...payload.keywordList },
+    //   };
+    // }
+
     case ActionKind.CLICK_AN_ITEM: {
       if (!payload?.itemId) return state;
       const newDataList = [...state.dataList].map((el) => {
@@ -107,6 +110,14 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
       );
       return { ...state, dataList: newDataList };
     }
+
+    // case ActionKind.FETCH_QUESTION_DATA_LIST: {
+    //   if (!payload?.questionList) return state;
+    //   const newDataList = [...state.questionList];
+    //   newDataList.push(...questionList);
+    //   return { ...state, questionList: newDataList };
+    // }
+
     default:
       return state;
   }
@@ -115,7 +126,10 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
 const initialFormData: FormDataType = {
   dataList: mockdata.map((e) => ({ ...e, clicked: false })),
   keywordList: [],
-  valid: { dataList: false, keywordList: true },
+  valid: {
+    dataList: false,
+    // keywordList: true
+  },
   confirmed: false,
 };
 
@@ -135,9 +149,9 @@ export default function SurveyTest() {
     });
   }
 
-  function addKeywordHandler(keyword: KeywordType) {
-    dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
-  }
+  // function addKeywordHandler(keyword: KeywordType) {
+  //   dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
+  // }
 
   switch (step) {
     case 0:

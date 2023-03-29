@@ -19,28 +19,27 @@ export default function Item({ item, onClickItem }: ItemProps) {
     <QueueAnim type={["left", "right"]} duration={900}>
       <ItemBox
         key={item.id}
-        span={6}
         selected={item.clicked}
         onClick={() => onClickItem(item.id)}
       >
         <Text>{item.name}</Text>
-        {/* <img src={item.imgUrl} alt={item.name} /> */}
       </ItemBox>
     </QueueAnim>
   );
 }
 
-const ItemBox = styled(Col)<{ selected: boolean }>`
-  border: ${(props) =>
-    props.selected ? "1px solid #1890ff" : "1px solid darkgrey"};
+const ItemBox = styled.div<{ selected: boolean }>`
+  border: ${(props) => (props.selected ? "3px solid" : "1px solid")};
+  border-color: ${(props) =>
+    props.selected ? ({ theme }) => theme.colors.orange : "darkgrey"};
   width: calc(height * 0.7);
   height: 8rem;
   margin: 0.25rem;
   border-radius: 4px;
   grid: 1fr 1fr;
   max-width: none;
+  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    width: calc(height * 0.7);
+    height: 8rem;
+  }
 `;
-// FIXME: 추가되면 애니메이션 슬라이드 인
-// clickedIndex%3 === 0 : 2개 오른쪽 추가 아래 한 개 추가
-// clickedIndex%3 === 1 : 1개 오른쪽 추가 아래 두 개 추가
-// clickedIndex%3 === 2 : 아래 3개 추가
