@@ -1,4 +1,3 @@
-import Header from "./Header";
 import ProgressiveBar from "./ProgressiveBar";
 import Layout from "./Layout";
 import MBTILayout from "../mbti/MBTILayout";
@@ -8,7 +7,6 @@ import DoughnutChart from "./DoughnutChart";
 import ScrollControl from "./ScrollControl";
 
 export {
-  Header,
   ProgressiveBar,
   Layout,
   MBTILayout,

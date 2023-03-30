@@ -4,8 +4,17 @@ import SurveyTest from "./SurveyTest";
 import MBTIResult from "./MBTIResult";
 import MBTIResultAll from "./MBTIResultAll";
 import MBTITest from "./MBTITest";
+import NotFound from "./NotFound";
 
-export { Home, SurveyResult, SurveyTest, MBTIResult, MBTIResultAll, MBTITest };
+export {
+  Home,
+  SurveyResult,
+  SurveyTest,
+  MBTIResult,
+  MBTIResultAll,
+  MBTITest,
+  NotFound,
+};
 
 window.Kakao.init(import.meta.env.VITE_KAKAO_SHARE_KEY);
 window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다
