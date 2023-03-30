@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import tiger from "/tiger.jpg";
 import test1 from "/test1.png";
 
+type ColorType = "kakao" | "naver" | "ongoing" | "finished";
+
 //TODO: data fetch
 const data = {
   reader_category_img: test1,
@@ -181,10 +183,10 @@ export default function AnalysisResult() {
           <Text size="1.3rem">플랫폼 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="#FFBC00">
+              <RatioText color="kakao">
                 카카오페이지 {data.platform_ratio.Kakao}%
               </RatioText>
-              <RatioText color="#2DB400">
+              <RatioText color="naver">
                 네이버 {data.platform_ratio.Naver}%
               </RatioText>
             </RatioTextBox>
@@ -194,7 +196,7 @@ export default function AnalysisResult() {
             ></ProgressiveBar>
             <RatioTextBox>
               {data.platform_ratio.Kakao > data.platform_ratio.Naver ? (
-                <RatioText color="kako">카카오페이지</RatioText>
+                <RatioText color="kakao">카카오페이지</RatioText>
               ) : (
                 <RatioText color="naver">네이버</RatioText>
               )}
@@ -206,10 +208,10 @@ export default function AnalysisResult() {
           <Text size="1.3rem">완결작 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="#FF6C6C">
+              <RatioText color="finished">
                 완결작 {data.finished_ratio.finished}%
               </RatioText>
-              <RatioText color="#1E9EFF">
+              <RatioText color="ongoing">
                 연재작 {data.finished_ratio.ongoing}%
               </RatioText>
             </RatioTextBox>
@@ -219,16 +221,16 @@ export default function AnalysisResult() {
             ></ProgressiveBar>
             {data.finished_ratio.finished < data.finished_ratio.ongoing ? (
               <RatioTextBox>
-                <RatioText color="#FF6C6C"> 완결작</RatioText>
+                <RatioText color="finished"> 완결작</RatioText>
                 <RatioText>보다 더&nbsp;</RatioText>
-                <RatioText color="#1E9EFF"> 연재작</RatioText>
+                <RatioText color="ongoing"> 연재작</RatioText>
                 <RatioText>을 더 선호해요.</RatioText>
               </RatioTextBox>
             ) : (
               <RatioTextBox>
-                <RatioText color="#1E9EFF">연재작 </RatioText>
+                <RatioText color="ongoing">연재작 </RatioText>
                 <RatioText>보다 더&nbsp;</RatioText>
-                <RatioText color="#FF6C6C"> 완결작</RatioText>
+                <RatioText color="finished"> 완결작</RatioText>
                 <RatioText>을 더 선호해요.</RatioText>
               </RatioTextBox>
             )}
@@ -246,52 +248,31 @@ export default function AnalysisResult() {
               </GenreTableTitleDiv>
               <GenreSect>
                 {data.genre_analysis.map((item) => {
-                  if (rankList.includes(item)) {
-                    return (
-                      <GenreDiv key={item.id}>
-                        <GenreText preferred>#{item.name}</GenreText>
-                        <GenreHr preferred />
-                        <GenreText preferred>
-                          {item.count} (
-                          {calPercent(item.count, data.read_books_num)}%)
-                        </GenreText>
-                      </GenreDiv>
-                    );
-                  } else {
-                    return (
-                      <GenreDiv key={item.id}>
-                        <GenreText>#{item.name}</GenreText>
-                        <GenreHr />
-                        <GenreText>
-                          {item.count} (
-                          {calPercent(item.count, data.read_books_num)}%)
-                        </GenreText>
-                      </GenreDiv>
-                    );
-                  }
+                  return (
+                    <GenreDiv key={item.id}>
+                      <GenreText preferred={rankList.includes(item)}>
+                        #{item.name}
+                      </GenreText>
+                      <GenreHr preferred={rankList.includes(item)} />
+                      <GenreText preferred={rankList.includes(item)}>
+                        {item.count} (
+                        {calPercent(item.count, data.read_books_num)}%)
+                      </GenreText>
+                    </GenreDiv>
+                  );
                 })}
               </GenreSect>
             </section>
             <RatioTextBox>
               <Text bold="true" size="1.1rem">
                 주로&nbsp;
-                <>
-                  {rankList.map((item, idx) => {
-                    if (idx === rankList.length - 1) {
-                      return (
-                        <span key={item.id} style={{ color: "#FF6C6C" }}>
-                          {item.name}
-                        </span>
-                      );
-                    } else {
-                      return (
-                        <span key={item.id} style={{ color: "#FF6C6C" }}>
-                          {item.name},&nbsp;
-                        </span>
-                      );
-                    }
-                  })}
-                </>
+                {rankList.map((item, idx) => {
+                  return (
+                    <PointSpan key={item.id}>
+                      {item.name} {idx !== rankList.length - 1 && ", "}
+                    </PointSpan>
+                  );
+                })}
                 &nbsp;장르를 <br />더 선호하시네요!
               </Text>
             </RatioTextBox>
@@ -443,11 +424,17 @@ const RatioTextBox = styled.div<{ space?: boolean }>`
   font-size: 1rem;
 `;
 //TODO: color에 다른 다른 theme불러와야됑
-const RatioText = styled.p<{ color?: string }>`
-  color: ${(props) =>
-    props.color === "kakao"
-      ? ({ theme }) => theme.colors.kakao
-      : ({ theme }) => theme.colors.naver};
+const RatioText = styled.p<{ color?: ColorType }>`
+  color: ${({ color, theme }) =>
+    color === "kakao"
+      ? theme.colors.kakao
+      : color === "naver"
+      ? theme.colors.green
+      : color === "finished"
+      ? theme.colors.pink
+      : color === "ongoing"
+      ? theme.colors.blue
+      : "infinite"};
   font-weight: 700;
   display: flex;
   margin: 0.2rem;
@@ -463,11 +450,13 @@ const GradientText = styled.span`
   color: transparent;
 `;
 const GenreText = styled.p<{ preferred?: boolean }>`
-  color: ${(props) => (props.preferred ? "#FF6C6C" : "black")};
+  color: ${({ preferred, theme }) =>
+    preferred ? theme.colors.orange : "black"};
   margin: auto 0.5rem;
 `;
 const GenreHr = styled.hr<{ preferred?: boolean }>`
-  background: ${(props) => (props.preferred ? "#FF6C6C" : "black")};
+  background: ${({ preferred, theme }) =>
+    preferred ? theme.colors.orange : "black"};
   border: 1px;
   height: 1px;
   flex-grow: 1;
@@ -494,29 +483,6 @@ const GenreGraphSection = styled.section`
   display: flex;
   justify-content: center;
 `;
-// const KeywordDiv = styled.div`
-//   border-radius: 4px;
-//   background-color: #eeeeee;
-//   width: fit-content;
-// `;
-// const KeywordSection = styled.section`
-//   justify-content: center;
-//   gap: 0.5rem;
-//   display: flex;
-// `;
-// const AuthorsDiv = styled.div`
-//   width: 100%;
-//   padding: 0.5rem 1rem;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin-bottom: 0.5rem;
-//   background-color: #eeeeee;
-//   border-radius: 8px;
-// `;
-// const DescAuthorDiv = styled.div`
-//   width: 60%;
-// `;
 const BoldSpan = styled.span`
   font-weight: 700;
 `;
