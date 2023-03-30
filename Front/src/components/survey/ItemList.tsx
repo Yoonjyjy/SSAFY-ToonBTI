@@ -1,20 +1,51 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Item from "./Item";
 import styled from "styled-components";
 import { Row } from "antd";
+import { InfiniteScroll } from "../common";
 
 interface ItemListProps {
   dataList: SurveyItemType[];
   onClickItem: (itemId: number) => void;
+  fetchAdditionalData: (nextPage: number) => void;
 }
 
-export default function ItemList({ dataList, onClickItem }: ItemListProps) {
+export default function ItemList({
+  dataList,
+  onClickItem,
+  fetchAdditionalData,
+}: ItemListProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [curPage, setCurPage] = useState<number>(1);
+  const totalPage = 10;
+  const isLastPage = false;
+
+  function callback(
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        //fetch data
+        fetchAdditionalData(curPage + 1);
+      }
+    });
+  }
+
   return (
-    <ItemListBox>
-      {dataList.map((item) => {
-        return <Item key={item.id} item={item} onClickItem={onClickItem} />;
-      })}
-    </ItemListBox>
+    <InfiniteScroll
+      isLoading={isLoading}
+      callback={callback}
+      page={curPage}
+      totalPage={totalPage}
+      isLastPage={isLastPage}
+    >
+      <ItemListBox>
+        {dataList.map((item) => {
+          return <Item key={item.id} item={item} onClickItem={onClickItem} />;
+        })}
+      </ItemListBox>
+    </InfiniteScroll>
   );
 }
 

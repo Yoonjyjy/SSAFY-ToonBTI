@@ -9,6 +9,18 @@ const mockdata = [
   { id: 4, name: "호랑이행님4", imgUrl: "imgUrl" },
   { id: 5, name: "호랑이행님5", imgUrl: "imgUrl" },
   { id: 6, name: "호랑이행님5", imgUrl: "imgUrl" },
+  { id: 10, name: "호랑이행님1", imgUrl: "imgUrl" },
+  { id: 11, name: "호랑이행님2", imgUrl: "imgUrl" },
+  { id: 12, name: "호랑이행님3", imgUrl: "imgUrl" },
+  { id: 14, name: "호랑이행님4", imgUrl: "imgUrl" },
+  { id: 15, name: "호랑이행님5", imgUrl: "imgUrl" },
+  { id: 16, name: "호랑이행님5", imgUrl: "imgUrl" },
+  { id: 21, name: "호랑이행님1", imgUrl: "imgUrl" },
+  { id: 22, name: "호랑이행님2", imgUrl: "imgUrl" },
+  { id: 23, name: "호랑이행님3", imgUrl: "imgUrl" },
+  { id: 24, name: "호랑이행님4", imgUrl: "imgUrl" },
+  { id: 25, name: "호랑이행님5", imgUrl: "imgUrl" },
+  { id: 26, name: "호랑이행님5", imgUrl: "imgUrl" },
 ];
 
 const addedMockData = [
@@ -23,23 +35,21 @@ enum ActionKind {
   REMOVE_KEYWORD_LIST = "removekeywordlist",
   CLICK_AN_ITEM = "clickanitem",
   FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
-  // FETCH_QUESTION_DATA_LIST = "fetchquestiondatalist",
+  FETCH_ADDITIONAL_DATA_LIST = "fetchqadditionaldatalist",
 }
 interface FormDataType {
   dataList: SurveyItemType[];
   keywordList: KeywordType[];
   valid: {
     dataList: boolean;
-    // keywordList: true;
   };
   confirmed: boolean;
 }
 
 interface ActionType {
   type: ActionKind;
-  payload: {
+  payload?: {
     dataList?: SurveyItemType[];
-    // keywordList?: KeywordType[];
     itemId?: number;
     keyword?: KeywordType;
   };
@@ -49,13 +59,13 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
   const { type, payload } = action;
   switch (type) {
     case ActionKind.FETCH_DATA_LIST: {
-      if (!payload.dataList) return state;
+      if (!payload?.dataList) return state;
       // TODO: fetch data list
-      const isValidated = payload.dataList.length >= 10;
+      const isValidated = payload?.dataList.length >= 10;
       const isConfirmed = state.confirmed && isValidated;
       return {
         ...state,
-        dataList: { ...payload.dataList },
+        dataList: { ...payload?.dataList },
         valid: { ...state.valid, dataList: isValidated },
         confirmed: isConfirmed,
       };
@@ -92,6 +102,7 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
       });
       return { ...state, dataList: newDataList };
     }
+
     case ActionKind.FETCH_RELATIVE_ITEM_LIST: {
       if (!payload?.itemId) return state;
       const newDataList = [...state.dataList];
@@ -99,15 +110,27 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
         (el) => el.id === payload.itemId
       );
       // TODO: fetch relative item list
-      newDataList.splice(
-        clickedIndex + 1,
-        0,
-        ...addedMockData.map((e) => ({
-          ...e,
-          id: Math.random(),
-          clicked: false,
-        }))
-      );
+      if (state.dataList[clickedIndex].clicked === true) {
+        newDataList.splice(
+          clickedIndex + 1,
+          0,
+          ...addedMockData.map((e) => ({
+            ...e,
+            id: Math.random(),
+            clicked: false,
+          }))
+        );
+      }
+      return { ...state, dataList: newDataList };
+    }
+
+    case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
+      // if (!payload?.dataList) {
+      //   return state;
+      // }
+      const new_data = addedMockData.map((el) => ({ ...el, clicked: false }));
+      const newDataList = [...state.dataList, ...new_data];
+      // TODO: fetch additional data list
       return { ...state, dataList: newDataList };
     }
 
@@ -149,6 +172,14 @@ export default function SurveyTest() {
     });
   }
 
+  //TODO: infinite scroll에서 호출하면 실행될 함수 => fetch data
+  function fetchAdditionalData(nextPage: number) {
+    console.log("fetchAdditionalData");
+    dispatch({
+      type: ActionKind.FETCH_ADDITIONAL_DATA_LIST,
+    });
+  }
+
   // function addKeywordHandler(keyword: KeywordType) {
   //   dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
   // }
@@ -161,6 +192,7 @@ export default function SurveyTest() {
             dataList={formData.dataList}
             onClickNext={nextHandler}
             onClickItem={itemClickHandler}
+            fetchAdditionalData={fetchAdditionalData}
           />
         </Layout>
       );
