@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Space, Progress, Typography } from "antd";
 import { Layout, MainImage } from "../components/common";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS } from "../api/mbti";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const data = [
   {
@@ -128,24 +128,137 @@ const data = [
     answerList: [
       {
         answerId: 1,
-        questionNo: 5,
+        questionNo: 6,
         answer:
           "나는 로맨스를 보려고 읽는 건데!\n로맨스가 안 나와서 재미없어 ㅠㅠ",
       },
       {
         answerId: 2,
-        questionNo: 5,
+        questionNo: 6,
         answer: "로맨스가 보고 싶긴 하지만…\n금방 나오겠지? 좀 더 기다려보자",
       },
       {
         answerId: 3,
-        questionNo: 5,
+        questionNo: 6,
         answer: "로맨스도 좋지만 사건 전개도 좋아!\n로맨스 없어도 흥미진진해!",
       },
       {
         answerId: 4,
-        questionNo: 5,
+        questionNo: 6,
         answer: "지금 사랑할 때가 아닌걸!\n계속 사건 전개로 이어지면 좋겠다",
+      },
+    ],
+  },
+  {
+    questionNo: 7,
+    question: "벌써 한 화를 다 봤네!",
+    image: "https://lottiefiles.com/84152-chating-typing-bubble",
+    answerList: [
+      {
+        answerId: 1,
+        questionNo: 7,
+        answer: "웹툰 보기도 바빠! 바로 다음 화로 넘어가자",
+      },
+      {
+        answerId: 2,
+        questionNo: 7,
+        answer:
+          "다른 사람은 어떻게 생각했을까?\n댓글 구경하다가 가끔 재밌으면 좋아요도 눌러야지",
+      },
+      {
+        answerId: 3,
+        questionNo: 7,
+        answer: "좋은 작품엔 별점을 꼬박꼬박 남겨줘야 해!",
+      },
+      {
+        answerId: 4,
+        questionNo: 7,
+        answer: "감상 댓글을 달면서 다른 독자들과 소통할 거야!",
+      },
+    ],
+  },
+  {
+    questionNo: 8,
+    question:
+      "순식간에 좋아하는 웹툰의 최신 회차까지 읽었다…\n다음 화가 너무 궁금해! 어떡하지?",
+    image: "https://lottiefiles.com/36413-cat-loading",
+    answerList: [
+      {
+        answerId: 1,
+        questionNo: 8,
+        answer: "안 돼, 참자! 무료 회차까지만 볼래",
+      },
+      {
+        answerId: 2,
+        questionNo: 8,
+        answer: "너무 궁금하니까 이번만 미리보기 회차를 봐볼까?",
+      },
+      {
+        answerId: 3,
+        questionNo: 8,
+        answer: "이미 좋아하는 웹툰은\n유료회차까지 꼬박꼬박 보고 있어!",
+      },
+      {
+        answerId: 4,
+        questionNo: 8,
+        answer: "매번 충전하기 귀찮아서\n달마다 주기적으로 쿠키를 굽는 중이야",
+      },
+    ],
+  },
+  {
+    questionNo: 9,
+    question: "너무 재미있는 이야기였어…!",
+    image: "https://lottiefiles.com/64907-cheers-with-like",
+    answerList: [
+      {
+        answerId: 1,
+        questionNo: 9,
+        answer: "정말 재밌었다! 이제 다른 일을 해야지",
+      },
+      {
+        answerId: 2,
+        questionNo: 9,
+        answer: "이 장면은 이 복선이었어…! 어디에 정리해야겠다!",
+      },
+      {
+        answerId: 3,
+        questionNo: 9,
+        answer: "다른 사람들은 어떻게 생각할까?\n댓글로 얘기해야지",
+      },
+      {
+        answerId: 4,
+        questionNo: 9,
+        answer:
+          "모두 이 명작을 알아야 해!ㅠㅠ\n같이 읽어 달라고 친구한테 추천해보자",
+      },
+    ],
+  },
+  {
+    questionNo: 10,
+    question: "친구와 이야기하다보니\n친구가 재밌다고 하는 웹툰들을 추천해준다",
+    image: "https://lottiefiles.com/124303-colabrate-with-friends",
+    answerList: [
+      {
+        answerId: 1,
+        questionNo: 9,
+        answer:
+          "음… 몇 개는 내 취향이 아닌 것 같아.\n내 취향인 것만 골라서 봐볼까?",
+      },
+      {
+        answerId: 2,
+        questionNo: 9,
+        answer:
+          "추천은 필요 없어!\n내 까다로운 취향에 맞는 웹툰은 직접 고를 거야!",
+      },
+      {
+        answerId: 3,
+        questionNo: 9,
+        answer: "오 고마워~ 추천해둔 건 전부 찜해둬야지",
+      },
+      {
+        answerId: 4,
+        questionNo: 9,
+        answer: "난 가리지 않아!\n무슨 장르든 재밌으면 더 추천해줘!",
       },
     ],
   },
@@ -154,99 +267,119 @@ const data = [
 /**
  * 1, 3번은 보낼 필요 X
  */
-const sendData = [
-  {
-    questionNo: 2,
-    answerId: 0,
-  },
-  {
-    questionNo: 4,
-    answerId: 0,
-  },
-  {
-    questionNo: 5,
-    answerId: 0,
-  },
-  {
-    questionNo: 6,
-    answerId: 0,
-  },
-  {
-    questionNo: 7,
-    answerId: 0,
-  },
-  {
-    questionNo: 8,
-    answerId: 0,
-  },
-  {
-    questionNo: 9,
-    answerId: 0,
-  },
-  {
-    questionNo: 10,
-    answerId: 0,
-  },
-];
+// const sendData = [
+//   {
+//     questionNo: 2,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 4,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 5,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 6,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 7,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 8,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 9,
+//     answerId: 0,
+//   },
+//   {
+//     questionNo: 10,
+//     answerId: 0,
+//   },
+// ];
 
-enum ActionKind {
-  CLICK_AN_ITEM = "clickanitem",
-}
+// enum ActionKind {
+//   CLICK_AN_ITEM = "clickanitem",
+// }
 
-interface FormDataType {
-  dataList: AnswerSendType[];
-  valid: {
-    dataList: boolean;
-  };
-  confirmed: boolean;
-}
+// interface FormDataType {
+//   dataList: AnswerSendType[];
+//   valid: {
+//     dataList: boolean;
+//   };
+//   confirmed: boolean;
+// }
 
-interface ActionType {
-  type: ActionKind;
-  payload: {
-    dataList: AnswerSendType[];
-  };
-}
+// interface ActionType {
+//   type: ActionKind;
+//   payload: {
+//     dataList: AnswerSendType[];
+//   };
+// }
 
-function reducer(state: FormDataType, action: ActionType): FormDataType {
-  const { type, payload } = action;
-  switch (type) {
-    case ActionKind.CLICK_AN_ITEM: {
-      if (!payload?.dataList) return state;
-      const newDataList = [...state.dataList].map((el) => {
-        //   if (el.id === payload.itemId) {
-        //     el = { ...el };
-        //   }
-        return el;
-      });
-      return { ...state, dataList: newDataList };
-    }
-    default:
-      return state;
-  }
-}
+// function reducer(state: FormDataType, action: ActionType): FormDataType {
+//   const { type, payload } = action;
+//   switch (type) {
+//     case ActionKind.CLICK_AN_ITEM: {
+//       if (!payload?.dataList) return state;
+//       const newDataList = [...state.dataList].map((el) => {
+//         //   if (el.id === payload.itemId) {
+//         //     el = { ...el };
+//         //   }
+//         return el;
+//       });
+//       return { ...state, dataList: newDataList };
+//     }
+//     default:
+//       return state;
+//   }
+// }
 
-const initialFormData: FormDataType = {
-  dataList: sendData.map((e) => ({ ...e })),
-  valid: { dataList: false },
-  confirmed: false,
-};
+// const initialFormData: FormDataType = {
+//   dataList: sendData.map((e) => ({ ...e })),
+//   valid: { dataList: false },
+//   confirmed: false,
+// };
 
 export default function MBTITest() {
   const navigate = useNavigate();
   //FIXME: 데이터 관리
   // const { error, data } = useQuery(GET_QUESTIONS);
   // console.log("data", data);
+  const [step, setStep] = useState<number>(0);
+  const [answers, setAnswers] = useState<number[]>([]);
 
-  function clickHandler() {
+  useEffect(() => {
+    console.log("answers: ", answers);
+  }, [answers]);
+
+  const handleSelect = (answerId: number) => {
+    if (step == 9) {
+      setAnswers([...answers, answerId]);
+      // console.log(answers)
+      clickHandler();
+    } else if (step == 0 || step == 2) {
+      setStep(step + 1);
+    } else {
+      setAnswers([...answers, answerId]);
+      setStep(step + 1);
+      // console.log(answers);
+    }
+  };
+
+  async function clickHandler() {
     /** TODO: */
+    await console.log(answers);
     navigate("/mbti/result");
   }
 
   // if (error) {
   //   navigate("/404");
   // }
-  const state = 5;
 
   return (
     <StyledLayout
@@ -256,19 +389,24 @@ export default function MBTITest() {
     >
       <StyledDiv>
         <StyledProgress>
-          <StyleSpan>{data[state].questionNo} / 10</StyleSpan>
+          <StyleSpan>{data[step].questionNo} / 10</StyleSpan>
         </StyledProgress>
         <Progress
-          percent={data[state].questionNo * 10}
+          percent={data[step].questionNo * 10}
           showInfo={false}
           strokeColor="#FFB202"
         />
       </StyledDiv>
-      <StyleSpan>{data[state].question}</StyleSpan>
+      <StyleSpan>{data[step].question}</StyleSpan>
       <MainImage src={tiger} size={50} />
       <BtnContainer direction="vertical">
-        {data[state].answerList.map((el) => (
-          <StyledButton onClick={clickHandler} key={el.answerId}>
+        {data[step].answerList.map((el) => (
+          <StyledButton
+            onClick={() => {
+              handleSelect(el.answerId);
+            }}
+            key={el.answerId}
+          >
             {el.answer}
           </StyledButton>
         ))}
