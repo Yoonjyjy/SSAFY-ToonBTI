@@ -1,15 +1,18 @@
 import React from "react";
-import { Button, Space } from "antd";
+import { Button, Space, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Layout, MainImage } from "../components/common";
 import tiger from "/tiger.jpg";
+
+const { Title } = Typography;
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
     <StyledLayout title="나의 웹툰 독자 유형 테스트" type="home">
+      <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
       <MainImage src={tiger} size={100} />
       <BtnContainer direction="vertical">
         <StyledButton onClick={() => navigate("/mbti")}>
@@ -37,6 +40,7 @@ const StyledButton = styled(Button)`
   height: 5rem;
   border: none;
   background-color: ${({ theme }) => theme.colors.yellow};
+  border-radius: 10px;
 `;
 
 const StyledLayout = styled(Layout)`
@@ -46,4 +50,11 @@ const StyledLayout = styled(Layout)`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
+
+const StyledHeader = styled(Title)`
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 10px;
 `;

@@ -427,6 +427,7 @@ const StyledButton = styled(Button)`
   width: 100%;
   height: 3.5rem;
   white-space: pre-wrap;
+  border-radius: 10px;
 `;
 
 const StyledProgress = styled(Text)`

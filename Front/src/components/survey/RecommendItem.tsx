@@ -11,7 +11,7 @@ export default function RecommendItem({ item }: ItemProps) {
     <StyledDiv>
       <img src={item.imgUrl} height="150px" />
       <StyledText>{item.name}</StyledText>
-      <StyledTextBlue>취향저격율 {item.per}%</StyledTextBlue>
+      <StyledTextColor>취향저격율 {item.per}%</StyledTextColor>
     </StyledDiv>
   );
 }
@@ -26,9 +26,12 @@ const StyledText = styled.p`
   font-size: 0.7rem;
   line-height: 0.5rem;
   justify-content: left;
+  text-align: left;
 `;
-const StyledTextBlue = styled.p`
+
+const StyledTextColor = styled.p`
   font-size: 0.7rem;
   line-height: 0.5rem;
-  color: #4096ff;
+  color: ${({ theme }) => theme.colors.orange};
+  text-align: left;
 `;

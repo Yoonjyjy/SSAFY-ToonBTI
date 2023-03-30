@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
@@ -15,7 +15,7 @@ type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 //TODO: data fetch
 const data = {
   reader_category_img: test1,
-  reader_category_name: "개척하는 모험가",
+  reader_category_name: "LSEA",
   read_books_num: 77,
   total_reader_cnt: 3023,
   reader_percentage: 23.5,
@@ -280,8 +280,9 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text size="1.1rem">
-            <BoldSpan>{data.favorite_genre}</BoldSpan> 장르를 좋아하는 독자들의
-            선택
+            {/* <BoldSpan>{data.favorite_genre}</BoldSpan> 장르를 좋아하는 독자들의 */}
+            <BoldSpan color="yellow">{data.reader_category_name}</BoldSpan>{" "}
+            유형의 독자들이 좋아하는 작품
           </Text>
           <section>
             <RecommendItemList
@@ -348,20 +349,33 @@ export default function AnalysisResult() {
             })}
           </Text>
         </StyledSection>
-        <StyledButton
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          웹툰 취향 분석 다시하기
-        </StyledButton>
+        <StyledSection>
+          <BtnContainer direction="vertical">
+            <StyledButton
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              독자 유형 테스트 다시하기
+            </StyledButton>
+            <StyledButton
+              onClick={() => {
+                navigate("/survey");
+              }}
+            >
+              웹툰 취향 분석 다시하기
+            </StyledButton>
+          </BtnContainer>
+        </StyledSection>
+        <StyledSection>
+          <ShareButton
+            text="웹툰 취향 분석 결과 공유하기"
+            // text=""
+            src="http://localhost:5173"
+            param="survey/result"
+          />
+        </StyledSection>
       </article>
-      <ShareButton
-        // text="웹툰 취향 분석 결과 공유하기"
-        text=""
-        src="http://localhost:5173"
-        param="mbti/result"
-      />
     </Layout>
   );
 }
@@ -384,6 +398,7 @@ const CallOutDiv = styled.div`
 const StyledButton = styled(Button)`
   width: 100%;
   height: 3rem;
+  border-radius: 10px;
 `;
 const PointSpan = styled.span`
   color: ${({ theme }) => theme.colors.orange};
@@ -485,4 +500,9 @@ const GenreGraphSection = styled.section`
 `;
 const BoldSpan = styled.span`
   font-weight: 700;
+`;
+
+const BtnContainer = styled(Space)`
+  line-height: 3rem;
+  width: 100%;
 `;
