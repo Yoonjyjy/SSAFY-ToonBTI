@@ -5,6 +5,8 @@ import MainImage from "./MainImage";
 import ShareButton from "./ShareButton";
 import DoughnutChart from "./DoughnutChart";
 import ScrollControl from "./ScrollControl";
+import InfiniteScroll from "./InfiniteScroll";
+import Spinner from "./Spinner";
 
 export {
   ProgressiveBar,
@@ -14,4 +16,6 @@ export {
   ShareButton,
   DoughnutChart,
   ScrollControl,
+  InfiniteScroll,
+  Spinner,
 };

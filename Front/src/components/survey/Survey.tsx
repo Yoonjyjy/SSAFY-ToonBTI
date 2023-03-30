@@ -15,6 +15,7 @@ interface SurveyProps {
   onClickNext: () => void;
   onClickItem: (itemId: number) => void;
   dataList: SurveyItemType[];
+  fetchAdditionalData: (nextPage: number) => void;
 }
 
 export default function Survey(props: SurveyProps) {
@@ -33,7 +34,11 @@ export default function Survey(props: SurveyProps) {
           </Text>
         </SelectedNumDiv>
       </RightDiv>
-      <ItemList dataList={props.dataList} onClickItem={props.onClickItem} />
+      <ItemList
+        dataList={props.dataList}
+        onClickItem={props.onClickItem}
+        fetchAdditionalData={props.fetchAdditionalData}
+      />
       <BtnContainer direction="vertical">
         <StyledButton
           onClick={(e) => {
