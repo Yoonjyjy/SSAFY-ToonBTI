@@ -7,47 +7,40 @@ import { LeftOutlined } from "@ant-design/icons";
 const { Header, Content } = Layout;
 
 interface PropType {
-  title: string;
+  title?: string;
   hasPrevious?: boolean;
   children: React.ReactNode;
-  type?: string;
+  type?: "survey" | "keywordSurvey";
 }
 
 export default function CommonLayout(props: PropType) {
   const navigate = useNavigate();
 
-  if (props?.type === "survey") {
-    return (
-      <StyledLayout>
-        <StyledHeader>
-          {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
-          {props.title}
-        </StyledHeader>
-        <SurveyPageContent>{props.children}</SurveyPageContent>
-      </StyledLayout>
-    );
-  }
-
-  if (props?.type === "keywordSurvey") {
-    return (
-      <StyledLayout>
-        <StyledHeader>
-          {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
-          {props.title}
-        </StyledHeader>
-        <KeywordPageContent>{props.children}</KeywordPageContent>
-      </StyledLayout>
-    );
-  }
   return (
     <StyledLayout>
-      <StyledHeader>
-        {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
-        {props.title}
-      </StyledHeader>
-      <StyledContent>{props.children}</StyledContent>
+      {props.title && (
+        <StyledHeader>
+          {props.hasPrevious && <LeftButton onClick={() => navigate(-1)} />}
+          {props.title}
+        </StyledHeader>
+      )}
+      <CustomContent type={props.type}>{props.children}</CustomContent>
     </StyledLayout>
   );
+}
+
+function CustomContent(props: {
+  type?: "survey" | "keywordSurvey";
+  children: React.ReactNode;
+}) {
+  switch (props.type) {
+    case "survey":
+      return <SurveyPageContent>{props.children}</SurveyPageContent>;
+    case "keywordSurvey":
+      return <KeywordPageContent>{props.children}</KeywordPageContent>;
+    default:
+      return <StyledContent>{props.children}</StyledContent>;
+  }
 }
 
 const StyledLayout = styled(Layout)`

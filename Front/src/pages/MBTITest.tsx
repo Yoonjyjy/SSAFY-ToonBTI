@@ -4,13 +4,21 @@ import { Button, Space } from "antd";
 import { Layout, MainImage } from "../components/common";
 import tiger from "/tiger.jpg";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_QUESTIONS } from "../api/mbti";
 
 export default function MBTITest() {
   const navigate = useNavigate();
+  const { error, data } = useQuery(GET_QUESTIONS);
+  console.log("data", data);
 
   function clickHandler() {
     /** TODO: */
     navigate("/mbti/result");
+  }
+
+  if (error) {
+    navigate("/404");
   }
 
   return (

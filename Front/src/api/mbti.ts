@@ -2,7 +2,34 @@ import { gql } from "@apollo/client";
 
 const GET_QUESTIONS = gql`
   query GetQuestions {
-    questions
+    getQuestions {
+      questionNo
+      question
+      image
+      answersList
+    }
+  }
+`;
+
+const ADD_USER = gql`
+  mutation AddUser($input: UserAnswerInput) {
+    addUserResponse(input: $input) {
+      myType {
+        userType
+      }
+      bestType {
+        userType
+      }
+      worstType {
+        userType
+      }
+      firstType {
+        userType
+      }
+      secondType {
+        userType
+      }
+    }
   }
 `;
 
@@ -18,4 +45,4 @@ const GET_WEBTOON_LIST = gql`
   }
 `;
 
-export { GET_QUESTIONS, GET_MBTI, GET_WEBTOON_LIST };
+export { GET_QUESTIONS, ADD_USER, GET_MBTI, GET_WEBTOON_LIST };
