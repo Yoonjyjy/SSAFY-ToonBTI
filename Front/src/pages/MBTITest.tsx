@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Space, Progress, Typography } from "antd";
-import { Layout, MainImage } from "../components/common";
-import tiger from "/tiger.jpg";
+import { Layout } from "../components/common";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS } from "../api/mbti";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const { Text } = Typography;
 
@@ -264,92 +264,11 @@ const data = [
   },
 ];
 
-/**
- * 1, 3번은 보낼 필요 X
- */
-// const sendData = [
-//   {
-//     questionNo: 2,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 4,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 5,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 6,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 7,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 8,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 9,
-//     answerId: 0,
-//   },
-//   {
-//     questionNo: 10,
-//     answerId: 0,
-//   },
-// ];
-
-// enum ActionKind {
-//   CLICK_AN_ITEM = "clickanitem",
-// }
-
-// interface FormDataType {
-//   dataList: AnswerSendType[];
-//   valid: {
-//     dataList: boolean;
-//   };
-//   confirmed: boolean;
-// }
-
-// interface ActionType {
-//   type: ActionKind;
-//   payload: {
-//     dataList: AnswerSendType[];
-//   };
-// }
-
-// function reducer(state: FormDataType, action: ActionType): FormDataType {
-//   const { type, payload } = action;
-//   switch (type) {
-//     case ActionKind.CLICK_AN_ITEM: {
-//       if (!payload?.dataList) return state;
-//       const newDataList = [...state.dataList].map((el) => {
-//         //   if (el.id === payload.itemId) {
-//         //     el = { ...el };
-//         //   }
-//         return el;
-//       });
-//       return { ...state, dataList: newDataList };
-//     }
-//     default:
-//       return state;
-//   }
-// }
-
-// const initialFormData: FormDataType = {
-//   dataList: sendData.map((e) => ({ ...e })),
-//   valid: { dataList: false },
-//   confirmed: false,
-// };
-
 export default function MBTITest() {
   const navigate = useNavigate();
   //FIXME: 데이터 관리
-  // const { error, data } = useQuery(GET_QUESTIONS);
-  // console.log("data", data);
+  const { error, data: datasth } = useQuery(GET_QUESTIONS);
+  console.log("data", datasth);
   const [step, setStep] = useState<number>(0);
   const [answers, setAnswers] = useState<number[]>([]);
 
@@ -377,9 +296,9 @@ export default function MBTITest() {
     navigate("/mbti/result");
   }
 
-  // if (error) {
-  //   navigate("/404");
-  // }
+  if (error) {
+    navigate("/404");
+  }
 
   return (
     <StyledLayout
@@ -398,7 +317,11 @@ export default function MBTITest() {
         />
       </StyledDiv>
       <StyleSpan>{data[step].question}</StyleSpan>
-      <MainImage src={tiger} size={50} />
+      <StyledPlayer
+        autoplay
+        loop
+        src={"/" + data[step].questionNo + ".json"}
+      ></StyledPlayer>
       <BtnContainer direction="vertical">
         {data[step].answerList.map((el) => (
           <StyledButton
@@ -414,6 +337,13 @@ export default function MBTITest() {
     </StyledLayout>
   );
 }
+
+const StyledPlayer = styled(Player)`
+  width: 75vw;
+  height: 50vw;
+  max-width: 800px;
+  max-height: 800px;
+`;
 
 const BtnContainer = styled(Space)`
   // line-height: 3rem;
@@ -438,17 +368,6 @@ const StyledProgress = styled(Text)`
     font-weight: 600;
   }
 `;
-
-// const StyledContent = styled(Text)`
-//   text-align: center;
-//   line-height: 1rem;
-//   word-break: keep-all;
-
-//   span {
-//     font-weight: 600;
-//     line-height: 2rem;
-//   }
-// `;
 
 const StyledDiv = styled.div`
   display: flex;

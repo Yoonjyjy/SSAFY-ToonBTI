@@ -9,13 +9,9 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <Layout>
+    <StyledLayout hasPrevious type="home">
       <Title>페이지를 찾을 수 없어요!</Title>
-      <StyledPlayer
-        autoplay
-        loop
-        src="/84918-404-error-doodle-animation.json"
-      ></StyledPlayer>
+      <StyledPlayer autoplay loop src="/404-error.json"></StyledPlayer>
       <BtnContainer direction="vertical">
         <StyledButton
           onClick={(e) => {
@@ -27,7 +23,7 @@ export default function NotFound() {
           처음으로 돌아가기
         </StyledButton>
       </BtnContainer>
-    </Layout>
+    </StyledLayout>
   );
 }
 
@@ -54,4 +50,13 @@ const StyledButton = styled(Button)`
   width: 100%;
   height: 3rem;
   background-color: ${(props) => props.theme.colors.yellow};
+`;
+
+const StyledLayout = styled(Layout)`
+  width: 100%;
+  height: 5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 `;

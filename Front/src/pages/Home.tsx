@@ -2,8 +2,8 @@ import React from "react";
 import { Button, Space, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Layout, MainImage } from "../components/common";
-import tiger from "/tiger.jpg";
+import { Layout } from "../components/common";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const { Title } = Typography;
 
@@ -11,9 +11,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <StyledLayout title="나의 웹툰 독자 유형 테스트" type="home">
+    <StyledLayout type="home">
       <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
-      <MainImage src={tiger} size={100} />
+      <StyledPlayer autoplay loop src="/home.json"></StyledPlayer>
       <BtnContainer direction="vertical">
         <StyledButton onClick={() => navigate("/mbti")}>
           <SpanTitle>시작하기</SpanTitle>
@@ -24,6 +24,13 @@ export default function Home() {
     </StyledLayout>
   );
 }
+
+const StyledPlayer = styled(Player)`
+  width: 80vw;
+  height: 80vw;
+  max-width: 800px;
+  max-height: 800px;
+`;
 
 const SpanTitle = styled.span`
   font-size: 1.5rem;
