@@ -11,7 +11,7 @@ const { Text } = Typography;
 
 export default function MBTITest() {
   const navigate = useNavigate();
-  const { error, data } = useQuery(GET_QUESTIONS); // TODO: handle while loading
+  const { error, data } = useQuery(GET_QUESTIONS);
 
   const [step, setStep] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -25,6 +25,11 @@ export default function MBTITest() {
       setAnswers([...answers, answer.charAt(0)]);
       setStep(step + 1);
     }
+  }
+
+  function clickHandler() {
+    /** TODO: */
+    navigate("/mbti/result");
   }
 
   if (error) {

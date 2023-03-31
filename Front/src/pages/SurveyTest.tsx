@@ -36,12 +36,14 @@ enum ActionKind {
   CLICK_AN_ITEM = "clickanitem",
   FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
   FETCH_ADDITIONAL_DATA_LIST = "fetchqadditionaldatalist",
+  SEARCH_DATA = "searchdata",
 }
 interface FormDataType {
   dataList: SurveyItemType[];
   keywordList: KeywordType[];
   valid: {
     dataList: boolean;
+    keyword: boolean;
   };
   confirmed: boolean;
 }
@@ -61,6 +63,7 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
     case ActionKind.FETCH_DATA_LIST: {
       if (!payload?.dataList) return state;
       // TODO: fetch data list
+      // 무슨 용돈지 ? FIXME: 모르겠음
       const isValidated = payload?.dataList.length >= 10;
       const isConfirmed = state.confirmed && isValidated;
       return {
@@ -71,26 +74,23 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
       };
     }
 
-    // add keyword func
-    // case ActionKind.ADD_KEYWORD_LIST: {
-    //   if (!payload?.keyword) return state;
-    //   if (state.keywordList.includes(payload.keyword)) {
-    //     return state;
-    //   }
-    //   return {
-    //     ...state,
-    //     keywordList: [...state.keywordList, payload.keyword],
-    //   };
-    // }
-
-    //remove keyword func
-    // case ActionKind.REMOVE_KEYWORD_LIST: {
-    //   if (!payload?.keywordList) return state;
-    //   return {
-    //     ...state,
-    //     keywordList: { ...payload.keywordList },
-    //   };
-    // }
+    case ActionKind.SEARCH_DATA: {
+      if (!payload?.dataList) {
+        return state;
+      }
+      const addedDataList = payload?.dataList.map((el) => ({
+        ...el,
+        clicked: false,
+      }));
+      const isValidated = payload?.dataList.length >= 10;
+      const isConfirmed = state.confirmed && isValidated;
+      return {
+        ...state,
+        dataList: { ...addedDataList },
+        valid: { ...state.valid, dataList: isValidated },
+        confirmed: isConfirmed,
+      };
+    }
 
     case ActionKind.CLICK_AN_ITEM: {
       if (!payload?.itemId) return state;
@@ -125,9 +125,9 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
     }
 
     case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
-      // if (!payload?.dataList) {
-      //   return state;
-      // }
+      if (!payload?.dataList) {
+        return state;
+      }
       const new_data = addedMockData.map((el) => ({ ...el, clicked: false }));
       const newDataList = [...state.dataList, ...new_data];
       // TODO: fetch additional data list
@@ -151,7 +151,7 @@ const initialFormData: FormDataType = {
   keywordList: [],
   valid: {
     dataList: false,
-    // keywordList: true
+    keyword: true,
   },
   confirmed: false,
 };
@@ -174,15 +174,15 @@ export default function SurveyTest() {
 
   //TODO: infinite scroll에서 호출하면 실행될 함수 => fetch data
   function fetchAdditionalData(nextPage: number) {
-    console.log("fetchAdditionalData");
     dispatch({
       type: ActionKind.FETCH_ADDITIONAL_DATA_LIST,
     });
   }
 
-  // function addKeywordHandler(keyword: KeywordType) {
-  //   dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
-  // }
+  function fetchSearchedData(keyword: string) {
+    // dispatch({ type: ActionKind.SEARCH_DATA });
+    console.log(keyword);
+  }
 
   switch (step) {
     case 0:
@@ -197,18 +197,10 @@ export default function SurveyTest() {
             onClickNext={nextHandler}
             onClickItem={itemClickHandler}
             fetchAdditionalData={fetchAdditionalData}
+            searchData={fetchSearchedData}
           />
         </Layout>
       );
-    // case 1:
-    //   return (
-    //     <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
-    //       <KeywordSurvey
-    //         keywordList={formData.keywordList}
-    //         addKeyword={addKeywordHandler}
-    //       />
-    //     </Layout>
-    //   );
 
     default:
       return <></>;

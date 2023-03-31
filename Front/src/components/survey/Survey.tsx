@@ -2,6 +2,7 @@ import { Button, Space, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { SearchBar } from "../common";
 import Text from "../common/Text";
 import ItemList from "./ItemList";
 
@@ -18,6 +19,7 @@ interface SurveyProps {
   onClickItem: (itemId: number) => void;
   dataList: SurveyItemType[];
   fetchAdditionalData: (nextPage: number) => void;
+  searchData: (keyword: string) => void;
 }
 
 export default function Survey(props: SurveyProps) {
@@ -30,6 +32,7 @@ export default function Survey(props: SurveyProps) {
     <OuterBox>
       <StyledHeader level={3}>웹툰 취향 분석 테스트</StyledHeader>
       <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
+      <SearchBar searchData={props.searchData} />
       <RightDiv>
         <SelectedNumDiv>
           <b>

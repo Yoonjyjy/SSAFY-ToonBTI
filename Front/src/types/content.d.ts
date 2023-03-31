@@ -13,7 +13,6 @@ interface RecommListItemType extends ItemType {
 }
 
 interface KeywordType {
-  id: number;
   keyword: string;
 }
 
