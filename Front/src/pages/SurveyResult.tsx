@@ -374,6 +374,11 @@ export default function AnalysisResult() {
             src="http://localhost:5173"
             param="survey/result"
           />
+          <StyleSpan>
+            @SSAFY 8기 특화 3반 A302
+            <br></br>
+            FE: 김태원 노현정 윤지영 / BE: 권성은 김진호 전주영
+          </StyleSpan>
         </StyledSection>
       </article>
     </Layout>
@@ -505,4 +510,11 @@ const BoldSpan = styled.span`
 const BtnContainer = styled(Space)`
   line-height: 3rem;
   width: 100%;
+`;
+
+const StyleSpan = styled.span`
+  margin-top: 2rem;
+  white-space: pre-line;
+  display: block;
+  color: gray;
 `;

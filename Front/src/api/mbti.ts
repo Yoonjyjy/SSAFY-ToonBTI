@@ -5,11 +5,11 @@ const GET_QUESTIONS = gql`
     getQuestions {
       questionNo
       question
-      image
       answersList
     }
   }
-`;
+  `;
+  // image
 
 const ADD_USER = gql`
   mutation AddUser($input: UserAnswerInput) {
