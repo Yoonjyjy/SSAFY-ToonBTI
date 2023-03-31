@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    username: unni
+    password: xmrghka302
+    url: jdbc:mysql://43.200.255.205:3333/toonbti?useSSL=true&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
