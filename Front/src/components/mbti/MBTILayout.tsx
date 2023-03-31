@@ -39,5 +39,5 @@ const StyledAllMBTI = styled(Layout)`
   // background-color: #f8f8f8;
   background-color: #ffffff;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 0.8rem;
 `;

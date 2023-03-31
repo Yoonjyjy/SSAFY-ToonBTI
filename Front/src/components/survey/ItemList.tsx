@@ -53,4 +53,5 @@ const ItemListBox = styled(Row)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 0 0 30px 0;
+  height: 100%;
 `;

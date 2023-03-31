@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
+import background from "../../assets/background.jpg";
 
 const { Header, Content } = Layout;
 
@@ -10,7 +11,7 @@ interface PropType {
   title?: string;
   hasPrevious?: boolean;
   children: React.ReactNode;
-  type?: "survey" | "keywordSurvey";
+  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
 }
 
 export default function CommonLayout(props: PropType) {
@@ -30,7 +31,7 @@ export default function CommonLayout(props: PropType) {
 }
 
 function CustomContent(props: {
-  type?: "survey" | "keywordSurvey";
+  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
   children: React.ReactNode;
 }) {
   switch (props.type) {
@@ -38,15 +39,26 @@ function CustomContent(props: {
       return <SurveyPageContent>{props.children}</SurveyPageContent>;
     case "keywordSurvey":
       return <KeywordPageContent>{props.children}</KeywordPageContent>;
+    case "MbtiTest":
+      return <StyledTestContent>{props.children}</StyledTestContent>;
+    case "home":
+      return <StyledHomeContent>{props.children}</StyledHomeContent>;
     default:
       return <StyledContent>{props.children}</StyledContent>;
   }
 }
 
 const StyledLayout = styled(Layout)`
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   background-color: inherit;
+  background-size: 80%;
+  background-repeat: repeat;
+  background-image: linear-gradient(
+      rgba(256, 256, 256, 0.9),
+      rgba(256, 256, 256, 0.9)
+    ),
+    url(${background});
 `;
 
 const StyledHeader = styled(Header)`
@@ -67,9 +79,11 @@ const StyledHeader = styled(Header)`
 
 const LeftButton = styled(LeftOutlined)`
   position: absolute;
-  top: 1rem;
+  top: 0.5rem;
+  // top: 0.5rem;
   left: 0.5rem;
-  font-size: 2rem;
+  font-size: 1rem;
+  padding: 1rem;
 `;
 
 const StyledContent = styled(Content)`
@@ -84,11 +98,35 @@ const StyledContent = styled(Content)`
   gap: 4rem;
 `;
 
+const StyledHomeContent = styled(Content)`
+  text-align: center;
+  // min-height: 120;
+  // line-height: 120px;
+  padding: 2rem;
+  // padding-top: 5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+`;
+
+const StyledTestContent = styled(Content)`
+  height: auto;
+  text-align: center;
+  padding: 2rem;
+  padding-top: 5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 const SurveyPageContent = styled(Content)`
   text-align: center;
   min-height: 120;
   padding: 2rem;
-  padding-top: 8rem;
+  padding-top: 6rem;
 `;
 const KeywordPageContent = styled(Content)`
   text-align: center;

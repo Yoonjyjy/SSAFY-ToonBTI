@@ -46,7 +46,7 @@ export default function MBTIResult() {
           { text: "나와 안 맞는 유형", mbti: "LWEA", per: 11.0 },
         ].map((el) => (
           <StyledCol key={el.mbti} span={12}>
-            {el.text}
+            <b>{el.text}</b>
             <MainImage src={tiger} size={40} />
             <strong>{el.mbti}</strong>
           </StyledCol>
@@ -69,10 +69,10 @@ export default function MBTIResult() {
             </StyledCol>
           ))}
         </Row>
-        <StyledButton onClick={clickResultAllHandler}>
+        <StyledButton onClick={clickResultAllHandler} height={4}>
           나와 같은 유형은 몇 %일까요?
           <br />
-          <strong>전체 유형 순위 보기</strong>
+          <StyledStrong>전체 유형 순위 보기</StyledStrong>
         </StyledButton>
       </TextContainer>
 
@@ -83,13 +83,13 @@ export default function MBTIResult() {
             <br />
             지금까지 본 웹툰을 알려주시면
             <br />
-            <span>나의 웹툰 취향 분석 결과를 알 수 있어요!</span>
+            <b>나의 웹툰 취향 분석 결과</b>를 알 수 있어요!
           </StyledContent>
         </TextContainer>
 
         <BtnContainer direction="vertical">
-          <StyledButton onClick={clickHandler}>
-            웹툰 취향 분석하기
+          <StyledButton onClick={clickHandler} color="yellow">
+            <StyledStrong>웹툰 취향 분석하기</StyledStrong>
             <SwapRightOutlined />
           </StyledButton>
           <StyledButton onClick={clickHomeHandler}>
@@ -108,18 +108,19 @@ export default function MBTIResult() {
 }
 
 const BtnContainer = styled(Space)`
-  line-height: 4rem;
+  line-height: 3rem;
   width: 100%;
   // margin-bottom: 60px;
 `;
 
-const StyledButton = styled(Button)<{ color?: string }>`
+const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   width: 100%;
-  height: 4rem;
+  height: ${(props) => (props.height ? props.height + "rem" : "3rem")};
   background-color: ${(props) =>
     props.color ? ({ theme }) => theme.colors.yellow : null};
   border-color: ${(props) =>
     props.color ? ({ theme }) => theme.colors.yellow : null};
+  border-radius: 10px;
 `;
 
 const StyledHeader = styled(Title)`
@@ -131,7 +132,7 @@ const StyledHeader = styled(Title)`
 
 const StyledContent = styled(Text)`
   text-align: center;
-  line-height: 1.3rem;
+  line-height: 1.5rem;
   word-break: keep-all;
 
   span {
@@ -166,4 +167,8 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+const StyledStrong = styled.strong`
+  font-size: 1rem;
 `;

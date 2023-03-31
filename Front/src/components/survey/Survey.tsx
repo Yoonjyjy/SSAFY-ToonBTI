@@ -1,9 +1,11 @@
-import { Button, Space } from "antd";
+import { Button, Space, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Text from "../common/Text";
 import ItemList from "./ItemList";
+
+const { Title } = Typography;
 
 /**
 
@@ -26,12 +28,13 @@ export default function Survey(props: SurveyProps) {
 
   return (
     <OuterBox>
+      <StyledHeader level={3}>웹툰 취향 분석 테스트</StyledHeader>
       <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
       <RightDiv>
         <SelectedNumDiv>
-          <Text>
+          <b>
             선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
-          </Text>
+          </b>
         </SelectedNumDiv>
       </RightDiv>
       <ItemList
@@ -41,13 +44,15 @@ export default function Survey(props: SurveyProps) {
       />
       <BtnContainer direction="vertical">
         <StyledButton
+          color="yellow"
+          height={3}
           onClick={(e) => {
             e.preventDefault();
             //TODO: graphQL 데이터 서버로 보내기
             navigate("/survey/result");
           }}
         >
-          나의 취향 분석하기
+          <b>나의 취향 분석하기</b>
         </StyledButton>
       </BtnContainer>
     </OuterBox>
@@ -68,11 +73,12 @@ const OuterBox = styled.div`
 const RightDiv = styled.div`
   display: flex;
   justify-content: end;
-  margin: 1rem 0;
+  margin: 0;
 `;
 const SelectedNumDiv = styled.div`
   display: flex;
   width: fit-content;
+  margin: 0.2rem;
   margin-left: 1rem;
 `;
 
@@ -87,7 +93,19 @@ const BtnContainer = styled(Space)`
   transform: translateY(-20%);
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   width: 100%;
-  height: 3rem;
+  height: ${(props) => (props.height ? props.height + "rem" : "3rem")};
+  background-color: ${(props) =>
+    props.color ? ({ theme }) => theme.colors.yellow : null};
+  border-color: ${(props) =>
+    props.color ? ({ theme }) => theme.colors.yellow : null};
+  border-radius: 10px;
+`;
+
+const StyledHeader = styled(Title)`
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0px;
 `;
