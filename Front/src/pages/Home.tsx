@@ -29,7 +29,7 @@ export default function Home() {
       <BtnContainer direction="vertical">
         {/* //TODO: question data fetch -> 저장해... surveypage reducer 참고... */}
         <StyledButton
-          onClick={() => navigate("/mbti", { state: data.getQuestions })}
+          onClick={() => navigate("/mbti", { state: data?.getQuestions })}
         >
           <SpanTitle>시작하기</SpanTitle>
           <br />

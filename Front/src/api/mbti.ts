@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { graphql } from "../../src/gql";
 
-const GET_QUESTIONS = gql`
+const GET_QUESTIONS = graphql(`
   query GetQuestions {
     getQuestions {
       questionNo
@@ -8,10 +8,9 @@ const GET_QUESTIONS = gql`
       answersList
     }
   }
-  `;
-  // image
+`);
 
-const ADD_USER = gql`
+const ADD_USER = graphql(`
   mutation AddUser($input: UserAnswerInput) {
     addUserResponse(input: $input) {
       myType {
@@ -31,18 +30,12 @@ const ADD_USER = gql`
       }
     }
   }
-`;
+`);
 
-const GET_MBTI = gql`
-  query MbtiById($id: ID!) {
-    mbtiById(id: $id)
+const COUNT_ALL_USERS = graphql(`
+  query CountAllUser {
+    countAllUsers
   }
-`;
+`);
 
-const GET_WEBTOON_LIST = gql`
-  query GetWebtoonList($id: ID!) {
-    webtoonsByMbti(id: $id)
-  }
-`;
-
-export { GET_QUESTIONS, ADD_USER, GET_MBTI, GET_WEBTOON_LIST };
+export { GET_QUESTIONS, ADD_USER, COUNT_ALL_USERS };
