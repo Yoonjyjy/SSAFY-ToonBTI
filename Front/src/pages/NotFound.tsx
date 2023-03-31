@@ -9,7 +9,7 @@ export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <StyledLayout hasPrevious type="home">
+    <Layout hasPrevious type="home">
       <Title>페이지를 찾을 수 없어요!</Title>
       <StyledPlayer autoplay loop src="/404-error.json"></StyledPlayer>
       <BtnContainer direction="vertical">
@@ -23,7 +23,7 @@ export default function NotFound() {
           처음으로 돌아가기
         </StyledButton>
       </BtnContainer>
-    </StyledLayout>
+    </Layout>
   );
 }
 
@@ -48,15 +48,6 @@ const BtnContainer = styled(Space)`
 
 const StyledButton = styled(Button)`
   width: 100%;
-  height: 3rem;
+  height: 50px;
   background-color: ${(props) => props.theme.colors.yellow};
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-  height: 5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
 `;

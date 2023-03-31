@@ -33,13 +33,15 @@ const ItemBox = styled.div<{ selected: boolean }>`
   border-color: ${(props) =>
     props.selected ? ({ theme }) => theme.colors.orange : "darkgrey"};
   width: calc(height * 0.7);
-  height: 8rem;
+  // height: 8rem;
+  // height: 50px;
   margin: 0.25rem;
   border-radius: 4px;
   grid: 1fr 1fr;
   max-width: none;
   @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     width: calc(height * 0.7);
-    height: 8rem;
+    // height: 8rem;
+    height: 120px;
   }
 `;

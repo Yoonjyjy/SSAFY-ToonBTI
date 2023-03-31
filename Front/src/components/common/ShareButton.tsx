@@ -44,6 +44,6 @@ const StyledDiv = styled.div`
 `;
 
 const StyledImg = styled.img`
-  height: 3rem;
+  height: 50px;
   padding: 0px 5px;
 `;

@@ -35,5 +35,4 @@ const StyledHeader = styled(Title)`
   font-weight: bold;
   font-size: 1rem;
   margin: 0px;
-  // height: 3rem;
 `;

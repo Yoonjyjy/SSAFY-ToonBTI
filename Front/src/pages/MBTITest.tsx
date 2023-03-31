@@ -49,10 +49,10 @@ export default function MBTITest() {
   // }
 
   return (
-    <StyledLayout
+    <Layout
       title="나의 웹툰 독자 유형 테스트"
       hasPrevious
-      type="MbtiTest"
+      // type="MbtiTest"
     >
       <StyledDiv>
         <StyledProgress>
@@ -93,28 +93,25 @@ export default function MBTITest() {
           );
         })}
       </BtnContainer>
-    </StyledLayout>
+    </Layout>
   );
 }
 
 const StyledPlayer = styled(Player)`
   width: 75vw;
-  height: 50vw;
+  height: 40vw;
   max-width: 800px;
   max-height: 800px;
 `;
 
 const BtnContainer = styled(Space)`
-  // line-height: 3rem;
   height: 100%
   width: 100%;
-
-  padding-bottom: 2rem;
 `;
 
 const StyledButton = styled(Button)`
   width: 100%;
-  height: 3.5rem;
+  height: 50px;
   white-space: pre-wrap;
   border-radius: 10px;
 `;
@@ -137,13 +134,4 @@ const StyledDiv = styled.div`
 const StyleSpan = styled.span`
   white-space: pre-line;
   display: block;
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
 `;

@@ -24,7 +24,7 @@ export default function MBTIResult() {
     navigate("/mbti/result/all");
   }
   return (
-    <StyledLayout title="웹툰 독자 유형 결과" hasPrevious>
+    <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
         <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
         <MainImage src={tiger} size={80} />
@@ -69,7 +69,7 @@ export default function MBTIResult() {
             </StyledCol>
           ))}
         </Row>
-        <StyledButton onClick={clickResultAllHandler} height={4}>
+        <StyledButton onClick={clickResultAllHandler} height={7}>
           나와 같은 유형은 몇 %일까요?
           <br />
           <StyledStrong>전체 유형 순위 보기</StyledStrong>
@@ -103,7 +103,7 @@ export default function MBTIResult() {
         src="http://localhost:5173"
         param="mbti/result"
       />
-    </StyledLayout>
+    </Layout>
   );
 }
 
@@ -115,7 +115,8 @@ const BtnContainer = styled(Space)`
 
 const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   width: 100%;
-  height: ${(props) => (props.height ? props.height + "rem" : "3rem")};
+  height: 50px;
+  height: ${(props) => (props.height ? props.height + "0px" : "50px")};
   background-color: ${(props) =>
     props.color ? ({ theme }) => theme.colors.yellow : null};
   border-color: ${(props) =>
@@ -152,15 +153,6 @@ const TextContainer = styled(Space)`
   width: 100%;
   color: black;
   padding-bottom: 0px;
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-  height: 5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
 `;
 
 const StyledDiv = styled.div`

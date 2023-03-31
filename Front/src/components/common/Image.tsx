@@ -26,8 +26,8 @@ const StyledImage = styled.div<{
   borderRadius?: number;
   url: string;
 }>`
-  height: ${(props) => (props.height ? props.height : "20rem")};
-  width: ${(props) => (props.width ? props.width : "20rem")};
+  height: ${(props) => (props.height ? props.height : "200px")};
+  width: ${(props) => (props.width ? props.width : "200px")};
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : 10)}px;
   background-color: #eeeeee;
   background-image: url(${(props) => props.url});

@@ -23,7 +23,7 @@ export default function Home() {
   }, [data, error]);
 
   return (
-    <StyledLayout type="home">
+    <Layout type="home">
       <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
       <StyledPlayer autoplay loop src="/home.json"></StyledPlayer>
       <BtnContainer direction="vertical">
@@ -42,7 +42,7 @@ export default function Home() {
         <br></br>
         FE: 김태원 노현정 윤지영 / BE: 권성은 김진호 전주영
       </StyleSpan>
-    </StyledLayout>
+    </Layout>
   );
 }
 
@@ -65,19 +65,10 @@ const BtnContainer = styled(Space)`
 
 const StyledButton = styled(Button)`
   width: 100%;
-  height: 5rem;
+  height: 80px;
   border: none;
   background-color: ${({ theme }) => theme.colors.yellow};
   border-radius: 10px;
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-  height: 5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 `;
 
 const StyledHeader = styled(Title)`
