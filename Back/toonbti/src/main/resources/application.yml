@@ -1,0 +1,54 @@
+spring:
+  profiles:
+    default: prod
+
+  datasource:
+    hikari:
+      idle-timeout: '600000'
+      connection-init-sql: SELECT 1
+      validation-timeout: '2000'
+      maximum-pool-size: '10'
+      auto-commit: 'true'
+      connection-timeout: '5000'
+      max-lifetime: '1800000'
+      minimum-idle: '10'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: 'false'
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  graphql:
+    servlet:
+      enabled: true
+      mapping: /graphql
+#      corsEnabled: false
+#      cors:
+#        allowed-origins: http://localhost:8080
+#        allowed-methods: GET, HEAD, POST, PATCH
+#      exception-handlers-enabled: true
+#      context-setting: PER_REQUEST_WITH_INSTRUMENTATION
+#      async-mode-enabled: true
+    tools:
+      schema-location-pattern: "**/*.graphqls"
+      introspection-enabled: true
+    graphiql:
+      enabled: true
+      printer:
+        enable: true
+
+
+
+logging:
+#  level:
+#    org:
+#      springframework:
+#        web: debug
+    root: info
+    com:
+      ssafy:
+        toonbti: debug
