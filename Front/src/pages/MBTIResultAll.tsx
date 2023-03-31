@@ -20,7 +20,7 @@ export default function MBTIResultAll() {
   }
 
   return (
-    <StyledLayout title="웹툰 독자 유형 결과" hasPrevious>
+    <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
         <TextContainer direction="vertical" size={5}>
           <StyledHeader level={3}>전체 독자 유형</StyledHeader>
@@ -134,7 +134,7 @@ export default function MBTIResultAll() {
         src="http://localhost:5173"
         param="mbti/result"
       />
-    </StyledLayout>
+    </Layout>
   );
 }
 
@@ -168,7 +168,7 @@ const TextContainer = styled(Space)`
 
 const StyledButton = styled(Button)<{ color?: string }>`
   width: 100%;
-  height: 3rem;
+  height: 50px;
   background-color: ${(props) =>
     props.color ? ({ theme }) => theme.colors.yellow : null};
   border-color: ${(props) =>
@@ -185,7 +185,6 @@ const StyledHeader = styled(Title)`
   font-weight: bold;
   font-size: 1rem;
   margin: 0px;
-  // height: 3rem;
 `;
 
 const StyledContent = styled(Text)`
@@ -198,15 +197,6 @@ const StyledContent = styled(Text)`
     font-weight: 600;
     line-height: 2rem;
   }
-`;
-
-const StyledLayout = styled(Layout)`
-  width: 100%;
-  height: 5rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
 `;
 
 const StyledDiv = styled.div`

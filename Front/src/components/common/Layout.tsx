@@ -11,7 +11,8 @@ interface PropType {
   title?: string;
   hasPrevious?: boolean;
   children: React.ReactNode;
-  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
+  type?: "home";
+  // type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
 }
 
 export default function CommonLayout(props: PropType) {
@@ -31,16 +32,17 @@ export default function CommonLayout(props: PropType) {
 }
 
 function CustomContent(props: {
-  type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
+  type?: "home";
+  // type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
   children: React.ReactNode;
 }) {
   switch (props.type) {
-    case "survey":
-      return <SurveyPageContent>{props.children}</SurveyPageContent>;
-    case "keywordSurvey":
-      return <KeywordPageContent>{props.children}</KeywordPageContent>;
-    case "MbtiTest":
-      return <StyledTestContent>{props.children}</StyledTestContent>;
+    // case "survey":
+    //   return <SurveyPageContent>{props.children}</SurveyPageContent>;
+    // case "keywordSurvey":
+    //   return <KeywordPageContent>{props.children}</KeywordPageContent>;
+    // case "MbtiTest":
+    //   return <StyledTestContent>{props.children}</StyledTestContent>;
     case "home":
       return <StyledHomeContent>{props.children}</StyledHomeContent>;
     default:
@@ -88,49 +90,47 @@ const LeftButton = styled(LeftOutlined)`
 
 const StyledContent = styled(Content)`
   text-align: center;
-  // min-height: 120;
-  // line-height: 120px;
   padding: 2rem;
-  padding-top: 8rem;
+  padding-top: 90px;
 
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+
+  width: 100%;
+  height: 100%;
+  gap: 20px;
 `;
 
 const StyledHomeContent = styled(Content)`
   text-align: center;
-  // min-height: 120;
-  // line-height: 120px;
   padding: 2rem;
-  // padding-top: 5rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
+  gap: 20px;
 `;
 
-const StyledTestContent = styled(Content)`
-  height: auto;
-  text-align: center;
-  padding: 2rem;
-  padding-top: 5rem;
+// const StyledTestContent = styled(Content)`
+//   height: auto;
+//   text-align: center;
+//   padding: 2rem;
+//   padding-top: 5rem;
 
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1rem;
+// `;
 
-const SurveyPageContent = styled(Content)`
-  text-align: center;
-  min-height: 120;
-  padding: 2rem;
-  padding-top: 6rem;
-`;
-const KeywordPageContent = styled(Content)`
-  text-align: center;
-  min-height: 120;
-  padding: 2rem;
-  padding-top: 8rem;
-`;
+// const SurveyPageContent = styled(Content)`
+//   text-align: center;
+//   min-height: 120;
+//   padding: 2rem;
+//   padding-top: 6rem;
+// `;
+// const KeywordPageContent = styled(Content)`
+//   text-align: center;
+//   min-height: 120;
+//   padding: 2rem;
+//   padding-top: 8rem;
+// `;

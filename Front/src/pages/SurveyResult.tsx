@@ -130,7 +130,11 @@ export default function AnalysisResult() {
     },
   ];
   return (
-    <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
+    <Layout
+      // type="survey"
+      title="웹툰 취향 분석 테스트"
+      hasPrevious
+    >
       <TitleText>당신의 독자 유형은?</TitleText>
       <Image url={data.reader_category_img} /> {/* data */}
       <article>
@@ -151,7 +155,7 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text>
-            현재
+            현재&nbsp;
             <PointSpan>{data.total_reader_cnt}</PointSpan>명의 분석 독자들 중...
           </Text>
           <div style={{ width: "90%", margin: "auto" }}>
@@ -402,7 +406,7 @@ const CallOutDiv = styled.div`
 `;
 const StyledButton = styled(Button)`
   width: 100%;
-  height: 3rem;
+  height: 50px;
   border-radius: 10px;
 `;
 const PointSpan = styled.span`
@@ -458,6 +462,8 @@ const RatioText = styled.p<{ color?: ColorType }>`
   font-weight: 700;
   display: flex;
   margin: 0.2rem;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
 `;
 const GradientText = styled.span`
   margin-bottom: 0.5rem;

@@ -187,7 +187,11 @@ export default function SurveyTest() {
   switch (step) {
     case 0:
       return (
-        <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
+        <Layout
+          // type="survey"
+          title="웹툰 취향 분석 테스트"
+          hasPrevious
+        >
           <Survey
             dataList={formData.dataList}
             onClickNext={nextHandler}
