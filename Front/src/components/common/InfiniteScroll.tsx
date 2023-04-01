@@ -15,7 +15,7 @@ interface PropsType {
   isLoading: boolean;
   page: number;
   totalPage: number;
-  isLastPage: boolean;
+  isLastPage: boolean; // list 개수 27개 이하이면 lastPage
 }
 
 export default function InfiniteScroll({
@@ -30,7 +30,7 @@ export default function InfiniteScroll({
   const options = {
     root: null, // 타켓 요소가 "어디에" 들어왔을때 콜백함수를 실행할 것인지 결정합니다. null이면 viewport가 root로 지정됩니다.
     //root: document.querySelector('#scrollArea'), => 특정 요소를 선택할 수도 있습니다.
-    rootMargin: "200px 0px 0px 0px", // root에 마진값을 주어 범위를 확장 가능합니다.
+    rootMargin: "0px", // root에 마진값을 주어 범위를 확장 가능합니다.
     threshold: 1, // 타겟 요소가 얼마나 들어왔을때 백함수를 실행할 것인지 결정합니다. 1이면 타겟 요소 전체가 들어와야 합니다.
   };
   const observer = new IntersectionObserver(callback, options);
@@ -45,7 +45,14 @@ export default function InfiniteScroll({
   return (
     <div>
       {children}
-      {!isLastPage ? <div ref={target}> </div> : null}
+      {!isLastPage ? (
+        <div
+          style={{ width: "100%", height: "20px", border: "1px solid black" }}
+          ref={target}
+        >
+          {" "}
+        </div>
+      ) : null}
       {isLoading ? <Spinner /> : null}
     </div>
   );

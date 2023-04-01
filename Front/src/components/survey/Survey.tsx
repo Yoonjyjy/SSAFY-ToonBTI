@@ -91,6 +91,7 @@ const BtnContainer = styled(Space)`
   width: 100%;
   position: relative;
   transform: translateY(-20%);
+  margin-top: 2rem;
 `;
 
 const StyledButton = styled(Button)<{ color?: string; height?: number }>`
