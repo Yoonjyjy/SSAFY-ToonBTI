@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Space, Row, Col, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, MainImage } from "../components/common";
 import tiger from "/tiger.jpg";
 import { SwapRightOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ShareButton from "../components/common/ShareButton";
+import { useMutation } from "@apollo/client";
+import { ADD_USER_RESPONSE } from "../api/mbti";
 
 const { Title, Text } = Typography;
 
+// FIXME: 나의 유형 desc, 잘 맞는 & 안 맞는 유형 percent, 유형에 대한 이미지 필요
+// FIXME: createResult() api 에 userId 필요
 export default function MBTIResult() {
+  const { state: answers } = useLocation();
   const navigate = useNavigate();
+  const [addUserResponse, { data, error }] = useMutation(ADD_USER_RESPONSE); // TODO: handle while loading
+
+  useEffect(() => {
+    addUserResponse({
+      variables: { input: { answers } },
+    });
+  }, []);
 
   function clickHandler() {
     navigate("/survey");
@@ -23,13 +35,18 @@ export default function MBTIResult() {
   function clickResultAllHandler() {
     navigate("/mbti/result/all");
   }
+
+  if (error) navigate("/404");
+
+  const res = data?.addUserResponse;
+
   return (
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
         <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
         <MainImage src={tiger} size={80} />
         <TextContainer direction="vertical" size={5}>
-          <StyledHeader level={4}>LSEA</StyledHeader>
+          <StyledHeader level={4}>{res?.myType?.userType}</StyledHeader>
 
           <StyledContent>
             유형에 대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에
@@ -42,32 +59,46 @@ export default function MBTIResult() {
 
       <Row gutter={[16, 16]}>
         {[
-          { text: "나와 잘 맞는 유형", mbti: "LSEA", per: 40.6 },
-          { text: "나와 안 맞는 유형", mbti: "LWEA", per: 11.0 },
-        ].map((el) => (
-          <StyledCol key={el.mbti} span={12}>
-            <b>{el.text}</b>
-            <MainImage src={tiger} size={40} />
-            <strong>{el.mbti}</strong>
-          </StyledCol>
-        ))}
+          {
+            text: "나와 잘 맞는 유형",
+            mbti: res?.bestType?.userType,
+            per: 40.6,
+          },
+          {
+            text: "나와 안 맞는 유형",
+            mbti: res?.worstType?.userType,
+            per: 11.0,
+          },
+        ].map(
+          (el) =>
+            el.mbti && (
+              <StyledCol key={el.mbti + "me"} span={12}>
+                <b>{el.text}</b>
+                <MainImage src={tiger} size={40} />
+                <strong>{el.mbti}</strong>
+              </StyledCol>
+            )
+        )}
       </Row>
 
       <TextContainer direction="vertical" size={5}>
         <StyledHeader level={4}>지금까지 가장 많은 유형은?</StyledHeader>
         <Row gutter={[16, 16]}>
           {[
-            { text: "1위", mbti: "LSEA", per: 40.6 },
-            { text: "2위", mbti: "LWEA", per: 11.0 },
-          ].map((el) => (
-            <StyledCol key={el.mbti} span={12}>
-              {el.text}
-              <MainImage src={tiger} size={40} />
-              <strong>
-                {el.mbti} ({el.per} %)
-              </strong>
-            </StyledCol>
-          ))}
+            { text: "1위", mbti: res?.firstType?.userType, per: 40.6 },
+            { text: "2위", mbti: res?.secondType?.userType, per: 11.0 },
+          ].map(
+            (el) =>
+              el.mbti && (
+                <StyledCol key={el.mbti + "popularity"} span={12}>
+                  {el.text}
+                  <MainImage src={tiger} size={40} />
+                  <strong>
+                    {el.mbti} ({el.per} %)
+                  </strong>
+                </StyledCol>
+              )
+          )}
         </Row>
         <StyledButton onClick={clickResultAllHandler} height={7}>
           나와 같은 유형은 몇 %일까요?

@@ -1,39 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Space, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Layout } from "../components/common";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useQuery } from "@apollo/client";
-import { GET_QUESTIONS } from "../api/mbti";
+import { COUNT_ALL_USERS } from "../api/mbti";
 
 const { Title } = Typography;
 
 export default function Home() {
   const navigate = useNavigate();
-  const { data, error } = useQuery(GET_QUESTIONS);
+  const { data, error } = useQuery(COUNT_ALL_USERS);
 
-  useEffect(() => {
-    if (error) {
-      console.log(error);
-    }
-    if (data) {
-      console.log(data);
-    }
-  }, [data, error]);
+  if (error) navigate("/404");
 
   return (
     <Layout type="home">
       <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
       <StyledPlayer autoplay loop src="/home.json"></StyledPlayer>
       <BtnContainer direction="vertical">
-        {/* //TODO: question data fetch -> 저장해... surveypage reducer 참고... */}
-        <StyledButton
-          onClick={() => navigate("/mbti", { state: data.getQuestions })}
-        >
+        <StyledButton onClick={() => navigate("/mbti")}>
           <SpanTitle>시작하기</SpanTitle>
           <br />
-          지금까지 NNN,NNN 명이 참여 했어요!
+          지금까지 {data?.countAllUsers} 명이 참여 했어요!
         </StyledButton>
       </BtnContainer>
 

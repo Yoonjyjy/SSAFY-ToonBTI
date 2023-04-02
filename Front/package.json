@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gql-watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -30,6 +31,8 @@
     "styled-components": "^5.3.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/client-preset": "^2.1.1",
     "@types/node": "^18.15.7",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
@@ -41,6 +44,7 @@
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-react": "^7.32.2",
     "typescript": "^4.9.3",
+    "urql": "^3.0.4",
     "vite": "^4.1.0"
   },
   "prettier": {

@@ -13,13 +13,7 @@ export default function NotFound() {
       <Title>페이지를 찾을 수 없어요!</Title>
       <StyledPlayer autoplay loop src="/404-error.json"></StyledPlayer>
       <BtnContainer direction="vertical">
-        <StyledButton
-          onClick={(e) => {
-            e.preventDefault();
-            //TODO: graphQL 데이터 서버로 보내기
-            navigate("/survey/result");
-          }}
-        >
+        <StyledButton onClick={() => navigate("/", { replace: true })}>
           처음으로 돌아가기
         </StyledButton>
       </BtnContainer>

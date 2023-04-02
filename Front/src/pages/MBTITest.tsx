@@ -1,52 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, Space, Progress, Typography } from "antd";
 import { Layout } from "../components/common";
 import { useNavigate } from "react-router-dom";
-// import { useQuery } from "@apollo/client";
-// import { GET_QUESTIONS } from "../api/mbti";
+import { useQuery } from "@apollo/client";
+import { GET_QUESTIONS } from "../api/mbti";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { useLocation } from "react-router";
 
 const { Text } = Typography;
 
 export default function MBTITest() {
   const navigate = useNavigate();
-  //FIXME: 데이터 관리
-  // const { error, data: datasth } = useQuery(GET_QUESTIONS);
-  // console.log("data", datasth);
+  const { error, data } = useQuery(GET_QUESTIONS); // TODO: handle while loading
 
-  const { state } = useLocation();
   const [step, setStep] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
 
-  // console.log(state);
-
-  useEffect(() => {
-    console.log("answers: ", answers);
-  }, [answers]);
-
-  const handleSelect = (answer: string) => {
+  function handleSelect(answer: string) {
     if (step == 9) {
-      setAnswers([...answers, answer.charAt(0)]);
-      clickHandler();
+      navigate("/mbti/result", { state: [...answers, answer.charAt(0)] });
     } else if (step == 0 || step == 2) {
       setStep(step + 1);
     } else {
       setAnswers([...answers, answer.charAt(0)]);
       setStep(step + 1);
     }
-  };
-
-  function clickHandler() {
-    /** TODO: */
-    // console.log(answers);
-    navigate("/mbti/result");
   }
 
-  // if (error) {
-  //   navigate("/404");
-  // }
+  if (error) {
+    navigate("/404");
+  }
 
   return (
     <Layout
@@ -56,26 +39,30 @@ export default function MBTITest() {
     >
       <StyledDiv>
         <StyledProgress>
-          <StyleSpan>{state[step].questionNo} / 10</StyleSpan>
+          <StyleSpan>{data?.getQuestions?.[step].questionNo} / 10</StyleSpan>
         </StyledProgress>
         <Progress
-          percent={state[step].questionNo * 10}
+          percent={data?.getQuestions?.[step].questionNo * 10}
           showInfo={false}
           strokeColor="#FFB202"
         />
       </StyledDiv>
       <StyleSpan>
-        {state[step].question.split("\\n").map((line: string) => {
-          return <div key={line}>{line}</div>;
-        })}
+        {data?.getQuestions?.[step].question
+          ?.split("\\n")
+          .map((line: string) => {
+            return <div key={line}>{line}</div>;
+          })}
       </StyleSpan>
       <StyledPlayer
         autoplay
         loop
-        src={"/" + state[step].questionNo + ".json"}
+        src={"/" + data?.getQuestions?.[step].questionNo + ".json"}
       ></StyledPlayer>
       <BtnContainer direction="vertical">
-        {state[step].answersList.map((el: string) => {
+        {data?.getQuestions?.[step].answersList?.map((el) => {
+          if (!el) return <></>;
+
           return (
             <StyledButton
               key={el}
@@ -105,7 +92,7 @@ const StyledPlayer = styled(Player)`
 `;
 
 const BtnContainer = styled(Space)`
-  height: 100%
+  height: 100%;
   width: 100%;
 `;
 
