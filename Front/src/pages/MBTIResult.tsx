@@ -69,13 +69,16 @@ export default function MBTIResult() {
             mbti: res?.worstType?.userType,
             per: 11.0,
           },
-        ].map((el) => (
-          <StyledCol key={el.mbti} span={12}>
-            <b>{el.text}</b>
-            <MainImage src={tiger} size={40} />
-            <strong>{el.mbti}</strong>
-          </StyledCol>
-        ))}
+        ].map(
+          (el) =>
+            el.mbti && (
+              <StyledCol key={el.mbti + "me"} span={12}>
+                <b>{el.text}</b>
+                <MainImage src={tiger} size={40} />
+                <strong>{el.mbti}</strong>
+              </StyledCol>
+            )
+        )}
       </Row>
 
       <TextContainer direction="vertical" size={5}>
@@ -84,15 +87,18 @@ export default function MBTIResult() {
           {[
             { text: "1위", mbti: res?.firstType?.userType, per: 40.6 },
             { text: "2위", mbti: res?.secondType?.userType, per: 11.0 },
-          ].map((el) => (
-            <StyledCol key={el.mbti} span={12}>
-              {el.text}
-              <MainImage src={tiger} size={40} />
-              <strong>
-                {el.mbti} ({el.per} %)
-              </strong>
-            </StyledCol>
-          ))}
+          ].map(
+            (el) =>
+              el.mbti && (
+                <StyledCol key={el.mbti + "popularity"} span={12}>
+                  {el.text}
+                  <MainImage src={tiger} size={40} />
+                  <strong>
+                    {el.mbti} ({el.per} %)
+                  </strong>
+                </StyledCol>
+              )
+          )}
         </Row>
         <StyledButton onClick={clickResultAllHandler} height={7}>
           나와 같은 유형은 몇 %일까요?
