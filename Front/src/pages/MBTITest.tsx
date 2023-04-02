@@ -11,34 +11,25 @@ const { Text } = Typography;
 
 export default function MBTITest() {
   const navigate = useNavigate();
-  const { error, data } = useQuery(GET_QUESTIONS);
+  const { error, data } = useQuery(GET_QUESTIONS); // TODO: handle while loading
 
   const [step, setStep] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
 
-  const handleSelect = (answer: string) => {
+  function handleSelect(answer: string) {
     if (step == 9) {
-      setAnswers([...answers, answer.charAt(0)]);
-      clickHandler();
+      navigate("/mbti/result", { state: [...answers, answer.charAt(0)] });
     } else if (step == 0 || step == 2) {
       setStep(step + 1);
     } else {
       setAnswers([...answers, answer.charAt(0)]);
       setStep(step + 1);
     }
-  };
-
-  function clickHandler() {
-    /** TODO: */
-    // console.log(answers);
-    navigate("/mbti/result");
   }
 
   if (error) {
     navigate("/404");
   }
-
-  console.log("data", data);
 
   return (
     <Layout
@@ -48,26 +39,30 @@ export default function MBTITest() {
     >
       <StyledDiv>
         <StyledProgress>
-          <StyleSpan>{data?.getQuestions[step].questionNo} / 10</StyleSpan>
+          <StyleSpan>{data?.getQuestions?.[step].questionNo} / 10</StyleSpan>
         </StyledProgress>
         <Progress
-          percent={data?.getQuestions[step].questionNo * 10}
+          percent={data?.getQuestions?.[step].questionNo * 10}
           showInfo={false}
           strokeColor="#FFB202"
         />
       </StyledDiv>
       <StyleSpan>
-        {data?.getQuestions[step].question.split("\\n").map((line: string) => {
-          return <div key={line}>{line}</div>;
-        })}
+        {data?.getQuestions?.[step].question
+          ?.split("\\n")
+          .map((line: string) => {
+            return <div key={line}>{line}</div>;
+          })}
       </StyleSpan>
       <StyledPlayer
         autoplay
         loop
-        src={"/" + data?.getQuestions[step].questionNo + ".json"}
+        src={"/" + data?.getQuestions?.[step].questionNo + ".json"}
       ></StyledPlayer>
       <BtnContainer direction="vertical">
-        {data?.getQuestions[step].answersList.map((el: string) => {
+        {data?.getQuestions?.[step].answersList?.map((el) => {
+          if (!el) return <></>;
+
           return (
             <StyledButton
               key={el}
