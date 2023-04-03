@@ -125,9 +125,9 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
     }
 
     case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
-      if (!payload?.dataList) {
-        return state;
-      }
+      // if (!payload?.dataList) {
+      //   return state;
+      // }
       const new_data = addedMockData.map((el) => ({ ...el, clicked: false }));
       const newDataList = [...state.dataList, ...new_data];
       // TODO: fetch additional data list
