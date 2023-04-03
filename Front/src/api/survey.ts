@@ -1,17 +1,37 @@
-// import { gql } from "@apollo/client";
+import { graphql } from "../../src/gql";
 
-// // TODO: how to use graphql
-// const GET_WEBTOON_LIST = gql`
-//   query GET_WEBTOON_LIST {
-//     webtoonlist {
-//       id
-//       name
-//       imgUrl
-//       checked
-//     }
-//   }
-// `;
+const SEARCH_WEBTOON = graphql(`
+  query SearchWebtoon($searchName: String!) {
+    searchWebtoon(searchName: $searchName) {
+      webtoonId
+      title
+      image
+      platform
+      endFlag
+      rate
+      view
+    }
+  }
+`);
 
-// export { GET_WEBTOON_LIST };
+const NBTI_WEBTOON = graphql(`
+  query NBTI_Webtoon($nbtiPk: Int!, $offset: Int!) {
+    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {
+      webtoonId
+      title
+      image
+      platform
+      endFlag
+      rate
+      view
+    }
+  }
+`);
 
-export {};
+const SELECT_WEBTOON = graphql(`
+  query Select_Webtoon($nbtiPk: Int!, $userPk: Int!, $webtoonIds: [Int]!) {
+    selectWebtoon(nbtiPk: $nbtiPk, userPk: $userPk)
+  }
+`);
+
+export { NBTI_WEBTOON, SEARCH_WEBTOON, SELECT_WEBTOON };
