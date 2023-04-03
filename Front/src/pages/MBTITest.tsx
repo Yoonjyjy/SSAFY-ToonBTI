@@ -66,6 +66,7 @@ export default function MBTITest() {
           return (
             <StyledButton
               key={el}
+              className="testButtons"
               onClick={() => {
                 handleSelect(el);
               }}
@@ -101,6 +102,9 @@ const StyledButton = styled(Button)`
   height: 50px;
   white-space: pre-wrap;
   border-radius: 10px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const StyledProgress = styled(Text)`
