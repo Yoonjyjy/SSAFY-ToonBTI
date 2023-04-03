@@ -32,20 +32,33 @@ const ADD_USER_RESPONSE = graphql(`
     addUserResponse(input: $input) {
       myType {
         userType
+        description
+        image
       }
       bestType {
         userType
+        description
+        image
       }
       worstType {
         userType
+        description
+        image
       }
       firstType {
         userType
+        description
+        image
       }
       secondType {
         userType
+        description
+        image
       }
     }
+  }
+  query CountAllUser {
+    countAllUsers
   }
 `);
 

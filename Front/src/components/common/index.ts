@@ -7,6 +7,7 @@ import DoughnutChart from "./DoughnutChart";
 import ScrollControl from "./ScrollControl";
 import InfiniteScroll from "./InfiniteScroll";
 import Spinner from "./Spinner";
+import SearchBar from "../survey/SearchBar";
 
 export {
   ProgressiveBar,
@@ -18,4 +19,5 @@ export {
   ScrollControl,
   InfiniteScroll,
   Spinner,
+  SearchBar,
 };

@@ -1,6 +1,15 @@
-import React, { useReducer, useState } from "react";
-import { Layout } from "../components/common";
+import React, { useEffect, useReducer } from "react";
+import { Typography } from "antd";
+import styled from "styled-components";
+import { Layout, SearchBar } from "../components/common";
 import { Survey } from "../components/survey";
+import Text from "../components/common/Text";
+import { useLazyQuery } from "@apollo/client";
+import { SEARCH_WEBTOON } from "../api/survey";
+import { django } from "../api";
+import { useNavigate } from "react-router-dom";
+
+const { Title } = Typography;
 
 const mockdata = [
   { id: 1, name: "호랑이행님1", imgUrl: "imgUrl" },
@@ -31,8 +40,6 @@ const addedMockData = [
 
 enum ActionKind {
   FETCH_DATA_LIST = "fetchdatalist",
-  ADD_KEYWORD_LIST = "addkeywordlist",
-  REMOVE_KEYWORD_LIST = "removekeywordlist",
   CLICK_AN_ITEM = "clickanitem",
   FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
   FETCH_ADDITIONAL_DATA_LIST = "fetchqadditionaldatalist",
@@ -42,6 +49,7 @@ interface FormDataType {
   keywordList: KeywordType[];
   valid: {
     dataList: boolean;
+    keyword: boolean;
   };
   confirmed: boolean;
 }
@@ -61,6 +69,7 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
     case ActionKind.FETCH_DATA_LIST: {
       if (!payload?.dataList) return state;
       // TODO: fetch data list
+      // 무슨 용돈지 ? FIXME: 모르겠음
       const isValidated = payload?.dataList.length >= 10;
       const isConfirmed = state.confirmed && isValidated;
       return {
@@ -70,27 +79,6 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
         confirmed: isConfirmed,
       };
     }
-
-    // add keyword func
-    // case ActionKind.ADD_KEYWORD_LIST: {
-    //   if (!payload?.keyword) return state;
-    //   if (state.keywordList.includes(payload.keyword)) {
-    //     return state;
-    //   }
-    //   return {
-    //     ...state,
-    //     keywordList: [...state.keywordList, payload.keyword],
-    //   };
-    // }
-
-    //remove keyword func
-    // case ActionKind.REMOVE_KEYWORD_LIST: {
-    //   if (!payload?.keywordList) return state;
-    //   return {
-    //     ...state,
-    //     keywordList: { ...payload.keywordList },
-    //   };
-    // }
 
     case ActionKind.CLICK_AN_ITEM: {
       if (!payload?.itemId) return state;
@@ -125,21 +113,11 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
     }
 
     case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
-      // if (!payload?.dataList) {
-      //   return state;
-      // }
       const new_data = addedMockData.map((el) => ({ ...el, clicked: false }));
       const newDataList = [...state.dataList, ...new_data];
       // TODO: fetch additional data list
       return { ...state, dataList: newDataList };
     }
-
-    // case ActionKind.FETCH_QUESTION_DATA_LIST: {
-    //   if (!payload?.questionList) return state;
-    //   const newDataList = [...state.questionList];
-    //   newDataList.push(...questionList);
-    //   return { ...state, questionList: newDataList };
-    // }
 
     default:
       return state;
@@ -151,17 +129,20 @@ const initialFormData: FormDataType = {
   keywordList: [],
   valid: {
     dataList: false,
-    // keywordList: true
+    keyword: true,
   },
   confirmed: false,
 };
 
 export default function SurveyTest() {
-  const [step, setStep] = useState<number>(0);
+  const navigate = useNavigate();
   const [formData, dispatch] = useReducer(reducer, { ...initialFormData });
+  const [getWebtoons, { error, data }] = useLazyQuery(SEARCH_WEBTOON, {
+    client: django,
+  });
 
   function nextHandler() {
-    setStep((prev) => prev + 1);
+    console.log("Next handler");
   }
 
   function itemClickHandler(itemId: number) {
@@ -174,43 +155,46 @@ export default function SurveyTest() {
 
   //TODO: infinite scroll에서 호출하면 실행될 함수 => fetch data
   function fetchAdditionalData(nextPage: number) {
-    console.log("fetchAdditionalData");
     dispatch({
       type: ActionKind.FETCH_ADDITIONAL_DATA_LIST,
     });
   }
 
-  // function addKeywordHandler(keyword: KeywordType) {
-  //   dispatch({ type: ActionKind.ADD_KEYWORD_LIST, payload: { keyword } });
-  // }
+  // 키워드 통해 검색한 웹툰 리스트 데이터 체크용입니다
+  // 아래 fetchSearchedData 함수를 마저 작성해주세요
+  useEffect(() => {
+    console.log("data from keyword", data);
+  }, [data]);
 
-  switch (step) {
-    case 0:
-      return (
-        <Layout
-          // type="survey"
-          title="웹툰 취향 분석 테스트"
-          hasPrevious
-        >
-          <Survey
-            dataList={formData.dataList}
-            onClickNext={nextHandler}
-            onClickItem={itemClickHandler}
-            fetchAdditionalData={fetchAdditionalData}
-          />
-        </Layout>
-      );
-    // case 1:
-    //   return (
-    //     <Layout type="keywordSurvey" title="웹툰 취향 분석 테스트" hasPrevious>
-    //       <KeywordSurvey
-    //         keywordList={formData.keywordList}
-    //         addKeyword={addKeywordHandler}
-    //       />
-    //     </Layout>
-    //   );
-
-    default:
-      return <></>;
+  // TODO: add item list to dataList
+  function fetchSearchedData(keyword: string) {
+    getWebtoons({ variables: { searchName: keyword } });
   }
+
+  if (error) navigate("/404");
+
+  return (
+    <Layout
+      // type="survey"
+      title="웹툰 취향 분석 테스트"
+      hasPrevious
+    >
+      <StyledHeader level={3}>웹툰 취향 분석 테스트</StyledHeader>
+      <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
+      <SearchBar searchData={fetchSearchedData} />
+      <Survey
+        dataList={formData.dataList}
+        onClickNext={nextHandler}
+        onClickItem={itemClickHandler}
+        fetchAdditionalData={fetchAdditionalData}
+      />
+    </Layout>
+  );
 }
+
+const StyledHeader = styled(Title)`
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 0px;
+`;
