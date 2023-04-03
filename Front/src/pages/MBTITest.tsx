@@ -39,10 +39,10 @@ export default function MBTITest() {
     >
       <StyledDiv>
         <StyledProgress>
-          <StyleSpan>{data?.getQuestions?.[step].questionNo} / 10</StyleSpan>
+          <StyleSpan>{step + 1} / 10</StyleSpan>
         </StyledProgress>
         <Progress
-          percent={data?.getQuestions?.[step].questionNo * 10}
+          percent={(step + 1) * 10}
           showInfo={false}
           strokeColor="#FFB202"
         />
@@ -54,11 +54,7 @@ export default function MBTITest() {
             return <div key={line}>{line}</div>;
           })}
       </StyleSpan>
-      <StyledPlayer
-        autoplay
-        loop
-        src={"/" + data?.getQuestions?.[step].questionNo + ".json"}
-      ></StyledPlayer>
+      <StyledPlayer autoplay loop src={`/${step + 1}.json`}></StyledPlayer>
       <BtnContainer direction="vertical">
         {data?.getQuestions?.[step].answersList?.map((el) => {
           if (!el) return <></>;
