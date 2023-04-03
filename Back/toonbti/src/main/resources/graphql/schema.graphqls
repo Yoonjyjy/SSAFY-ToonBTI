@@ -29,29 +29,11 @@ type Question {
     answersList: [String]
 }
 
-type Answer {
-    answerId: ID!
-    question: Question
-    answer: String
-}
-
-type UserAnswer {
-    uuid: String
-    answers: [String!]
-}
-
 type User {
     userType: MBTI!
     description: String
     image: String
     count: Long
-}
-
-type Webtoon {
-    webtoonId: Long!
-    webtoonTitle: String
-    image: String
-    similarity: String
 }
 
 type TypeResult {
