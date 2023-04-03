@@ -6,13 +6,22 @@ import tiger from "/tiger.jpg";
 import { SwapRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareButton from "../components/common/ShareButton";
-import { useMutation } from "@apollo/client";
-import { ADD_USER_RESPONSE } from "../api/mbti";
+import { useMutation, useQuery } from "@apollo/client";
+import { ADD_USER_RESPONSE, COUNT_ALL_USERS } from "../api/mbti";
 
 const { Title, Text } = Typography;
 
 // FIXME: 나의 유형 desc, 잘 맞는 & 안 맞는 유형 percent, 유형에 대한 이미지 필요
 // FIXME: createResult() api 에 userId 필요
+
+const total = () => {
+  const navigate = useNavigate();
+  const { data, error } = useQuery(COUNT_ALL_USERS); // TODO: handle while loading
+
+  if (error) navigate("/404");
+  return data?.countAllUsers;
+};
+
 export default function MBTIResult() {
   const { state: answers } = useLocation();
   const navigate = useNavigate();
@@ -40,19 +49,25 @@ export default function MBTIResult() {
 
   const res = data?.addUserResponse;
 
+  console.log(res);
+  console.log(total());
+
   return (
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
         <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
-        <MainImage src={tiger} size={80} />
+        <MainImage
+          src={
+            res?.myType?.image
+              ? `${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`
+              : tiger
+          }
+          size={80}
+        />
         <TextContainer direction="vertical" size={5}>
           <StyledHeader level={4}>{res?.myType?.userType}</StyledHeader>
 
-          <StyledContent>
-            유형에 대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에
-            대한 설명이 들어갈 자리 유형에 대한 설명이 들어갈 자리 유형에 대한
-            설명이 들어갈 자리
-          </StyledContent>
+          <StyledContent>{res?.myType?.description}</StyledContent>
           <br />
         </TextContainer>
       </StyledDiv>
@@ -62,11 +77,13 @@ export default function MBTIResult() {
           {
             text: "나와 잘 맞는 유형",
             mbti: res?.bestType?.userType,
+            img: res?.bestType?.image,
             per: 40.6,
           },
           {
             text: "나와 안 맞는 유형",
             mbti: res?.worstType?.userType,
+            img: res?.worstType?.image,
             per: 11.0,
           },
         ].map(
@@ -74,7 +91,14 @@ export default function MBTIResult() {
             el.mbti && (
               <StyledCol key={el.mbti + "me"} span={12}>
                 <b>{el.text}</b>
-                <MainImage src={tiger} size={40} />
+                <MainImage
+                  src={
+                    el.img
+                      ? `${import.meta.env.VITE_IMAGE_URL}${el.img}`
+                      : tiger
+                  }
+                  size={40}
+                />
                 <strong>{el.mbti}</strong>
               </StyledCol>
             )
@@ -85,14 +109,31 @@ export default function MBTIResult() {
         <StyledHeader level={4}>지금까지 가장 많은 유형은?</StyledHeader>
         <Row gutter={[16, 16]}>
           {[
-            { text: "1위", mbti: res?.firstType?.userType, per: 40.6 },
-            { text: "2위", mbti: res?.secondType?.userType, per: 11.0 },
+            {
+              text: "1위",
+              mbti: res?.firstType?.userType,
+              img: res?.firstType?.image,
+              per: 40.6,
+            },
+            {
+              text: "2위",
+              mbti: res?.secondType?.userType,
+              img: res?.secondType?.image,
+              per: 11.0,
+            },
           ].map(
             (el) =>
               el.mbti && (
                 <StyledCol key={el.mbti + "popularity"} span={12}>
                   {el.text}
-                  <MainImage src={tiger} size={40} />
+                  <MainImage
+                    src={
+                      el.img
+                        ? `${import.meta.env.VITE_IMAGE_URL}${el.img}`
+                        : tiger
+                    }
+                    size={40}
+                  />
                   <strong>
                     {el.mbti} ({el.per} %)
                   </strong>

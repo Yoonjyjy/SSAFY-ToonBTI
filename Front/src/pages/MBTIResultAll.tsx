@@ -13,9 +13,14 @@ const { Title } = Typography;
 export default function MBTIResultAll() {
   const navigate = useNavigate();
   const { data, error } = useQuery(GET_ALL_TYPES); // TODO: handle while loading
+  // const { data, error } = useQuery(COUNT_ALL_USERS); // TODO: handle while loading
+
   const total = data?.getAllTypes
     ?.map((el) => el?.count)
     .reduce((a, b) => a + b);
+  const sortedData = data?.getAllTypes
+    ? [...data.getAllTypes].sort((a, b) => b?.count - a?.count)
+    : [];
 
   if (error) navigate("/404");
 
@@ -24,15 +29,16 @@ export default function MBTIResultAll() {
       <StyledDiv>
         <TextContainer direction="vertical" size={5}>
           <StyledHeader level={3}>전체 독자 유형</StyledHeader>
-          {/* <StyledHeader level={4}>나의 독자 유형은?</StyledHeader> */}
         </TextContainer>
         <Row gutter={[16, 16]}>
-          {data?.getAllTypes?.map(
+          {sortedData.map(
             (el) =>
               el && (
                 <StyledCol key={el.userType} span={12}>
                   <MBTILayout
                     mbti={el.userType}
+                    desc={el.description as string}
+                    img={el.image as string}
                     per={percent(el.count, total)}
                   />
                 </StyledCol>
