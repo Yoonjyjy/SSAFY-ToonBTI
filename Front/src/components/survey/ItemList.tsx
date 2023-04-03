@@ -20,6 +20,8 @@ export default function ItemList({
   const totalPage = 10;
   const isLastPage = false;
 
+  const target = document.querySelector("#infinite-scroll-container");
+
   function callback(
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver
@@ -33,22 +35,27 @@ export default function ItemList({
   }
 
   return (
-    <InfiniteScroll
-      isLoading={isLoading}
-      callback={callback}
-      page={curPage}
-      totalPage={totalPage}
-      isLastPage={isLastPage}
-    >
-      <ItemListBox>
-        {dataList.map((item) => {
-          return <Item key={item.id} item={item} onClickItem={onClickItem} />;
-        })}
-      </ItemListBox>
-    </InfiniteScroll>
+    <ItemListOuterDiv>
+      <InfiniteScroll
+        isLoading={isLoading}
+        callback={callback}
+        page={curPage}
+        totalPage={totalPage}
+        isLastPage={isLastPage}
+      >
+        <ItemListBox>
+          {dataList.map((item) => {
+            return <Item key={item.id} item={item} onClickItem={onClickItem} />;
+          })}
+        </ItemListBox>
+      </InfiniteScroll>
+    </ItemListOuterDiv>
   );
 }
-
+const ItemListOuterDiv = styled.div`
+  overflow-y: scroll;
+  height: 62vh;
+`;
 const ItemListBox = styled(Row)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
