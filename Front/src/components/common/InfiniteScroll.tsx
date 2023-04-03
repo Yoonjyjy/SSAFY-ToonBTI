@@ -15,7 +15,6 @@ interface PropsType {
   ) => void;
   isLoading: boolean;
   page: number;
-  totalPage: number;
   isLastPage: boolean; // list 개수 27개 이하이면 lastPage
 }
 
@@ -24,7 +23,6 @@ export default function InfiniteScroll({
   callback,
   isLoading,
   page,
-  totalPage,
   isLastPage,
 }: PropsType) {
   const target = useRef<HTMLDivElement>(null);
@@ -34,19 +32,19 @@ export default function InfiniteScroll({
     rootMargin: "0px", // root에 마진값을 주어 범위를 확장 가능합니다.
     threshold: 1, // 타겟 요소가 얼마나 들어왔을때 백함수를 실행할 것인지 결정합니다. 1이면 타겟 요소 전체가 들어와야 합니다.
   };
-  const observer = new IntersectionObserver(callback, options);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(callback, options);
     if (!target.current) return;
     observer.observe(target.current); // ✅ 타겟 요소 관측 시작
 
     return () => observer && observer.disconnect();
-  }, [target, options, callback]);
+  }, [target]);
 
   return (
     <div>
       {children}
-      {!isLastPage ? <ObservedDiv></ObservedDiv> : null}
+      {!isLastPage ? <ObservedDiv ref={target}> </ObservedDiv> : null}
       {isLoading ? <Spinner /> : null}
     </div>
   );

@@ -1,8 +1,8 @@
 import { graphql } from "../../src/gql";
 
-const SEARCH_WEBTOON = graphql(`
-  query SearchWebtoon($searchName: String!) {
-    searchWebtoon(searchName: $searchName) {
+const NBTI_WEBTOON = graphql(`
+  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {
+    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {
       webtoonId
       title
       image
@@ -14,9 +14,9 @@ const SEARCH_WEBTOON = graphql(`
   }
 `);
 
-const NBTI_WEBTOON = graphql(`
-  query NBTI_Webtoon($nbtiPk: Int!, $offset: Int!) {
-    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {
+const SEARCH_WEBTOON = graphql(`
+  query SearchWebtoon($searchName: String!) {
+    searchWebtoon(searchName: $searchName) {
       webtoonId
       title
       image

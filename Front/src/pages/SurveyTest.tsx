@@ -1,7 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Typography } from "antd";
 import styled from "styled-components";
+import { useQuery } from "@apollo/client";
 import { Layout, SearchBar } from "../components/common";
+import { NBTI_WEBTOON } from "../api/survey";
 import { Survey } from "../components/survey";
 import Text from "../components/common/Text";
 import { useLazyQuery } from "@apollo/client";
@@ -11,33 +13,6 @@ import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
-const mockdata = [
-  { id: 1, name: "호랑이행님1", imgUrl: "imgUrl" },
-  { id: 2, name: "호랑이행님2", imgUrl: "imgUrl" },
-  { id: 3, name: "호랑이행님3", imgUrl: "imgUrl" },
-  { id: 4, name: "호랑이행님4", imgUrl: "imgUrl" },
-  { id: 5, name: "호랑이행님5", imgUrl: "imgUrl" },
-  { id: 6, name: "호랑이행님5", imgUrl: "imgUrl" },
-  { id: 10, name: "호랑이행님1", imgUrl: "imgUrl" },
-  { id: 11, name: "호랑이행님2", imgUrl: "imgUrl" },
-  { id: 12, name: "호랑이행님3", imgUrl: "imgUrl" },
-  { id: 14, name: "호랑이행님4", imgUrl: "imgUrl" },
-  { id: 15, name: "호랑이행님5", imgUrl: "imgUrl" },
-  { id: 16, name: "호랑이행님5", imgUrl: "imgUrl" },
-  { id: 21, name: "호랑이행님1", imgUrl: "imgUrl" },
-  { id: 22, name: "호랑이행님2", imgUrl: "imgUrl" },
-  { id: 23, name: "호랑이행님3", imgUrl: "imgUrl" },
-  { id: 24, name: "호랑이행님4", imgUrl: "imgUrl" },
-  { id: 25, name: "호랑이행님5", imgUrl: "imgUrl" },
-  { id: 26, name: "호랑이행님5", imgUrl: "imgUrl" },
-];
-
-const addedMockData = [
-  { id: 7, name: "호랑이행님7", imgUrl: "imgUrl" },
-  { id: 8, name: "호랑이행님8", imgUrl: "imgUrl" },
-  { id: 9, name: "호랑이행님9", imgUrl: "imgUrl" },
-];
-
 enum ActionKind {
   FETCH_DATA_LIST = "fetchdatalist",
   CLICK_AN_ITEM = "clickanitem",
@@ -45,77 +20,81 @@ enum ActionKind {
   FETCH_ADDITIONAL_DATA_LIST = "fetchqadditionaldatalist",
 }
 interface FormDataType {
+  addedDataList: SurveyItemType[];
   dataList: SurveyItemType[];
   keywordList: KeywordType[];
-  valid: {
-    dataList: boolean;
-    keyword: boolean;
-  };
-  confirmed: boolean;
+  clickedList: SurveyItemType[];
 }
 
 interface ActionType {
   type: ActionKind;
   payload?: {
+    offset?: number;
+    addedDataList?: SurveyItemType[];
     dataList?: SurveyItemType[];
-    itemId?: number;
+    itemId?: string;
     keyword?: KeywordType;
   };
 }
 
 function reducer(state: FormDataType, action: ActionType): FormDataType {
   const { type, payload } = action;
+
   switch (type) {
+    // 첫번째 데이터 불러오기
     case ActionKind.FETCH_DATA_LIST: {
       if (!payload?.dataList) return state;
-      // TODO: fetch data list
-      // 무슨 용돈지 ? FIXME: 모르겠음
-      const isValidated = payload?.dataList.length >= 10;
-      const isConfirmed = state.confirmed && isValidated;
       return {
         ...state,
-        dataList: { ...payload?.dataList },
-        valid: { ...state.valid, dataList: isValidated },
-        confirmed: isConfirmed,
+        dataList: [...payload.dataList.map((e) => ({ ...e, clicked: false }))],
       };
     }
-
+    // 웹툰 클릭시 데이터 클릭 표시
     case ActionKind.CLICK_AN_ITEM: {
       if (!payload?.itemId) return state;
       const newDataList = [...state.dataList].map((el) => {
-        if (el.id === payload.itemId) {
+        if (el.webtoonId === payload.itemId) {
           el = { ...el, clicked: !el.clicked };
         }
         return el;
       });
+      // clickedList에서 삭제 / push
       return { ...state, dataList: newDataList };
     }
 
-    case ActionKind.FETCH_RELATIVE_ITEM_LIST: {
-      if (!payload?.itemId) return state;
-      const newDataList = [...state.dataList];
-      const clickedIndex = newDataList.findIndex(
-        (el) => el.id === payload.itemId
-      );
-      // TODO: fetch relative item list
-      if (state.dataList[clickedIndex].clicked === true) {
-        newDataList.splice(
-          clickedIndex + 1,
-          0,
-          ...addedMockData.map((e) => ({
-            ...e,
-            id: Math.random(),
-            clicked: false,
-          }))
-        );
-      }
-      return { ...state, dataList: newDataList };
-    }
+    // 웹툰 클릭시 관련 웹툰 불러오기
+    // case ActionKind.FETCH_RELATIVE_ITEM_LIST: {
+    //   if (!payload?.itemId) return state;
+    //   const newDataList = [...state.dataList];
+    //   const clickedIndex = newDataList.findIndex(
+    //     (el) => el.webtoonId === payload.itemId
+    //   );
+    //   // TODO: fetch relative item list
+    //   if (state.dataList[clickedIndex].clicked === true) {
+    //     newDataList.splice(
+    //       clickedIndex + 1,
+    //       0,
+    //       ...payload?.addedDataList.map((e) => ({
+    //         ...e,
+    //         webtoonId: Math.random.toString(),
+    //         clicked: false,
+    //       }))
+    //     );
+    //   }
+    //   return { ...state, dataList: newDataList };
+    // }
 
+    // 웹툰 추가로 받아오기
     case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
-      const new_data = addedMockData.map((el) => ({ ...el, clicked: false }));
+      if (!payload?.addedDataList) {
+        return state;
+      }
+      const new_data = payload?.addedDataList.map((el) => ({
+        ...el,
+        clicked: false,
+      }));
       const newDataList = [...state.dataList, ...new_data];
-      // TODO: fetch additional data list
+      console.log(newDataList);
       return { ...state, dataList: newDataList };
     }
 
@@ -125,38 +104,92 @@ function reducer(state: FormDataType, action: ActionType): FormDataType {
 }
 
 const initialFormData: FormDataType = {
-  dataList: mockdata.map((e) => ({ ...e, clicked: false })),
+  dataList: [],
+  addedDataList: [],
   keywordList: [],
-  valid: {
-    dataList: false,
-    keyword: true,
-  },
-  confirmed: false,
+  clickedList: [],
 };
 
 export default function SurveyTest() {
   const navigate = useNavigate();
   const [formData, dispatch] = useReducer(reducer, { ...initialFormData });
-  const [getWebtoons, { error, data }] = useLazyQuery(SEARCH_WEBTOON, {
+  const offsetRef = useRef<number>(0);
+  const [getWebtoons, { error: errorSearch, data: dataSearch }] = useLazyQuery(
+    SEARCH_WEBTOON,
+    {
+      client: django,
+    }
+  );
+
+  const [
+    getMoreWebtoons,
+    {
+      error: fetchMoreDataError,
+      loading: fetchMoreDataLoading,
+      data: fetchMoreData,
+    },
+  ] = useLazyQuery(NBTI_WEBTOON, {
+    variables: {
+      nbtiPk: 17,
+      offset: offsetRef.current,
+    },
     client: django,
   });
+
+  // FIXME: too many re-renders
+  if (fetchMoreDataError) {
+    console.log("fetchMoreDataError", fetchMoreDataError);
+  }
+  if (fetchMoreDataLoading) {
+    console.log("fetchMoreDataLoading", fetchMoreDataLoading);
+  }
+  if (fetchMoreData) {
+    fetchAdditionalData(fetchMoreData?.nbtiWebtoon as SurveyItemType[]);
+  }
+
+  const { data, error, loading } = useQuery(NBTI_WEBTOON, {
+    variables: {
+      nbtiPk: 17,
+      offset: offsetRef.current,
+    },
+    client: django,
+  });
+  if (error) {
+    console.log("err", error);
+  }
+  if (loading) {
+    console.log("loading");
+  }
+
+  useEffect(() => {
+    if (data?.nbtiWebtoon) {
+      console.log("useEffec", data?.nbtiWebtoon);
+      fetchDataList(data?.nbtiWebtoon as SurveyItemType[]);
+    }
+  }, [data]);
+
+  function fetchDataList(dataList: SurveyItemType[]) {
+    dispatch({ type: ActionKind.FETCH_DATA_LIST, payload: { dataList } });
+  }
 
   function nextHandler() {
     console.log("Next handler");
   }
 
-  function itemClickHandler(itemId: number) {
+  function itemClickHandler(itemId: string) {
     dispatch({ type: ActionKind.CLICK_AN_ITEM, payload: { itemId } });
-    dispatch({
-      type: ActionKind.FETCH_RELATIVE_ITEM_LIST,
-      payload: { itemId },
-    });
+    //TODO: relative는 내일~
+    // dispatch({
+    //   type: ActionKind.FETCH_RELATIVE_ITEM_LIST,
+    //   payload: { itemId },
+    // });
   }
 
-  //TODO: infinite scroll에서 호출하면 실행될 함수 => fetch data
-  function fetchAdditionalData(nextPage: number) {
+  //FIXME: 여기서 리렌더링 계속됨
+  function fetchAdditionalData(addedDataList: SurveyItemType[]) {
     dispatch({
       type: ActionKind.FETCH_ADDITIONAL_DATA_LIST,
+      payload: { addedDataList },
     });
   }
 
@@ -171,23 +204,43 @@ export default function SurveyTest() {
     getWebtoons({ variables: { searchName: keyword } });
   }
 
-  if (error) navigate("/404");
+  // useEffect(() => {
+  //   getAdditionalData(offsetRef.current);
+  // }, [offsetRef.current]);
 
+  function getAdditionalData(offset: number) {
+    console.log("더줘! ", offsetRef.current);
+    // const nbtiPk: number | null = Number(localStorage.getItem("nbtiPk"));
+    const nbtiPk = 17;
+    offsetRef.current = offsetRef.current + 1;
+    // TODO: 여기에서 데이터를 불러온 다음에 dispatch를 해야돼
+    getMoreWebtoons({
+      variables: { nbtiPk: nbtiPk, offset: offsetRef.current },
+    });
+  }
+
+  if (error) navigate("/404");
   return (
     <Layout
       // type="survey"
       title="웹툰 취향 분석 테스트"
       hasPrevious
     >
-      <StyledHeader level={3}>웹툰 취향 분석 테스트</StyledHeader>
-      <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
+      <StyledHeader level={3} style={{ margin: "0px" }}>
+        웹툰 취향 분석 테스트
+      </StyledHeader>
+      <p style={{ margin: "0px" }}>
+        지금까지 재미있게 봤던 웹툰들을 선택해주세요.
+      </p>
       <SearchBar searchData={fetchSearchedData} />
       <Survey
         dataList={formData.dataList}
         onClickNext={nextHandler}
         onClickItem={itemClickHandler}
-        fetchAdditionalData={fetchAdditionalData}
+        offsetRef={offsetRef}
+        fetchAdditionalData={getAdditionalData}
       />
+      <button onClick={() => getAdditionalData(offsetRef.current)}>TEST</button>
     </Layout>
   );
 }

@@ -31,11 +31,7 @@ export default function CommonLayout(props: PropType) {
   );
 }
 
-function CustomContent(props: {
-  type?: "home";
-  // type?: "survey" | "keywordSurvey" | "MbtiTest" | "home";
-  children: React.ReactNode;
-}) {
+function CustomContent(props: { type?: "home"; children: React.ReactNode }) {
   switch (props.type) {
     // case "survey":
     //   return <SurveyPageContent>{props.children}</SurveyPageContent>;
@@ -51,6 +47,7 @@ function CustomContent(props: {
 }
 
 const StyledLayout = styled(Layout)`
+  /* max-width: 480px; */
   min-height: 100vh;
   display: flex;
   background-color: inherit;

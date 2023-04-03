@@ -1,5 +1,5 @@
 import { Button, Space } from "antd";
-import React from "react";
+import React, { MutableRefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ItemList from "./ItemList";
@@ -12,16 +12,23 @@ import ItemList from "./ItemList";
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
 interface SurveyProps {
   onClickNext: () => void;
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: string) => void;
   dataList: SurveyItemType[];
-  fetchAdditionalData: (nextPage: number) => void;
+  fetchAdditionalData: (offset: number) => void;
+  offsetRef: React.MutableRefObject<number>;
 }
 
-export default function Survey(props: SurveyProps) {
+export default function Survey({
+  onClickItem,
+  onClickNext,
+  dataList,
+  fetchAdditionalData,
+  offsetRef,
+}: SurveyProps) {
   const navigate = useNavigate();
-  const cnt: number = props.dataList
-    .map((el) => (el.clicked ? 1 : 0))
-    .reduce((a: number, b) => a + b, 0);
+  const cnt: number = dataList
+    ?.map((el) => (el.clicked ? 1 : 0))
+    ?.reduce((a: number, b) => a + b, 0);
 
   return (
     <OuterBox>
@@ -33,9 +40,10 @@ export default function Survey(props: SurveyProps) {
         </SelectedNumDiv>
       </RightDiv>
       <ItemList
-        dataList={props.dataList}
-        onClickItem={props.onClickItem}
-        fetchAdditionalData={props.fetchAdditionalData}
+        dataList={dataList}
+        onClickItem={onClickItem}
+        fetchAdditionalData={fetchAdditionalData}
+        offsetRef={offsetRef}
       />
       <BtnContainer direction="vertical">
         <StyledButton

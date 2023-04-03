@@ -11,37 +11,34 @@ import Text from "../common/Text";
  */
 interface ItemProps {
   item: SurveyItemType;
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: string) => void;
 }
 
 export default function Item({ item, onClickItem }: ItemProps) {
   return (
     <QueueAnim type={["left", "right"]} duration={900}>
       <ItemBox
-        key={item.id}
+        key={item.webtoonId}
         selected={item.clicked}
-        onClick={() => onClickItem(item.id)}
+        onClick={() => onClickItem(item.webtoonId)}
+        url={item.image}
       >
-        <Text>{item.name}</Text>
+        {/* <Text>{item.title}</Text> */}
       </ItemBox>
     </QueueAnim>
   );
 }
 
-const ItemBox = styled.div<{ selected: boolean }>`
+const ItemBox = styled.div<{ selected: boolean; url: string }>`
   border: ${(props) => (props.selected ? "3px solid" : "1px solid")};
   border-color: ${(props) =>
-    props.selected ? ({ theme }) => theme.colors.orange : "darkgrey"};
-  width: calc(height * 0.7);
-  // height: 8rem;
-  // height: 50px;
+    props.selected ? ({ theme }) => theme.colors.orange : "white"};
+  height: 36vw;
+  background-image: url(${(props) => props.url});
+  background-position: center;
+  background-size: cover;
   margin: 0.25rem;
   border-radius: 4px;
   grid: 1fr 1fr;
   max-width: none;
-  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-    width: calc(height * 0.7);
-    // height: 8rem;
-    height: 120px;
-  }
 `;

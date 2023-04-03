@@ -1,7 +1,11 @@
 interface ItemType {
-  name: string;
-  id: number;
-  imgUrl: string;
+  webtoonId: string;
+  image: string;
+  endFlag: number;
+  platform: string;
+  rate: number;
+  title: string;
+  view: number;
 }
 
 interface SurveyItemType extends ItemType {

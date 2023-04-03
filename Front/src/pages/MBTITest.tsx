@@ -103,6 +103,7 @@ const StyledButton = styled(Button)`
   height: 50px;
   white-space: pre-wrap;
   border-radius: 10px;
+  //FIXME: 포커싱 이슈 해결 안 됨
   &:focus {
     outline: none;
   }
