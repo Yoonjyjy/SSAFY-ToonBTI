@@ -1,12 +1,8 @@
-import { Button, Space, Typography } from "antd";
+import { Button, Space } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { SearchBar } from "../common";
-import Text from "../common/Text";
 import ItemList from "./ItemList";
-
-const { Title } = Typography;
 
 /**
 
@@ -19,7 +15,6 @@ interface SurveyProps {
   onClickItem: (itemId: number) => void;
   dataList: SurveyItemType[];
   fetchAdditionalData: (nextPage: number) => void;
-  searchData: (keyword: string) => void;
 }
 
 export default function Survey(props: SurveyProps) {
@@ -30,9 +25,6 @@ export default function Survey(props: SurveyProps) {
 
   return (
     <OuterBox>
-      <StyledHeader level={3}>웹툰 취향 분석 테스트</StyledHeader>
-      <Text>지금까지 재미있게 봤던 웹툰들을 선택해주세요.</Text>
-      <SearchBar searchData={props.searchData} />
       <RightDiv>
         <SelectedNumDiv>
           <b>
@@ -105,11 +97,4 @@ const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   border-color: ${(props) =>
     props.color ? ({ theme }) => theme.colors.yellow : null};
   border-radius: 10px;
-`;
-
-const StyledHeader = styled(Title)`
-  text-align: center;
-  font-weight: bold;
-  font-size: 1rem;
-  margin: 0px;
 `;
