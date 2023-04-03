@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import styled from "styled-components";
 import Spinner from "./Spinner";
 
 /**
@@ -45,15 +46,13 @@ export default function InfiniteScroll({
   return (
     <div>
       {children}
-      {!isLastPage ? (
-        <div
-          style={{ width: "100%", height: "20px", border: "1px solid black" }}
-          ref={target}
-        >
-          {" "}
-        </div>
-      ) : null}
+      {!isLastPage ? <ObservedDiv></ObservedDiv> : null}
       {isLoading ? <Spinner /> : null}
     </div>
   );
 }
+
+const ObservedDiv = styled.div`
+  width: 100%;
+  height: 20px;
+`;
