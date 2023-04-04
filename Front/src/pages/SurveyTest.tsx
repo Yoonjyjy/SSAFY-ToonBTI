@@ -19,7 +19,7 @@ interface SurveyItemType extends Webtoon {
 // TODO: infinite scroll & fetch 3 relative items
 export default function SurveyTest() {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state: nbtiPk = 17 } = useLocation(); // default val is 17
   const offsetRef = useRef<number>(0);
   const keywordRef = useRef<InputRef>(null);
   const [surveyList, setSurveyList] = useState<SurveyItemType[]>([]);
@@ -27,10 +27,11 @@ export default function SurveyTest() {
     SurveyItemType[]
   >([]);
 
+  console.log("nbtipk", nbtiPk);
   useEffect(() => {
     getWebtoons({
       variables: {
-        nbtiPk: state.nbtiPk,
+        nbtiPk,
         offset: offsetRef.current,
       },
     });
@@ -49,7 +50,7 @@ export default function SurveyTest() {
 
   const [getWebtoons, { error: webtoonsError }] = useLazyQuery(NBTI_WEBTOON, {
     variables: {
-      nbtiPk: state.nbtiPk,
+      nbtiPk,
       offset: offsetRef.current,
     },
     client: django,
@@ -75,7 +76,7 @@ export default function SurveyTest() {
     const nbtiPk = 17;
     offsetRef.current = offsetRef.current + 1;
     getWebtoons({
-      variables: { nbtiPk: nbtiPk, offset: offsetRef.current },
+      variables: { nbtiPk, offset: offsetRef.current },
     });
   }
 

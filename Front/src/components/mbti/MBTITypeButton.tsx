@@ -2,14 +2,15 @@ import React from "react";
 import { Button, Space, Typography } from "antd";
 import styled from "styled-components";
 import { SwapRightOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
 export default function MBTITypeButton() {
   const navigate = useNavigate();
+  const { state: nbtiPk } = useLocation();
 
   function clickSurveyHandler() {
-    navigate("/survey");
+    navigate("/survey", { state: nbtiPk });
   }
 
   function clickHomeHandler() {
