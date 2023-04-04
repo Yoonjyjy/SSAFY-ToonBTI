@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import Spinner from "./Spinner";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 /**
  * Infinite Scroll 컴포넌트
@@ -45,7 +45,9 @@ export default function InfiniteScroll({
     <div>
       {children}
       {!isLastPage ? <ObservedDiv ref={target}> </ObservedDiv> : null}
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? (
+        <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
+      ) : null}
     </div>
   );
 }
@@ -53,4 +55,11 @@ export default function InfiniteScroll({
 const ObservedDiv = styled.div`
   width: 100%;
   height: 20px;
+`;
+
+const StyledPlayer = styled(Player)`
+  width: 75vw;
+  height: 40vw;
+  max-width: 800px;
+  max-height: 800px;
 `;

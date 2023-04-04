@@ -124,7 +124,7 @@ const StyledHomeContent = styled(Content)`
 // `;
 
 const SurveyPageContent = styled(StyledContent)`
-  gap: 0px;
+  gap: 5px;
 `;
 
 // const KeywordPageContent = styled(Content)`

@@ -206,7 +206,6 @@ export default function MBTIResult() {
                       src={`/simple-spinner.json`}
                     ></StyledPlayer>
                   )}
-                  \
                   <StyledTypeName>
                     <StyledStrong>
                       {el.mbti} ({el.per} %)
