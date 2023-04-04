@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
@@ -29,16 +29,35 @@ const originData = {
 };
 
 interface PropType {
-  dataList: {
-    id: number;
-    name: string;
-    count: number;
-  }[];
+  dataList: number[];
 }
+
+const Genre = [
+  "판타지",
+  "드라마",
+  "로맨스",
+  "로맨스판타지",
+  "현대판타지",
+  "액션/무협",
+  "소년/감성",
+  "일상/개그",
+  "공포/추리",
+  "스포츠",
+];
+
 export default function DoughnutChart({ dataList }: PropType) {
-  const rankList = dataList.slice().sort((a, b) => b.count - a.count);
-  originData.labels = rankList.map((row) => row.name);
-  originData.datasets[0].data = rankList.map((row) => row.count);
+  const newDataList: { id: number; name: string; count: number }[] = [];
+  useEffect(() => {
+    if (newDataList.length < 10) {
+      for (let i = 0; i < dataList?.length; i++) {
+        newDataList.push({ id: i + 1, name: Genre[i], count: dataList[i] });
+      }
+    }
+    const rankList = newDataList.slice().sort((a, b) => b.count - a.count);
+    originData.labels = rankList.map((row) => row.name);
+    originData.datasets[0].data = rankList.map((row) => row.count);
+  }, []);
+
   return (
     <DoughnutDiv>
       <Doughnut data={originData} />
