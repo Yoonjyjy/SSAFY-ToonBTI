@@ -12,12 +12,13 @@ type Query {
     getQuestions: [Question!]
     # 전체 유형 순위 보기
     getAllTypes: [User]
+    # 한가지 유형 보기
     getType(userType: String): TypeResult
 }
 
 type Mutation {
     # 유형 결과 페이지 반환
-    addUserResponse(input: UserAnswerInput): UserResult
+    addUserResponse(input: UserAnswerInput): TypeResult
     # 웹툰 결과 페이지 반환
     createResult(userId: Long): WebtoonResult
 }
@@ -46,21 +47,6 @@ type User {
     description: String
     image: String
     count: Long
-}
-
-type Webtoon {
-    webtoonId: Long!
-    webtoonTitle: String
-    image: String
-}
-
-type UserResult {
-    userId: Long
-    myType: User
-    bestType: User
-    worstType: User
-    firstType: User
-    secondType: User
 }
 
 type TypeResult {
