@@ -7,25 +7,75 @@ import { SwapRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareButton from "../components/common/ShareButton";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_USER_RESPONSE, COUNT_ALL_USERS } from "../api/mbti";
+import { ADD_USER_RESPONSE, COUNT_ALL_USERS, GET_ALL_TYPES } from "../api/mbti";
+import { Mbti } from "../gql/graphql";
 
 const { Title, Text } = Typography;
 
 // FIXME: 나의 유형 desc, 잘 맞는 & 안 맞는 유형 percent, 유형에 대한 이미지 필요
 // FIXME: createResult() api 에 userId 필요
 
-const total = () => {
-  const navigate = useNavigate();
-  const { data, error } = useQuery(COUNT_ALL_USERS); // TODO: handle while loading
+function percent(part: number, total: number): number {
+  return Math.round((part / total) * 100);
+}
 
-  if (error) navigate("/404");
-  return data?.countAllUsers;
-};
+function getTypeName(type: Mbti): string {
+  switch (type) {
+    case "LSRA":
+      return "이태원 클라스 - 조이서";
+    case "LSRT":
+      return "유미의 세포들 - 응큼이";
+    case "LSEA":
+      return "신과 함께 - 변호사";
+    case "LSET":
+      return "천리마마트 - 문석구";
+    case "LWRA":
+      return "연애 혁명 - 왕자림";
+    case "LWRT":
+      return "연애 혁명 - 공주영";
+    case "LWEA":
+      return "신과 함께 - 김자홍";
+    case "LWET":
+      return "미생 - 과장님";
+    case "HSRA":
+      return "나 혼자만 레벨업 - 성진우";
+    case "HSRT":
+      return "유미의 세포들 - 사랑세포";
+    case "HSEA":
+      return "하이브 - 개장수";
+    case "HSET":
+      return "프리드로우 - 동까";
+    case "HWRA":
+      return "치즈인더트랩 - 백인호";
+    case "HWRT":
+      return "패션왕 - 우기명";
+    case "HWEA":
+      return "노블레스 - 라이제르";
+    case "HWET":
+      return "이태원 클라스 - 박새로이";
+    default:
+      return "";
+  }
+}
 
 export default function MBTIResult() {
   const { state: answers } = useLocation();
   const navigate = useNavigate();
   const [addUserResponse, { data, error }] = useMutation(ADD_USER_RESPONSE); // TODO: handle while loading
+  const { data: totalData, error: totalErr } = useQuery(COUNT_ALL_USERS); // TODO: handle while loading
+  const { data: allTypesData, error: allTypesErr } = useQuery(GET_ALL_TYPES); // TODO: handle while loading
+
+  const total = totalData?.countAllUsers;
+  const sortedAllTypes = allTypesData?.getAllTypes
+    ? [...allTypesData.getAllTypes].sort((a, b) => b?.count - a?.count)
+    : [];
+
+  const res = data?.addUserResponse;
+
+  const first = sortedAllTypes?.[0]?.count;
+  const second = sortedAllTypes?.[1]?.count;
+
+  if (error || totalErr || allTypesErr) navigate("/404");
 
   useEffect(() => {
     addUserResponse({
@@ -47,13 +97,6 @@ export default function MBTIResult() {
     navigate("/mbti/result/all");
   }
 
-  if (error) navigate("/404");
-
-  const res = data?.addUserResponse;
-
-  console.log(res);
-  console.log(total());
-
   return (
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
@@ -67,7 +110,13 @@ export default function MBTIResult() {
           size={80}
         />
         <TextContainer direction="vertical" size={5}>
-          <StyledHeader level={4}>{res?.myType?.userType}</StyledHeader>
+          <StyledTypeName>
+            <StyledHeader level={4}>
+              {res?.myType?.userType}
+              <br></br>
+              {getTypeName(res?.myType?.userType as Mbti)}
+            </StyledHeader>
+          </StyledTypeName>
 
           <StyledContent>{res?.myType?.description}</StyledContent>
           <br />
@@ -79,14 +128,14 @@ export default function MBTIResult() {
           {
             text: "나와 잘 맞는 유형",
             mbti: res?.bestType?.userType,
+            typeName: getTypeName(res?.bestType?.userType as Mbti),
             img: res?.bestType?.image,
-            per: 40.6,
           },
           {
             text: "나와 안 맞는 유형",
             mbti: res?.worstType?.userType,
+            typeName: getTypeName(res?.worstType?.userType as Mbti),
             img: res?.worstType?.image,
-            per: 11.0,
           },
         ].map(
           (el) =>
@@ -101,7 +150,10 @@ export default function MBTIResult() {
                   }
                   size={40}
                 />
-                <strong>{el.mbti}</strong>
+                <StyledTypeName>
+                  <StyledStrong>{el.mbti}</StyledStrong>
+                  {el.typeName}
+                </StyledTypeName>
               </StyledCol>
             )
         )}
@@ -114,20 +166,22 @@ export default function MBTIResult() {
             {
               text: "1위",
               mbti: res?.firstType?.userType,
+              typeName: getTypeName(res?.firstType?.userType as Mbti),
               img: res?.firstType?.image,
-              per: 40.6,
+              per: percent(first, total),
             },
             {
               text: "2위",
               mbti: res?.secondType?.userType,
+              typeName: getTypeName(res?.secondType?.userType as Mbti),
               img: res?.secondType?.image,
-              per: 11.0,
+              per: percent(second, total),
             },
           ].map(
             (el) =>
               el.mbti && (
                 <StyledCol key={el.mbti + "popularity"} span={12}>
-                  {el.text}
+                  <b>{el.text}</b>
                   <MainImage
                     src={
                       el.img
@@ -136,9 +190,12 @@ export default function MBTIResult() {
                     }
                     size={40}
                   />
-                  <strong>
-                    {el.mbti} ({el.per} %)
-                  </strong>
+                  <StyledTypeName>
+                    <StyledStrong>
+                      {el.mbti} ({el.per} %)
+                    </StyledStrong>
+                    {el.typeName}
+                  </StyledTypeName>
                 </StyledCol>
               )
           )}
@@ -202,6 +259,7 @@ const StyledHeader = styled(Title)`
   text-align: center;
   font-weight: bold;
   font-size: 1rem;
+  line-height: 2rem;
   margin: 10px;
 `;
 
@@ -233,6 +291,13 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+const StyledTypeName = styled.div`
+  display: flex;
+  flex-direction: column;
+  line-height: 2rem;
+  margin: 10px 0px;
 `;
 
 const StyledStrong = styled.strong`

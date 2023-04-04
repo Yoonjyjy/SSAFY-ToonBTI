@@ -23,10 +23,11 @@ const Image = styled.img<{ size: number }>`
 
 const StyledDiv = styled.div<{ size: number }>`
   line-height: 0px;
-  /* position: relative;
+  position: relative;
   text-align: center;
-  width: 100px; // 자를 사이즈를 명시해준다.
+  /* width: 100px; // 자를 사이즈를 명시해준다. */
+  max-width: 100%;
   object-fit: cover;
   height: ${(props) => props.size}vw;
-  overflow: hidden; */
+  overflow: hidden;
 `;
