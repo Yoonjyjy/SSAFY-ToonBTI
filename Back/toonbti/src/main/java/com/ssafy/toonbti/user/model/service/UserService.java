@@ -1,5 +1,6 @@
 package com.ssafy.toonbti.user.model.service;
 
+import com.ssafy.toonbti.user.model.dto.TypeAnswerDTO;
 import com.ssafy.toonbti.user.model.dto.UserAnswerDTO;
 import com.ssafy.toonbti.user.model.dto.UserDTO;
 import com.ssafy.toonbti.user.model.dto.UserResultDTO;
@@ -29,6 +30,18 @@ public class UserService {
 	private final UserNbtiRepositroy userNbtiRepositroy;
 	private final NbtiRepositroy nbtiRepositroy;
 
+	/**
+	 * 유형별 관계 조회
+	 * @param userType
+	 * @return TypeAnswerDTO
+	 */
+	public TypeAnswerDTO getByType(String userType) {
+		Nbti nbti = nbtiRepositroy.findByName(userType);
+		UserDTO myType = UserDTO.of(nbti);
+		UserDTO bestType = getByBest(userType);
+		UserDTO worstType = getByWorst(userType);
+		return TypeAnswerDTO.of(myType, bestType, worstType, getByRank(1), getByRank(2));
+	}
 
 	/***
 	 * 가장 잘 맞는 유형 찾기
@@ -75,27 +88,18 @@ public class UserService {
 	public UserResultDTO addUserResponse(UserAnswerDTO userAnswerDTO) {
 		//유저 uuid 생성
 		String uuid = UUID.randomUUID().toString();
-		User inputUser = new User();
-		inputUser.setUuid(uuid);
-		//유저 생성 시간
-		inputUser.setDate(LocalDateTime.now());
+		User inputUser = User.builder()
+				.uuid(uuid)
+				.date(LocalDateTime.now())
+				.build();
 		//유저 정보 저장
+		logger.info("유저정보 저장 inputUser: {}", inputUser.toString());
 		User user = userRepository.save(inputUser);
-
-		UserResultDTO userResultDTO = new UserResultDTO();
-		userResultDTO.setUserId(user.getUserId());
 		// 내 유형 찾기
 		UserDTO myUser = getUser(userAnswerDTO, user);
-		userResultDTO.setMyType(myUser);
-		// 나와 가장 잘 맞는 유형
-		userResultDTO.setBestType(getByBest(myUser.getUserType()));
-		// 나와 가장 안 맞는 유형
-		userResultDTO.setWorstType(getByWorst(myUser.getUserType()));
-		// 1번째로 많은 유형
-		userResultDTO.setFirstType(getByRank(1));
-		// 2번째로 많은 유형
-		userResultDTO.setSecondType(getByRank(2));
-		return  userResultDTO;
+		UserDTO bestType = getByBest(myUser.getUserType());
+		UserDTO worstType = getByBest(myUser.getUserType());
+		return UserResultDTO.of(user.getUserId(), myUser, bestType, worstType, getByRank(1), getByRank(2));
 	}
 
 	/***
@@ -110,9 +114,10 @@ public class UserService {
 		//유저 유형 찾아오기
 		Nbti nbti = nbtiRepositroy.findByName(type);
 
-		UserNbti userNbti = new UserNbti();
-		userNbti.setNbti(nbti);
-		userNbti.setUser(user);
+		UserNbti userNbti = UserNbti.builder()
+				.nbti(nbti)
+				.user(user)
+				.build();
 		//유저 유형 저장
 		userNbtiRepositroy.save(userNbti);
 
@@ -133,6 +138,7 @@ public class UserService {
 			Nbti nbti = nbtiRepositroy.findByName(nbtiList.get(i).getName());
 			userDTOList.get(i).setCount(userNbtiRepositroy.countByNbti(nbti));
 		}
+		logger.info("userDTOList : {}",userDTOList);
 		return userDTOList;
 	}
 

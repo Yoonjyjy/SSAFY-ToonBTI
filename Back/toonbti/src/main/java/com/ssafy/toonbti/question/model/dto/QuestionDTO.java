@@ -5,8 +5,6 @@ import com.ssafy.toonbti.question.model.entity.Question;
 import com.ssafy.toonbti.user.model.dto.UserAnswerDTO;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder

@@ -27,22 +27,14 @@ public class WebtoonService {
     private final UserNbtiRepositroy userNbtiRepositroy;
 
     public WebtoonResultDTO createResult(Long userId) {
-        WebtoonResultDTO webtoonResultDTO = new WebtoonResultDTO();
         User user = userRepository.findById(userId).orElse(null);
         UserNbti userNbti = userNbtiRepositroy.findByUser(user);
         UserDTO userDTO = UserDTO.of(userNbti.getNbti());
-        // 사용자 유형
-        webtoonResultDTO.setMyType(userDTO);
-        // 사용자가 읽은 웹툰 수
-        webtoonResultDTO.setWebtoonCounts(userWebtoonRepository.countByUser(user));
-        // 사용자의 플랫폼 비율
-        webtoonResultDTO.setPlatformRatio(getPlatformRatio(user));
-        // 사용자의 완결/연재작 비율
-        webtoonResultDTO.setDoneRatio(getFinishedRatio(user));
-        // 사용자의 장르 비율
-        webtoonResultDTO.setGenreRatio(getGenreList(user));
-
-        return webtoonResultDTO;
+        Long cnt = userWebtoonRepository.countByUser(user);
+        int[] platformRatio = getPlatformRatio(user);
+        int[] finishedRatio = getFinishedRatio(user);
+        int[] genreList = getGenreList(user);
+        return WebtoonResultDTO.of(userDTO, cnt, platformRatio, finishedRatio, genreList);
     }
 
     public int[] getPlatformRatio(User user) {

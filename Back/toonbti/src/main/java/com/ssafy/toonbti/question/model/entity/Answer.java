@@ -25,6 +25,4 @@ public class Answer {
 
     @Column(name = "answer")
     private String answer;
-
-
 }
