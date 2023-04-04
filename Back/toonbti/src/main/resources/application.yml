@@ -28,8 +28,7 @@ spring:
       mapping: /graphql
       corsEnabled: false
       cors:
-        # allowed-origins: https://j8a302.p.ssafy.io/
-        allowed-origins: *
+        allowed-origins: https://j8a302.p.ssafy.io/, http://localhost:5173/
         allowed-methods: GET, HEAD, POST, PATCH
       exception-handlers-enabled: true
       context-setting: PER_REQUEST_WITH_INSTRUMENTATION
