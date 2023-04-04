@@ -2,10 +2,10 @@ spring:
   profiles:
     default: prod
   cors:
-  allowed-origins: "*"
-  allowed-methods: "*"
-  allowed-headers: "*"
-  allow-credentials: true
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    allow-credentials: true
 
   datasource:
     hikari:
