@@ -19,9 +19,10 @@ const documents = {
     "\n  query GetType($userType:String) {\n    getType(userType:$userType){\n      myType{\n        userType\n        description\n        image\n        count\n      }\n      bestType{\n        userType\n        description\n        image\n        count\n      }\n      worstType{\n        userType\n        description\n        image\n        count\n      }\n      firstType{\n        userType\n        description\n        image\n        count\n      }\n      secondType{\n      userType\n      description\n      image\n      count\n      }\n    }\n  }\n": types.GetTypeDocument,
     "\n  mutation AddUserResponse($input: UserAnswerInput) {\n    addUserResponse(input: $input) {\n      myType {\n        nbtiId\n        userType\n        description\n        image\n        count\n      }\n      bestType {\n        nbtiId\n        userType\n        description\n        image\n        count\n      }\n      worstType {\n        nbtiId\n        userType\n        description\n        image\n        count\n      }\n      firstType {\n        nbtiId\n        userType\n        description\n        image\n        count\n      }\n      secondType {\n        nbtiId\n        userType\n        description\n        image\n        count\n      }\n    }\n  }\n  query CountAllUser {\n    countAllUsers\n  }\n": types.AddUserResponseDocument,
     "\n  mutation CreateResult($userId: Long) {\n    createResult(userId: $userId) {\n      doneRatio\n      genreRatio\n      myType {\n        count\n        description\n        image\n        userType\n      }\n      platformRatio\n      webtoonCounts\n    }\n  }\n": types.CreateResultDocument,
-    "\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.Nbti_WebtoonDocument,
-    "\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.SearchWebtoonDocument,
+    "\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.Nbti_WebtoonDocument,
+    "\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.SearchWebtoonDocument,
     "\n  query Select_Webtoon($nbtiPk: Int!, $userPk: Int!, $webtoonIds: [Int]!) {\n    selectWebtoon(nbtiPk: $nbtiPk, userPk: $userPk)\n  }\n": types.Select_WebtoonDocument,
+    "\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.GetAdditional3WebtoonsDocument,
 };
 
 /**
@@ -65,15 +66,19 @@ export function graphql(source: "\n  mutation CreateResult($userId: Long) {\n   
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
+export function graphql(source: "\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query NBTI_Webtoon($nbtiPk: Int, $offset: Int) {\n    nbtiWebtoon(nbtiPk: $nbtiPk, offset: $offset) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
+export function graphql(source: "\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query SearchWebtoon($searchName: String!) {\n    searchWebtoon(searchName: $searchName) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Select_Webtoon($nbtiPk: Int!, $userPk: Int!, $webtoonIds: [Int]!) {\n    selectWebtoon(nbtiPk: $nbtiPk, userPk: $userPk)\n  }\n"): (typeof documents)["\n  query Select_Webtoon($nbtiPk: Int!, $userPk: Int!, $webtoonIds: [Int]!) {\n    selectWebtoon(nbtiPk: $nbtiPk, userPk: $userPk)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

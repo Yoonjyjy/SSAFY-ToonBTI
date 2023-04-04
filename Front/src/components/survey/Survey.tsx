@@ -13,7 +13,7 @@ import { Webtoon } from "../../gql/graphql";
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
 interface PropType {
   surveyList: SurveyItemType[];
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (offset: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }

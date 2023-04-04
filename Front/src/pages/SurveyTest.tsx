@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { InputRef, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, SearchBar } from "../components/common";
-import { NBTI_WEBTOON } from "../api/survey";
+import { GET_ADDITIONAL_3_WEBTOONS, NBTI_WEBTOON } from "../api/survey";
 import { Survey } from "../components/survey";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_WEBTOON } from "../api/survey";
@@ -16,7 +16,7 @@ interface SurveyItemType extends Webtoon {
   clicked: boolean;
 }
 
-// TODO: infinite scroll & fetch 3 relative items
+// TODO: infinite scroll
 export default function SurveyTest() {
   const navigate = useNavigate();
   const { state: nbtiPk = 17 } = useLocation(); // default val is 17
@@ -26,8 +26,8 @@ export default function SurveyTest() {
   const [surveyListByKeyword, setSurveyListByKeyword] = useState<
     SurveyItemType[]
   >([]);
+  const prevClickedItemId = useRef<number | null>(null);
 
-  console.log("nbtipk", nbtiPk);
   useEffect(() => {
     getWebtoons({
       variables: {
@@ -64,6 +64,31 @@ export default function SurveyTest() {
     },
   });
 
+  const [getRelative3Webtoons] = useLazyQuery(GET_ADDITIONAL_3_WEBTOONS, {
+    client: django,
+    onCompleted(data) {
+      if (prevClickedItemId.current) {
+        setSurveyList((prev) => {
+          const newSurveyList = [...surveyList];
+          for (let i = 0; i < newSurveyList.length; i++) {
+            if (newSurveyList[i].webtoonId === prevClickedItemId.current) {
+              newSurveyList.splice(
+                i,
+                0,
+                ...(data.additionalWebtoon?.map((newEl) => ({
+                  ...newEl,
+                  clicked: false,
+                })) as SurveyItemType[])
+              );
+              return newSurveyList;
+            }
+          }
+          return prev;
+        });
+      }
+    },
+  });
+
   function fetchSearchedData(keyword: string) {
     // console.log("keyword: ", keyword);
     searchWebtoons({ variables: { searchName: keyword } });
@@ -80,13 +105,18 @@ export default function SurveyTest() {
     });
   }
 
-  function clickItemHandler(itemId: number) {
+  function clickItemHandler(itemId: number, genreId: number) {
     setSurveyList((prev) =>
       prev.map((el) => {
-        if (el.webtoonId === itemId) el.clicked != el.clicked;
+        if (el.webtoonId === itemId) el.clicked = !el.clicked;
         return el;
       })
     );
+    prevClickedItemId.current = itemId;
+    console.log("click item item: ", prevClickedItemId.current, genreId);
+    getRelative3Webtoons({
+      variables: { webtoonPk: itemId, genrePk: genreId },
+    });
   }
 
   if (webtoonsError) navigate("/404");

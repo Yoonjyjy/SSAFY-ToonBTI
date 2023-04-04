@@ -12,7 +12,7 @@ interface SurveyItemType extends Webtoon {
 
 interface ItemListProps {
   dataList: SurveyItemType[];
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (nextPage: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }
@@ -48,15 +48,18 @@ export default function ItemList(props: ItemListProps) {
         isLastPage={isLastPage}
       >
         <ItemListBox>
-          {props.dataList.map((item) => {
-            return (
-              <Item
-                key={item.webtoonId}
-                item={item}
-                onClickItem={props.onClickItem}
-              />
-            );
-          })}
+          {props.dataList
+            .slice(0)
+            .reverse()
+            .map((item) => {
+              return (
+                <Item
+                  key={item.webtoonId}
+                  item={item}
+                  onClickItem={props.onClickItem}
+                />
+              );
+            })}
         </ItemListBox>
       </InfiniteScroll>
     </ItemListOuterDiv>
