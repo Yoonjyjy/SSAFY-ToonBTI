@@ -8,7 +8,7 @@ import { useLazyQuery } from "@apollo/client";
 import { SEARCH_WEBTOON } from "../api/survey";
 import { django } from "../api";
 import { Webtoon } from "../gql/graphql";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -16,8 +16,10 @@ interface SurveyItemType extends Webtoon {
   clicked: boolean;
 }
 
+// TODO: infinite scroll & fetch 3 relative items
 export default function SurveyTest() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const offsetRef = useRef<number>(0);
   const keywordRef = useRef<InputRef>(null);
   const [surveyList, setSurveyList] = useState<SurveyItemType[]>([]);
@@ -28,7 +30,7 @@ export default function SurveyTest() {
   useEffect(() => {
     getWebtoons({
       variables: {
-        nbtiPk: 17, // FIXME: number from Result
+        nbtiPk: state.nbtiPk,
         offset: offsetRef.current,
       },
     });
@@ -47,7 +49,7 @@ export default function SurveyTest() {
 
   const [getWebtoons, { error: webtoonsError }] = useLazyQuery(NBTI_WEBTOON, {
     variables: {
-      nbtiPk: 17, // FIXME: number from Result
+      nbtiPk: state.nbtiPk,
       offset: offsetRef.current,
     },
     client: django,

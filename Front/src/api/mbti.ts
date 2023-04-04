@@ -31,29 +31,39 @@ const ADD_USER_RESPONSE = graphql(`
   mutation AddUserResponse($input: UserAnswerInput) {
     addUserResponse(input: $input) {
       myType {
+        nbtiId
         userType
         description
         image
+        count
       }
       bestType {
+        nbtiId
         userType
         description
         image
+        count
       }
       worstType {
+        nbtiId
         userType
         description
         image
+        count
       }
       firstType {
+        nbtiId
         userType
         description
         image
+        count
       }
       secondType {
+        nbtiId
         userType
         description
         image
+        count
       }
     }
   }
