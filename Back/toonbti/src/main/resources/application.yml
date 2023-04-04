@@ -26,7 +26,7 @@ spring:
     servlet:
       enabled: true
       mapping: /graphql
-      corsEnabled: false
+      corsEnabled: true
       cors:
         # allowed-origins: https://j8a302.p.ssafy.io/
         allowed-origins: "*"
