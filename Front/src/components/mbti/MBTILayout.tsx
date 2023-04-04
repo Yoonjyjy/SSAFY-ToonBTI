@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Layout, Modal, Typography, Space, Row, Col } from "antd";
 import styled from "styled-components";
 import { MainImage } from "../common";
-import tiger from "/tiger.jpg";
 const { Title, Text } = Typography;
+import { useQuery } from "@apollo/client";
+import { GET_TYPE } from "../../api/mbti";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 interface PropType {
   mbti: string;
@@ -13,6 +15,15 @@ interface PropType {
 }
 
 export default function CommonLayout(props: PropType) {
+  const { data: typeInfo, error } = useQuery(GET_TYPE, {
+    variables: {
+      userType: props.mbti,
+    },
+  }); // TODO: handle while loading
+
+  // const best = typeInfo?.getType?.bestType?.userType;
+  // const worst = typeInfo?.getType?.worstType?.userType;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -27,12 +38,67 @@ export default function CommonLayout(props: PropType) {
     setIsModalOpen(false);
   };
 
+  function getTypeName(type: string): string {
+    switch (type) {
+      case "LSRA":
+        return "이태원 클라스 - 조이서";
+      case "LSRT":
+        return "유미의 세포들 - 응큼이";
+      case "LSEA":
+        return "신과 함께 - 변호사";
+      case "LSET":
+        return "천리마마트 - 문석구";
+      case "LWRA":
+        return "연애 혁명 - 왕자림";
+      case "LWRT":
+        return "연애 혁명 - 공주영";
+      case "LWEA":
+        return "신과 함께 - 김자홍";
+      case "LWET":
+        return "미생 - 과장님";
+      case "HSRA":
+        return "나 혼자만 레벨업 - 성진우";
+      case "HSRT":
+        return "유미의 세포들 - 사랑세포";
+      case "HSEA":
+        return "하이브 - 개장수";
+      case "HSET":
+        return "프리드로우 - 동까";
+      case "HWRA":
+        return "치즈인더트랩 - 백인호";
+      case "HWRT":
+        return "패션왕 - 우기명";
+      case "HWEA":
+        return "노블레스 - 라이제르";
+      case "HWET":
+        return "이태원 클라스 - 박새로이";
+      default:
+        return "";
+    }
+  }
+
   return (
     <StyledLayout>
       <StyledAllMBTI onClick={showModal}>
-        {props.per} %
-        <MainImage src={tiger} size={40} />
-        {props.mbti}
+        {/* {props.per} % */}
+        {props.img ? (
+          <MainImage
+            src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+            size={40}
+          />
+        ) : (
+          <StyledPlayer
+            autoplay
+            loop
+            src={`/simple-spinner.json`}
+          ></StyledPlayer>
+        )}
+        <StyledTypeName>
+          <StyledHeader level={5}>
+            {props.mbti} ({props.per}%)
+          </StyledHeader>
+          {getTypeName(props.mbti)}
+        </StyledTypeName>
       </StyledAllMBTI>
 
       <Modal
@@ -43,11 +109,26 @@ export default function CommonLayout(props: PropType) {
       >
         <StyledDiv>
           <StyledHeader level={3}>다른 유형은?</StyledHeader>
-          <MainImage src={tiger} size={80} />
+
+          {props.img ? (
+            <MainImage
+              src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+              size={40}
+            />
+          ) : (
+            <StyledPlayer
+              autoplay
+              loop
+              src={`/simple-spinner.json`}
+            ></StyledPlayer>
+          )}
           <TextContainer direction="vertical" size={5}>
-            <StyledHeader level={4}>
-              {props.mbti}({props.per}%)
-            </StyledHeader>
+            <StyledTypeName>
+              <StyledHeader level={4}>
+                {props.mbti}({props.per}%)
+              </StyledHeader>
+              <StyledHeader level={5}>{getTypeName(props.mbti)}</StyledHeader>
+            </StyledTypeName>
 
             <StyledContent>{props.desc}</StyledContent>
             <br />
@@ -58,21 +139,36 @@ export default function CommonLayout(props: PropType) {
           {[
             {
               text: "나와 잘 맞는 유형",
-              mbti: "맞는 유형",
-              per: 40.6,
+              mbti: typeInfo?.getType?.bestType?.userType,
+              img: typeInfo?.getType?.bestType?.image,
             },
             {
               text: "나와 안 맞는 유형",
-              mbti: "안 맞는 유형",
-              per: 11.0,
+              mbti: typeInfo?.getType?.worstType?.userType,
+              img: typeInfo?.getType?.worstType?.image,
             },
           ].map(
             (el) =>
               el.mbti && (
                 <StyledCol key={el.mbti + "me"} span={12}>
                   <b>{el.text}</b>
-                  <MainImage src={tiger} size={40} />
-                  <strong>{el.mbti}</strong>
+
+                  {props.img ? (
+                    <MainImage
+                      src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+                      size={40}
+                    />
+                  ) : (
+                    <StyledPlayer
+                      autoplay
+                      loop
+                      src={`/simple-spinner.json`}
+                    ></StyledPlayer>
+                  )}
+                  <StyledTypeName>
+                    <StyledStrong>{el.mbti}</StyledStrong>
+                    {getTypeName(el.mbti)}
+                  </StyledTypeName>
                 </StyledCol>
               )
           )}
@@ -136,4 +232,23 @@ const StyledCol = styled(Col)`
   text-align: center;
   line-height: 3rem;
   margin: 10px 0px;
+`;
+
+const StyledTypeName = styled.div`
+  display: flex;
+  flex-direction: column;
+  line-height: 1rem;
+  margin: 10px 0px;
+  gap: 10px;
+`;
+
+const StyledStrong = styled.strong`
+  font-size: 1rem;
+`;
+
+const StyledPlayer = styled(Player)`
+  width: 75vw;
+  height: 40vw;
+  max-width: 800px;
+  max-height: 800px;
 `;

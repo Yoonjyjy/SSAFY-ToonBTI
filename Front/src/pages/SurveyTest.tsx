@@ -91,11 +91,7 @@ export default function SurveyTest() {
   if (webtoonsError) navigate("/404");
 
   return (
-    <Layout
-      // type="survey"
-      title="웹툰 취향 분석 테스트"
-      hasPrevious
-    >
+    <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
       <StyledHeader level={3} style={{ margin: "0px" }}>
         웹툰 취향 분석 테스트
       </StyledHeader>

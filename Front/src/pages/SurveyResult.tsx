@@ -7,7 +7,6 @@ import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
 import ShareButton from "../components/common/ShareButton";
 import { useNavigate } from "react-router-dom";
-import tiger from "/tiger.jpg";
 import test1 from "/test1.png";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
@@ -55,7 +54,7 @@ const data = {
     author_list: ["SIU", "Omin", "테미스"],
     main_work_title: ["신의 탑", "언니", "그만훼"],
     main_genre: ["판타지"],
-    main_author_img: tiger,
+    main_author_img: "/tiger.jpg",
   },
   accuracy: 73.2,
 };
