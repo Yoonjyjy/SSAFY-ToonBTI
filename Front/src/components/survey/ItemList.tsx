@@ -1,51 +1,61 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Item from "./Item";
 import styled from "styled-components";
 import { Row } from "antd";
 import { InfiniteScroll } from "../common";
+// import { NBTI_WEBTOON } from "../../api/survey";
+import { Webtoon } from "../../gql/graphql";
+
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
+}
 
 interface ItemListProps {
   dataList: SurveyItemType[];
   onClickItem: (itemId: number) => void;
   fetchAdditionalData: (nextPage: number) => void;
+  offsetRef: React.MutableRefObject<number>;
 }
 
-export default function ItemList({
-  dataList,
-  onClickItem,
-  fetchAdditionalData,
-}: ItemListProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [curPage, setCurPage] = useState<number>(1);
-  const totalPage = 10;
+export default function ItemList(props: ItemListProps) {
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  const curPage = props.offsetRef.current;
   const isLastPage = false;
 
-  const target = document.querySelector("#infinite-scroll-container");
-
-  function callback(
-    entries: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        //fetch data
-        fetchAdditionalData(curPage + 1);
-      }
-    });
+  // FIXME: replace this with getAdditionalData on SurveyTest.tsx
+  // function callback(
+  //   entries: IntersectionObserverEntry[],
+  //   observer: IntersectionObserver
+  // ) {
+  //   entries.forEach((entry) => {
+  //     if (entry.isIntersecting && !isLoading) {
+  //       //fetch data
+  //       props.offsetRef.current += 1;
+  //       props.fetchAdditionalData(props.offsetRef.current + 1);
+  //     }
+  //   });
+  // }
+  function callback() {
+    /** */
   }
 
   return (
     <ItemListOuterDiv>
       <InfiniteScroll
-        isLoading={isLoading}
+        isLoading={false}
         callback={callback}
         page={curPage}
-        totalPage={totalPage}
         isLastPage={isLastPage}
       >
         <ItemListBox>
-          {dataList.map((item) => {
-            return <Item key={item.id} item={item} onClickItem={onClickItem} />;
+          {props.dataList.map((item) => {
+            return (
+              <Item
+                key={item.webtoonId}
+                item={item}
+                onClickItem={props.onClickItem}
+              />
+            );
           })}
         </ItemListBox>
       </InfiniteScroll>
@@ -54,7 +64,16 @@ export default function ItemList({
 }
 const ItemListOuterDiv = styled.div`
   overflow-y: scroll;
-  height: 62vh;
+  height: 54vh;
+  @media (min-width: 320px) and (max-width: 380px) {
+    height: 40vh;
+  }
+  @media (min-width: 380px) and (max-width: 400px) {
+    height: 53vh;
+  }
+  @media (min-width: 400px) and (max-width: 500px) {
+    height: 54vh;
+  }
 `;
 const ItemListBox = styled(Row)`
   display: grid;

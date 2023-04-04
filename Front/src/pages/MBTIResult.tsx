@@ -34,7 +34,9 @@ export default function MBTIResult() {
   }, []);
 
   function clickHandler() {
-    navigate("/survey");
+    navigate("/survey", {
+      state: { nbtiPk: data?.addUserResponse?.myType?.nbtiId },
+    });
   }
 
   function clickHomeHandler() {

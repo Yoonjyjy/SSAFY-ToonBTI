@@ -1,8 +1,8 @@
-import { Col } from "antd";
-import QueueAnim from "rc-queue-anim";
 import React from "react";
+import QueueAnim from "rc-queue-anim";
 import styled from "styled-components";
-import Text from "../common/Text";
+// import Text from "../common/Text";
+import { Webtoon } from "../../gql/graphql";
 
 /**
  * 웹툰 선택 설문조사에서 웹툰 리스트 안의 각 아이템을 나타내는 컴포넌트
@@ -13,35 +13,35 @@ interface ItemProps {
   item: SurveyItemType;
   onClickItem: (itemId: number) => void;
 }
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
+}
 
 export default function Item({ item, onClickItem }: ItemProps) {
   return (
     <QueueAnim type={["left", "right"]} duration={900}>
       <ItemBox
-        key={item.id}
+        key={item.webtoonId}
         selected={item.clicked}
-        onClick={() => onClickItem(item.id)}
+        onClick={() => onClickItem(item.webtoonId as number)}
+        url={item.image as string}
       >
-        <Text>{item.name}</Text>
+        {/* <Text>{item.title}</Text> */}
       </ItemBox>
     </QueueAnim>
   );
 }
 
-const ItemBox = styled.div<{ selected: boolean }>`
+const ItemBox = styled.div<{ selected: boolean; url: string }>`
   border: ${(props) => (props.selected ? "3px solid" : "1px solid")};
   border-color: ${(props) =>
-    props.selected ? ({ theme }) => theme.colors.orange : "darkgrey"};
-  width: calc(height * 0.7);
-  // height: 8rem;
-  // height: 50px;
+    props.selected ? ({ theme }) => theme.colors.orange : "white"};
+  height: 36vw;
+  background-image: url(${(props) => props.url});
+  background-position: center;
+  background-size: cover;
   margin: 0.25rem;
   border-radius: 4px;
   grid: 1fr 1fr;
   max-width: none;
-  @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-    width: calc(height * 0.7);
-    // height: 8rem;
-    height: 120px;
-  }
 `;

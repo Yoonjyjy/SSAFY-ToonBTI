@@ -12,7 +12,7 @@ import {
   MBTIResultAll,
   NotFound,
 } from "./pages";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 export default function App() {
   return (
@@ -24,16 +24,39 @@ export default function App() {
       }}
     >
       <ThemeProvider theme={theme}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/404" element={<NotFound />} />
-          <Route path="/mbti" element={<MBTITest />} />
-          <Route path="/mbti/result" element={<MBTIResult />} />
-          <Route path="/mbti/result/all" element={<MBTIResultAll />} />
-          <Route path="/survey" element={<SurveyTest />} />
-          <Route path="/survey/result" element={<SurveyResult />} />
-        </Routes>
+        <Wrap>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="/mbti" element={<MBTITest />} />
+            <Route path="/mbti/result" element={<MBTIResult />} />
+            <Route path="/mbti/result/all" element={<MBTIResultAll />} />
+            <Route path="/survey" element={<SurveyTest />} />
+            <Route path="/survey/result" element={<SurveyResult />} />
+          </Routes>
+        </Wrap>
       </ThemeProvider>
     </ConfigProvider>
   );
 }
+
+const Wrap = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  @media ${({ theme }) => theme.device.laptop} {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .MobileFramePage {
+    z-index: 999;
+  }
+`;
