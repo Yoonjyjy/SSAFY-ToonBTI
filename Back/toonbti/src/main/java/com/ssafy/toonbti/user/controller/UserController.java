@@ -13,16 +13,12 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
