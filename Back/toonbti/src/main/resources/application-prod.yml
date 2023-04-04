@@ -13,3 +13,8 @@ spring:
         format_sql: true
         hbm2ddl:
           auto: none
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    allow-credentials: true
