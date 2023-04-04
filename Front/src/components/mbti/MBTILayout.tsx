@@ -102,18 +102,18 @@ export default function CommonLayout(props: PropType) {
       </StyledAllMBTI>
 
       <Modal
-        // title="Basic Modal"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={[]}
       >
         <StyledDiv>
-          <StyledHeader level={3}>다른 유형은?</StyledHeader>
+          {/* <StyledHeader level={3}>다른 유형은?</StyledHeader> */}
 
           {props.img ? (
             <MainImage
               src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
-              size={40}
+              size={70}
             />
           ) : (
             <StyledPlayer
@@ -125,9 +125,9 @@ export default function CommonLayout(props: PropType) {
           <TextContainer direction="vertical" size={5}>
             <StyledTypeName>
               <StyledHeader level={4}>
-                {props.mbti}({props.per}%)
+                {props.mbti} ({props.per}%)
               </StyledHeader>
-              <StyledHeader level={5}>{getTypeName(props.mbti)}</StyledHeader>
+              <center>{getTypeName(props.mbti)}</center>
             </StyledTypeName>
 
             <StyledContent>{props.desc}</StyledContent>
@@ -155,7 +155,7 @@ export default function CommonLayout(props: PropType) {
 
                   {props.img ? (
                     <MainImage
-                      src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+                      src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
                       size={40}
                     />
                   ) : (
@@ -201,13 +201,15 @@ const StyledDiv = styled.div`
   flex-direction: column;
   gap: 1rem;
   align-items: center;
+  margin: 50px 10px 0px 10px;
+  /* margin-top: 50px; */
 `;
 
 const StyledHeader = styled(Title)`
   text-align: center;
   font-weight: bold;
   font-size: 1rem;
-  margin: 10px;
+  margin: 0px;
 `;
 
 const StyledContent = styled(Text)`

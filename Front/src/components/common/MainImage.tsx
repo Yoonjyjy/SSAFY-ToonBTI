@@ -30,4 +30,5 @@ const StyledDiv = styled.div<{ size: number }>`
   object-fit: cover;
   height: ${(props) => props.size}vw;
   overflow: hidden;
+  border-radius: 10px;
 `;
