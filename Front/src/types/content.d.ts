@@ -1,6 +1,4 @@
-interface RecommListItemType extends ItemType {
-  per: number;
-}
+
 
 interface KeywordType {
   keyword: string;

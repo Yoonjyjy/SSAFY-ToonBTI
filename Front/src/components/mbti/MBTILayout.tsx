@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Layout, Modal, Typography, Space, Row, Col } from "antd";
 import styled from "styled-components";
 import { MainImage } from "../common";
-import tiger from "/tiger.jpg";
 const { Title, Text } = Typography;
 import { useQuery } from "@apollo/client";
 import { GET_TYPE } from "../../api/mbti";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 interface PropType {
   mbti: string;
@@ -81,12 +81,18 @@ export default function CommonLayout(props: PropType) {
     <StyledLayout>
       <StyledAllMBTI onClick={showModal}>
         {/* {props.per} % */}
-        <MainImage
-          src={
-            props.img ? `${import.meta.env.VITE_IMAGE_URL}${props.img}` : tiger
-          }
-          size={40}
-        />
+        {props.img ? (
+          <MainImage
+            src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+            size={40}
+          />
+        ) : (
+          <StyledPlayer
+            autoplay
+            loop
+            src={`/simple-spinner.json`}
+          ></StyledPlayer>
+        )}
         <StyledTypeName>
           <StyledHeader level={5}>
             {props.mbti} ({props.per}%)
@@ -103,14 +109,19 @@ export default function CommonLayout(props: PropType) {
       >
         <StyledDiv>
           <StyledHeader level={3}>다른 유형은?</StyledHeader>
-          <MainImage
-            src={
-              props.img
-                ? `${import.meta.env.VITE_IMAGE_URL}${props.img}`
-                : tiger
-            }
-            size={80}
-          />
+
+          {props.img ? (
+            <MainImage
+              src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+              size={40}
+            />
+          ) : (
+            <StyledPlayer
+              autoplay
+              loop
+              src={`/simple-spinner.json`}
+            ></StyledPlayer>
+          )}
           <TextContainer direction="vertical" size={5}>
             <StyledTypeName>
               <StyledHeader level={4}>
@@ -141,14 +152,19 @@ export default function CommonLayout(props: PropType) {
               el.mbti && (
                 <StyledCol key={el.mbti + "me"} span={12}>
                   <b>{el.text}</b>
-                  <MainImage
-                    src={
-                      el.img
-                        ? `${import.meta.env.VITE_IMAGE_URL}${el.img}`
-                        : tiger
-                    }
-                    size={40}
-                  />
+
+                  {props.img ? (
+                    <MainImage
+                      src={`${import.meta.env.VITE_IMAGE_URL}${props.img}`}
+                      size={40}
+                    />
+                  ) : (
+                    <StyledPlayer
+                      autoplay
+                      loop
+                      src={`/simple-spinner.json`}
+                    ></StyledPlayer>
+                  )}
                   <StyledTypeName>
                     <StyledStrong>{el.mbti}</StyledStrong>
                     {getTypeName(el.mbti)}
@@ -228,4 +244,11 @@ const StyledTypeName = styled.div`
 
 const StyledStrong = styled.strong`
   font-size: 1rem;
+`;
+
+const StyledPlayer = styled(Player)`
+  width: 75vw;
+  height: 40vw;
+  max-width: 800px;
+  max-height: 800px;
 `;

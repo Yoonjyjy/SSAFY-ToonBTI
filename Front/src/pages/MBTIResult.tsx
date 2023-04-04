@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { Button, Space, Row, Col, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, MainImage } from "../components/common";
-import tiger from "/tiger.jpg";
 import { SwapRightOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShareButton from "../components/common/ShareButton";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_USER_RESPONSE, COUNT_ALL_USERS, GET_ALL_TYPES } from "../api/mbti";
 import { Mbti } from "../gql/graphql";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const { Title, Text } = Typography;
 
@@ -101,14 +101,20 @@ export default function MBTIResult() {
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
         <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
-        <MainImage
-          src={
-            res?.myType?.image
-              ? `${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`
-              : tiger
-          }
-          size={80}
-        />
+
+        {res?.myType?.image ? (
+          <MainImage
+            src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
+            size={40}
+          />
+        ) : (
+          <StyledPlayer
+            autoplay
+            loop
+            src={`/simple-spinner.json`}
+          ></StyledPlayer>
+        )}
+
         <TextContainer direction="vertical" size={5}>
           <StyledTypeName>
             <StyledHeader level={4}>
@@ -142,14 +148,20 @@ export default function MBTIResult() {
             el.mbti && (
               <StyledCol key={el.mbti + "me"} span={12}>
                 <b>{el.text}</b>
-                <MainImage
-                  src={
-                    el.img
-                      ? `${import.meta.env.VITE_IMAGE_URL}${el.img}`
-                      : tiger
-                  }
-                  size={40}
-                />
+
+                {el.img ? (
+                  <MainImage
+                    src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
+                    size={40}
+                  />
+                ) : (
+                  <StyledPlayer
+                    autoplay
+                    loop
+                    src={`/simple-spinner.json`}
+                  ></StyledPlayer>
+                )}
+
                 <StyledTypeName>
                   <StyledStrong>{el.mbti}</StyledStrong>
                   {el.typeName}
@@ -182,14 +194,19 @@ export default function MBTIResult() {
               el.mbti && (
                 <StyledCol key={el.mbti + "popularity"} span={12}>
                   <b>{el.text}</b>
-                  <MainImage
-                    src={
-                      el.img
-                        ? `${import.meta.env.VITE_IMAGE_URL}${el.img}`
-                        : tiger
-                    }
-                    size={40}
-                  />
+                  {el.img ? (
+                    <MainImage
+                      src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
+                      size={40}
+                    />
+                  ) : (
+                    <StyledPlayer
+                      autoplay
+                      loop
+                      src={`/simple-spinner.json`}
+                    ></StyledPlayer>
+                  )}
+                  \
                   <StyledTypeName>
                     <StyledStrong>
                       {el.mbti} ({el.per} %)
@@ -302,4 +319,11 @@ const StyledTypeName = styled.div`
 
 const StyledStrong = styled.strong`
   font-size: 1rem;
+`;
+
+const StyledPlayer = styled(Player)`
+  width: 75vw;
+  height: 40vw;
+  max-width: 800px;
+  max-height: 800px;
 `;

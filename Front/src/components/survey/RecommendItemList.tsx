@@ -2,6 +2,7 @@ import React from "react";
 import RecommendItem from "./RecommendItem";
 import styled from "styled-components";
 import { Row, Typography } from "antd";
+import { Webtoon } from "../../gql/graphql";
 
 const { Title } = Typography;
 
@@ -10,13 +11,17 @@ interface PropType {
   dataList: RecommListItemType[];
 }
 
+interface RecommListItemType extends Webtoon {
+  per: number;
+}
+
 export default function RecommendItemList({ text, dataList }: PropType) {
   return (
     <div>
       <StyledHeader level={5}>{text}</StyledHeader>
       <ItemListBox gutter={[16, 16]} key="1">
         {dataList.map((item) => {
-          return <RecommendItem key={item.id} item={item} />;
+          return <RecommendItem key={item.webtoonId} item={item} />;
         })}
       </ItemListBox>
     </div>
