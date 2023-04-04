@@ -26,15 +26,15 @@ spring:
     servlet:
       enabled: true
       mapping: /graphql
-      corsEnabled: true
-      cors:
-        # allowed-origins: https://j8a302.p.ssafy.io/
-        allowed-origins: "*"
-        allowed-methods: "*"
-        # allowed-methods: GET, HEAD, POST, PATCH
-      exception-handlers-enabled: true
-      context-setting: PER_REQUEST_WITH_INSTRUMENTATION
-      async-mode-enabled: true
+      # corsEnabled: true
+      # cors:
+      #   # allowed-origins: https://j8a302.p.ssafy.io/
+      #   allowed-origins: "*"
+      #   allowed-methods: "*"
+      #   # allowed-methods: GET, HEAD, POST, PATCH
+      # exception-handlers-enabled: true
+      # context-setting: PER_REQUEST_WITH_INSTRUMENTATION
+      # async-mode-enabled: true
     tools:
       schema-location-pattern: "**/*.graphqls"
       introspection-enabled: true
