@@ -30,6 +30,7 @@ public class UserController {
      * @return
      */
     @QueryMapping
+    @CrossOrigin(origins = "*")
     public long countAllUsers(){
         logger.info("countAllUsers");
         return userService.getUserCounts();
