@@ -60,7 +60,7 @@ export default function SurveyTest() {
         clicked: false,
       })) as SurveyItemType[];
 
-      setSurveyList((prev) => [...prev, ...newSurveyList]);
+      setSurveyList((prev) => uniqueWebtoons([...prev, ...newSurveyList]));
     },
   });
 
@@ -73,14 +73,14 @@ export default function SurveyTest() {
           for (let i = 0; i < newSurveyList.length; i++) {
             if (newSurveyList[i].webtoonId === prevClickedItemId.current) {
               newSurveyList.splice(
-                i,
+                i + 1,
                 0,
                 ...(data.additionalWebtoon?.map((newEl) => ({
                   ...newEl,
                   clicked: false,
                 })) as SurveyItemType[])
               );
-              return newSurveyList;
+              return uniqueWebtoons(newSurveyList);
             }
           }
           return prev;
@@ -106,12 +106,12 @@ export default function SurveyTest() {
   }
 
   function clickItemHandler(itemId: number, genreId: number) {
-    setSurveyList((prev) =>
-      prev.map((el) => {
+    setSurveyList((prev) => {
+      return prev.map((el) => {
         if (el.webtoonId === itemId) el.clicked = !el.clicked;
         return el;
-      })
-    );
+      });
+    });
     prevClickedItemId.current = itemId;
     console.log("click item item: ", prevClickedItemId.current, genreId);
     getRelative3Webtoons({
@@ -140,6 +140,18 @@ export default function SurveyTest() {
       />
     </Layout>
   );
+}
+
+function uniqueWebtoons(arr: SurveyItemType[]) {
+  const result = [];
+  const set = new Set();
+  for (const item of arr) {
+    if (set.has(item.webtoonId)) continue;
+    set.add(item.webtoonId);
+    result.push(item);
+  }
+  // console.log("result: ", result);
+  return result;
 }
 
 const StyledHeader = styled(Title)`

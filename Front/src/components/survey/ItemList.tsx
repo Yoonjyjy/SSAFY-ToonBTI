@@ -48,18 +48,15 @@ export default function ItemList(props: ItemListProps) {
         isLastPage={isLastPage}
       >
         <ItemListBox>
-          {props.dataList
-            .slice(0)
-            .reverse()
-            .map((item) => {
-              return (
-                <Item
-                  key={item.webtoonId}
-                  item={item}
-                  onClickItem={props.onClickItem}
-                />
-              );
-            })}
+          {props.dataList.map((item) => {
+            return (
+              <Item
+                key={item.webtoonId}
+                item={item}
+                onClickItem={props.onClickItem}
+              />
+            );
+          })}
         </ItemListBox>
       </InfiniteScroll>
     </ItemListOuterDiv>

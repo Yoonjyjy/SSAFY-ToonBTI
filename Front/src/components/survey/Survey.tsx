@@ -25,9 +25,14 @@ interface SurveyItemType extends Webtoon {
 export default function Survey(props: PropType) {
   const navigate = useNavigate();
 
-  const cnt: number = props.surveyList
-    ?.map((el) => (el.clicked ? 1 : 0))
-    ?.reduce((a: number, b) => a + b, 0);
+  const cnt = (() => {
+    const set = new Set<number>();
+    for (const survey of props.surveyList) {
+      if (survey.webtoonId && survey.clicked && !set.has(survey.webtoonId))
+        set.add(survey.webtoonId);
+    }
+    return set.size;
+  })();
 
   return (
     <OuterBox>
