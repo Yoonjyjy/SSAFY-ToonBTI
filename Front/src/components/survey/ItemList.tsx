@@ -1,39 +1,42 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Item from "./Item";
 import styled from "styled-components";
 import { Row } from "antd";
 import { InfiniteScroll } from "../common";
-import { useQuery } from "@apollo/client";
-import { NBTI_WEBTOON } from "../../api/survey";
+// import { NBTI_WEBTOON } from "../../api/survey";
+import { Webtoon } from "../../gql/graphql";
+
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
+}
 
 interface ItemListProps {
   dataList: SurveyItemType[];
-  onClickItem: (itemId: string) => void;
+  onClickItem: (itemId: number) => void;
   fetchAdditionalData: (nextPage: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }
 
-export default function ItemList({
-  dataList,
-  onClickItem,
-  fetchAdditionalData,
-  offsetRef,
-}: ItemListProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [curPage, setCurPage] = useState<number>(offsetRef.current);
+export default function ItemList(props: ItemListProps) {
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  const curPage = props.offsetRef.current;
   const isLastPage = false;
 
-  function callback(
-    entries: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && !isLoading) {
-        //fetch data
-        offsetRef.current += 1;
-        fetchAdditionalData(offsetRef.current + 1);
-      }
-    });
+  // FIXME: replace this with getAdditionalData on SurveyTest.tsx
+  // function callback(
+  //   entries: IntersectionObserverEntry[],
+  //   observer: IntersectionObserver
+  // ) {
+  //   entries.forEach((entry) => {
+  //     if (entry.isIntersecting && !isLoading) {
+  //       //fetch data
+  //       props.offsetRef.current += 1;
+  //       props.fetchAdditionalData(props.offsetRef.current + 1);
+  //     }
+  //   });
+  // }
+  function callback() {
+    /** */
   }
 
   return (
@@ -45,12 +48,12 @@ export default function ItemList({
         isLastPage={isLastPage}
       >
         <ItemListBox>
-          {dataList.map((item) => {
+          {props.dataList.map((item) => {
             return (
               <Item
                 key={item.webtoonId}
                 item={item}
-                onClickItem={onClickItem}
+                onClickItem={props.onClickItem}
               />
             );
           })}

@@ -1,8 +1,8 @@
-import { Col } from "antd";
-import QueueAnim from "rc-queue-anim";
 import React from "react";
+import QueueAnim from "rc-queue-anim";
 import styled from "styled-components";
-import Text from "../common/Text";
+// import Text from "../common/Text";
+import { Webtoon } from "../../gql/graphql";
 
 /**
  * 웹툰 선택 설문조사에서 웹툰 리스트 안의 각 아이템을 나타내는 컴포넌트
@@ -11,7 +11,10 @@ import Text from "../common/Text";
  */
 interface ItemProps {
   item: SurveyItemType;
-  onClickItem: (itemId: string) => void;
+  onClickItem: (itemId: number) => void;
+}
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
 }
 
 export default function Item({ item, onClickItem }: ItemProps) {
@@ -20,8 +23,8 @@ export default function Item({ item, onClickItem }: ItemProps) {
       <ItemBox
         key={item.webtoonId}
         selected={item.clicked}
-        onClick={() => onClickItem(item.webtoonId)}
-        url={item.image}
+        onClick={() => onClickItem(item.webtoonId as number)}
+        url={item.image as string}
       >
         {/* <Text>{item.title}</Text> */}
       </ItemBox>

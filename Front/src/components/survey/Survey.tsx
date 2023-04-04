@@ -1,8 +1,9 @@
+import React from "react";
 import { Button, Space } from "antd";
-import React, { MutableRefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ItemList from "./ItemList";
+import { Webtoon } from "../../gql/graphql";
 
 /**
 
@@ -10,23 +11,21 @@ import ItemList from "./ItemList";
 @setComp : 컴포넌트 변경을 위한 setter 함수
 @dataList : 선택한 작품 리스트
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
-interface SurveyProps {
-  onClickNext: () => void;
-  onClickItem: (itemId: string) => void;
-  dataList: SurveyItemType[];
+interface PropType {
+  surveyList: SurveyItemType[];
+  onClickItem: (itemId: number) => void;
   fetchAdditionalData: (offset: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }
 
-export default function Survey({
-  onClickItem,
-  onClickNext,
-  dataList,
-  fetchAdditionalData,
-  offsetRef,
-}: SurveyProps) {
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
+}
+
+export default function Survey(props: PropType) {
   const navigate = useNavigate();
-  const cnt: number = dataList
+
+  const cnt: number = props.surveyList
     ?.map((el) => (el.clicked ? 1 : 0))
     ?.reduce((a: number, b) => a + b, 0);
 
@@ -40,10 +39,10 @@ export default function Survey({
         </SelectedNumDiv>
       </RightDiv>
       <ItemList
-        dataList={dataList}
-        onClickItem={onClickItem}
-        fetchAdditionalData={fetchAdditionalData}
-        offsetRef={offsetRef}
+        dataList={props.surveyList}
+        onClickItem={props.onClickItem}
+        fetchAdditionalData={props.fetchAdditionalData}
+        offsetRef={props.offsetRef}
       />
       <BtnContainer direction="vertical">
         <StyledButton
@@ -52,7 +51,7 @@ export default function Survey({
           onClick={(e) => {
             e.preventDefault();
             //TODO: graphQL 데이터 서버로 보내기
-            navigate("/survey/result");
+            navigate("/survey/result", { state: { data: props.surveyList } });
           }}
         >
           <b>나의 취향 분석하기</b>

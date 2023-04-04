@@ -1,225 +1,93 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import { Typography } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { InputRef, Typography } from "antd";
 import styled from "styled-components";
-import { useQuery } from "@apollo/client";
 import { Layout, SearchBar } from "../components/common";
 import { NBTI_WEBTOON } from "../api/survey";
 import { Survey } from "../components/survey";
-import Text from "../components/common/Text";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_WEBTOON } from "../api/survey";
 import { django } from "../api";
+import { Webtoon } from "../gql/graphql";
 import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
-enum ActionKind {
-  FETCH_DATA_LIST = "fetchdatalist",
-  CLICK_AN_ITEM = "clickanitem",
-  FETCH_RELATIVE_ITEM_LIST = "fetchrelativeitemlist",
-  FETCH_ADDITIONAL_DATA_LIST = "fetchqadditionaldatalist",
+interface SurveyItemType extends Webtoon {
+  clicked: boolean;
 }
-interface FormDataType {
-  addedDataList: SurveyItemType[];
-  dataList: SurveyItemType[];
-  keywordList: KeywordType[];
-  clickedList: SurveyItemType[];
-}
-
-interface ActionType {
-  type: ActionKind;
-  payload?: {
-    offset?: number;
-    addedDataList?: SurveyItemType[];
-    dataList?: SurveyItemType[];
-    itemId?: string;
-    keyword?: KeywordType;
-  };
-}
-
-function reducer(state: FormDataType, action: ActionType): FormDataType {
-  const { type, payload } = action;
-
-  switch (type) {
-    // 첫번째 데이터 불러오기
-    case ActionKind.FETCH_DATA_LIST: {
-      if (!payload?.dataList) return state;
-      return {
-        ...state,
-        dataList: [...payload.dataList.map((e) => ({ ...e, clicked: false }))],
-      };
-    }
-    // 웹툰 클릭시 데이터 클릭 표시
-    case ActionKind.CLICK_AN_ITEM: {
-      if (!payload?.itemId) return state;
-      const newDataList = [...state.dataList].map((el) => {
-        if (el.webtoonId === payload.itemId) {
-          el = { ...el, clicked: !el.clicked };
-        }
-        return el;
-      });
-      // clickedList에서 삭제 / push
-      return { ...state, dataList: newDataList };
-    }
-
-    // 웹툰 클릭시 관련 웹툰 불러오기
-    // case ActionKind.FETCH_RELATIVE_ITEM_LIST: {
-    //   if (!payload?.itemId) return state;
-    //   const newDataList = [...state.dataList];
-    //   const clickedIndex = newDataList.findIndex(
-    //     (el) => el.webtoonId === payload.itemId
-    //   );
-    //   // TODO: fetch relative item list
-    //   if (state.dataList[clickedIndex].clicked === true) {
-    //     newDataList.splice(
-    //       clickedIndex + 1,
-    //       0,
-    //       ...payload?.addedDataList.map((e) => ({
-    //         ...e,
-    //         webtoonId: Math.random.toString(),
-    //         clicked: false,
-    //       }))
-    //     );
-    //   }
-    //   return { ...state, dataList: newDataList };
-    // }
-
-    // 웹툰 추가로 받아오기
-    case ActionKind.FETCH_ADDITIONAL_DATA_LIST: {
-      if (!payload?.addedDataList) {
-        return state;
-      }
-      const new_data = payload?.addedDataList.map((el) => ({
-        ...el,
-        clicked: false,
-      }));
-      const newDataList = [...state.dataList, ...new_data];
-      console.log(newDataList);
-      return { ...state, dataList: newDataList };
-    }
-
-    default:
-      return state;
-  }
-}
-
-const initialFormData: FormDataType = {
-  dataList: [],
-  addedDataList: [],
-  keywordList: [],
-  clickedList: [],
-};
 
 export default function SurveyTest() {
   const navigate = useNavigate();
-  const [formData, dispatch] = useReducer(reducer, { ...initialFormData });
   const offsetRef = useRef<number>(0);
-  const [getWebtoons, { error: errorSearch, data: dataSearch }] = useLazyQuery(
-    SEARCH_WEBTOON,
-    {
-      client: django,
-    }
-  );
-
-  const [
-    getMoreWebtoons,
-    {
-      error: fetchMoreDataError,
-      loading: fetchMoreDataLoading,
-      data: fetchMoreData,
-    },
-  ] = useLazyQuery(NBTI_WEBTOON, {
-    variables: {
-      nbtiPk: 17,
-      offset: offsetRef.current,
-    },
-    client: django,
-  });
-
-  // FIXME: too many re-renders
-  if (fetchMoreDataError) {
-    console.log("fetchMoreDataError", fetchMoreDataError);
-  }
-  if (fetchMoreDataLoading) {
-    console.log("fetchMoreDataLoading", fetchMoreDataLoading);
-  }
-  if (fetchMoreData) {
-    fetchAdditionalData(fetchMoreData?.nbtiWebtoon as SurveyItemType[]);
-  }
-
-  const { data, error, loading } = useQuery(NBTI_WEBTOON, {
-    variables: {
-      nbtiPk: 17,
-      offset: offsetRef.current,
-    },
-    client: django,
-  });
-  if (error) {
-    console.log("err", error);
-  }
-  if (loading) {
-    console.log("loading");
-  }
+  const keywordRef = useRef<InputRef>(null);
+  const [surveyList, setSurveyList] = useState<SurveyItemType[]>([]);
+  const [surveyListByKeyword, setSurveyListByKeyword] = useState<
+    SurveyItemType[]
+  >([]);
 
   useEffect(() => {
-    if (data?.nbtiWebtoon) {
-      console.log("useEffec", data?.nbtiWebtoon);
-      fetchDataList(data?.nbtiWebtoon as SurveyItemType[]);
-    }
-  }, [data]);
+    getWebtoons({
+      variables: {
+        nbtiPk: 17, // FIXME: number from Result
+        offset: offsetRef.current,
+      },
+    });
+  }, []);
 
-  function fetchDataList(dataList: SurveyItemType[]) {
-    dispatch({ type: ActionKind.FETCH_DATA_LIST, payload: { dataList } });
-  }
+  const [searchWebtoons] = useLazyQuery(SEARCH_WEBTOON, {
+    client: django,
+    onCompleted(data) {
+      const newSurveyList = data.searchWebtoon?.map((el) => ({
+        ...el,
+        clicked: false,
+      })) as SurveyItemType[];
+      setSurveyListByKeyword(newSurveyList);
+    },
+  });
 
-  function nextHandler() {
-    console.log("Next handler");
-  }
+  const [getWebtoons, { error: webtoonsError }] = useLazyQuery(NBTI_WEBTOON, {
+    variables: {
+      nbtiPk: 17, // FIXME: number from Result
+      offset: offsetRef.current,
+    },
+    client: django,
+    onCompleted(data) {
+      const newSurveyList = data.nbtiWebtoon?.map((el) => ({
+        ...el,
+        clicked: false,
+      })) as SurveyItemType[];
 
-  function itemClickHandler(itemId: string) {
-    dispatch({ type: ActionKind.CLICK_AN_ITEM, payload: { itemId } });
-    //TODO: relative는 내일~
-    // dispatch({
-    //   type: ActionKind.FETCH_RELATIVE_ITEM_LIST,
-    //   payload: { itemId },
-    // });
+      setSurveyList((prev) => [...prev, ...newSurveyList]);
+    },
+  });
+
+  function fetchSearchedData(keyword: string) {
+    // console.log("keyword: ", keyword);
+    searchWebtoons({ variables: { searchName: keyword } });
   }
 
   //FIXME: 여기서 리렌더링 계속됨
-  function fetchAdditionalData(addedDataList: SurveyItemType[]) {
-    dispatch({
-      type: ActionKind.FETCH_ADDITIONAL_DATA_LIST,
-      payload: { addedDataList },
-    });
-  }
-
-  // 키워드 통해 검색한 웹툰 리스트 데이터 체크용입니다
-  // 아래 fetchSearchedData 함수를 마저 작성해주세요
-  useEffect(() => {
-    console.log("data from keyword", data);
-  }, [data]);
-
-  // TODO: add item list to dataList
-  function fetchSearchedData(keyword: string) {
-    getWebtoons({ variables: { searchName: keyword } });
-  }
-
-  // useEffect(() => {
-  //   getAdditionalData(offsetRef.current);
-  // }, [offsetRef.current]);
-
   function getAdditionalData(offset: number) {
     console.log("더줘! ", offsetRef.current);
     // const nbtiPk: number | null = Number(localStorage.getItem("nbtiPk"));
     const nbtiPk = 17;
     offsetRef.current = offsetRef.current + 1;
-    // TODO: 여기에서 데이터를 불러온 다음에 dispatch를 해야돼
-    getMoreWebtoons({
+    getWebtoons({
       variables: { nbtiPk: nbtiPk, offset: offsetRef.current },
     });
   }
 
-  if (error) navigate("/404");
+  function clickItemHandler(itemId: number) {
+    setSurveyList((prev) =>
+      prev.map((el) => {
+        if (el.webtoonId === itemId) el.clicked != el.clicked;
+        return el;
+      })
+    );
+  }
+
+  if (webtoonsError) navigate("/404");
+
   return (
     <Layout
       // type="survey"
@@ -232,15 +100,15 @@ export default function SurveyTest() {
       <p style={{ margin: "0px" }}>
         지금까지 재미있게 봤던 웹툰들을 선택해주세요.
       </p>
-      <SearchBar searchData={fetchSearchedData} />
+      <SearchBar ref={keywordRef} searchData={fetchSearchedData} />
       <Survey
-        dataList={formData.dataList}
-        onClickNext={nextHandler}
-        onClickItem={itemClickHandler}
+        surveyList={
+          keywordRef.current?.input?.value ? surveyListByKeyword : surveyList
+        }
+        onClickItem={clickItemHandler}
         offsetRef={offsetRef}
         fetchAdditionalData={getAdditionalData}
       />
-      <button onClick={() => getAdditionalData(offsetRef.current)}>TEST</button>
     </Layout>
   );
 }
