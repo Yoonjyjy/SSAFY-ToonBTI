@@ -1,10 +1,8 @@
 package com.ssafy.toonbti.user.model.dto;
 
 import com.ssafy.toonbti.user.model.entity.Nbti;
-import com.ssafy.toonbti.user.model.repository.UserNbtiRepositroy;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Builder
 @NoArgsConstructor
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Setter
 @ToString
 public class UserDTO {
+    private Long nbtiId;
     //독자 유형
     private String userType;
     //독자 유형 설명
@@ -24,6 +23,7 @@ public class UserDTO {
 
     public static UserDTO of(@NotNull Nbti nbti){
         return UserDTO.builder()
+                .nbtiId(nbti.getNbtiId())
                 .userType(nbti.getName())
                 .description(nbti.getContent())
                 .image(nbti.getImage())

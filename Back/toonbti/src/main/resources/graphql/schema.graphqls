@@ -43,6 +43,7 @@ type UserAnswer {
 }
 
 type User {
+    nbtiId: Long
     userType: MBTI!
     description: String
     image: String
