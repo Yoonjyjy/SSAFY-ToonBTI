@@ -98,7 +98,7 @@ public class UserService {
 		// 내 유형 찾기
 		UserDTO myUser = getUser(userAnswerDTO, user);
 		UserDTO bestType = getByBest(myUser.getUserType());
-		UserDTO worstType = getByBest(myUser.getUserType());
+		UserDTO worstType = getByWorst(myUser.getUserType());
 		return UserResultDTO.of(user.getUserId(), myUser, bestType, worstType, getByRank(1), getByRank(2));
 	}
 
