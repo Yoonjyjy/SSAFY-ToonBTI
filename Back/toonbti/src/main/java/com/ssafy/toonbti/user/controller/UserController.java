@@ -22,6 +22,7 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -31,7 +32,6 @@ public class UserController {
      * @return
      */
     @QueryMapping
-    @CrossOrigin(origins = "*")
     public long countAllUsers(){
         logger.info("countAllUsers");
         return userService.getUserCounts();
