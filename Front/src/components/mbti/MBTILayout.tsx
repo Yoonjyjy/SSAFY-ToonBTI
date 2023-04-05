@@ -130,7 +130,11 @@ export default function CommonLayout(props: PropType) {
               <center>{getTypeName(props.mbti)}</center>
             </StyledTypeName>
 
-            <StyledContent>{props.desc}</StyledContent>
+            <StyledList>
+              {props.desc?.split("\\n").map((line: string) => {
+                return <StyledLi key={line}>{line}</StyledLi>;
+              })}
+            </StyledList>
             <br />
           </TextContainer>
         </StyledDiv>
@@ -216,6 +220,8 @@ const StyledContent = styled(Text)`
   text-align: center;
   line-height: 1.5rem;
   word-break: keep-all;
+  white-space: pre-line;
+  display: block;
 
   span {
     font-weight: 600;
@@ -253,4 +259,24 @@ const StyledPlayer = styled(Player)`
   height: 40vw;
   max-width: 800px;
   max-height: 800px;
+`;
+
+const StyledList = styled(Text)`
+  text-align: left;
+  line-height: 1.5rem;
+  word-break: keep-all;
+  white-space: pre-line;
+  display: block;
+
+  span {
+    font-weight: 600;
+    line-height: 2rem;
+  }
+`;
+
+const StyledLi = styled.li`
+  /* list-style-position: inside; */
+
+  /* padding-left: 30px; */
+  /* text-indent: -20px; */
 `;

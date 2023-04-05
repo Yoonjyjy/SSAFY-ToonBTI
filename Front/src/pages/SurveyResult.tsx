@@ -505,7 +505,7 @@ export default function AnalysisResult() {
           <ShareButton
             text="웹툰 취향 분석 결과 공유하기"
             // text=""
-            src="http://localhost:5173"
+            src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
           />
           <StyleSpan>

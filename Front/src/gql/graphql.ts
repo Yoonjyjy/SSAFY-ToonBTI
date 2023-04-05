@@ -100,6 +100,7 @@ export type MutationSaveWebtoonArgs = {
 export type MyGenre = {
   __typename?: 'MyGenre';
   genreId?: Maybe<Scalars['Int']>;
+  genreName?: Maybe<Scalars['String']>;
 };
 
 export type MyKeyword = {

@@ -10,7 +10,7 @@ interface PropType {
   param: string;
 }
 
-export default function ShardButton(props: PropType) {
+export default function ShareButton(props: PropType) {
   const url = props.src + "/" + props.param;
 
   function clickCopyHandler() {

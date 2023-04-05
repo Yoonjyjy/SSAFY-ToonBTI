@@ -100,7 +100,7 @@ const BtnContainer = styled(Space)`
 
 const StyledButton = styled(Button)`
   width: 100%;
-  height: 50px;
+  height: 60px;
   white-space: pre-wrap;
   border-radius: 10px;
   //FIXME: 포커싱 이슈 해결 안 됨
