@@ -18,6 +18,7 @@ import { django } from "../api";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { COUNT_ALL_USERS } from "../api/mbti";
 import { finished } from "stream";
+import theme from "../theme";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 
@@ -237,6 +238,26 @@ export default function AnalysisResult() {
     }
   );
 
+  const reader_expert_value = [
+    {
+      id: 1,
+      title:
+        (rankList[0]?.name == "로맨스판타지" ? "로판" : rankList[0]?.name) +
+        " 전문가",
+      color: "#99CCFF",
+    },
+    {
+      id: 2,
+      title: (kakaoRatio > naverRatio ? "카카오" : "네이버") + " 매니아",
+      color: kakaoRatio > naverRatio ? theme.colors.kakao : theme.colors.green,
+    },
+    {
+      id: 3,
+      title: (finishedRatio > unfinishedRatio ? "완결작" : "연재작") + " 킬러",
+      color: "#757575",
+    },
+  ];
+
   //data fetch
   useEffect(() => {
     saveWebtoonDB({
@@ -300,7 +321,18 @@ export default function AnalysisResult() {
               <PointSpan>{result?.getFromSpring[0].webtoonCounts}</PointSpan>개
             </Text>
           </CallOutDiv>
-          <Text>제법 많이 보셨군요!</Text> {/* 읽은 권수에 따른 다른 text */}
+          {result?.getFromSpring[0].webtoonCounts < 10 ? (
+            <Text>웹툰에 더 관심을 가져보시는 건 어떨까요?</Text>
+          ) : result?.getFromSpring[0].webtoonCounts < 30 ? (
+            <Text>제법 많이 보셨군요!</Text>
+          ) : result?.getFromSpring[0].webtoonCounts < 50 ? (
+            <Text>웹툰계의 대학원생이에요.</Text>
+          ) : (
+            <Text>혹시 웹툰학과 교수신가요?</Text>
+          )}
+
+          {/* 읽은 권수에 따른 다른 text */}
+          {/* <Text>제법 많이 보셨군요!</Text>  */}
         </StyledSection>
         <StyledSection>
           <Text>
@@ -325,7 +357,7 @@ export default function AnalysisResult() {
           <Text size="1.3rem">나의 전문가 수치</Text>
           <RoundBoxDiv>
             {/* TODO: 전문가 수치 */}
-            {data.reader_title_list.map((item) => (
+            {reader_expert_value.map((item) => (
               <RoundUpperDiv key={item.id}>
                 <RoundDiv color={item.color}>
                   <Text color="#ffffff" bold="true" type="responsive">
@@ -457,10 +489,21 @@ export default function AnalysisResult() {
           </section>
         </StyledSection>
         <StyledSection>
+          <Text size="1.1rem">사용자가 즐겨보는 키워드</Text>
+          <StyledKeywordDiv>
+            {/* {rankList.map} */}
+            {/* mykeyword */}
+            {result?.myKeyword[0].myKeywordName.map((el: string) => {
+              return <StyledKeyword key={el}>#{el}</StyledKeyword>;
+            })}
+          </StyledKeywordDiv>
+        </StyledSection>
+        <StyledSection>
           <RecommendItemList
             type="keyword"
             keyword={result?.myKeyword[0].myKeywordName[0]}
-            text="# 키워드와 유사한 키워드의 작품"
+            text="내가 선호하는 키워드의 작품"
+            // text="# 키워드와 유사한 키워드의 작품"
             dataList={result?.keywordSimilarWebtoon}
           ></RecommendItemList>
         </StyledSection>
@@ -555,11 +598,14 @@ const RoundBoxDiv = styled.div`
   grid-gap: 0.5rem;
   width: 100%;
   justify-content: center;
+  justify-items: center;
 `;
 const RoundUpperDiv = styled.div`
   width: 100%;
   padding-bottom: 100%;
   position: relative;
+  max-width: 200px;
+  max-height: 200px;
 `;
 const RoundDiv = styled.div<{ color?: string }>`
   display: flex;
@@ -575,6 +621,8 @@ const RoundDiv = styled.div<{ color?: string }>`
   padding: 0.5rem;
   word-break: keep-all;
   margin: 0.25rem;
+  max-width: 200px;
+  max-height: 200px;
 `;
 
 const RatioTextBox = styled.div<{ space?: boolean }>`
@@ -670,4 +718,20 @@ const StyledPlayer = styled(Player)`
   width: 75vw;
   max-width: 800px;
   max-height: 800px;
+`;
+
+const StyledKeywordDiv = styled.div`
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+`;
+
+const StyledKeyword = styled.div`
+  display: flex;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  background-color: #eeeeee;
+  padding: 4px 10px;
 `;

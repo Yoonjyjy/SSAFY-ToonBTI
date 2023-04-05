@@ -25,7 +25,8 @@ export default function RecommendItemList({
       return (
         <div>
           <StyledHeader>
-            <StyledSpan>#{keyword}</StyledSpan> 키워드와 유사한 키워드의 작품
+            {/* <StyledSpan>#{keyword}</StyledSpan> 키워드와 유사한 키워드의 작품 */}
+            내가 선호하는 키워드의 작품
           </StyledHeader>
           <ItemListBox gutter={[16, 16]} key="1">
             {dataList.map((item) => {
