@@ -71,16 +71,15 @@ export default function SurveyTest() {
         setSurveyList((prev) => {
           const newSurveyList = [...surveyList];
           for (let i = 0; i < newSurveyList.length; i++) {
-            if (newSurveyList[i].webtoonId === prevClickedItemId.current) {
-              newSurveyList.splice(
-                i + 1,
-                0,
-                ...(data.additionalWebtoon?.map((newEl) => ({
-                  ...newEl,
-                  clicked: false,
-                })) as SurveyItemType[])
+            if (
+              data.additionalWebtoon &&
+              newSurveyList[i].webtoonId === prevClickedItemId.current
+            ) {
+              return uniqueWebtoons(
+                newSurveyList,
+                data.additionalWebtoon as Webtoon[],
+                i + 1
               );
-              return uniqueWebtoons(newSurveyList);
             }
           }
           return prev;
@@ -105,6 +104,7 @@ export default function SurveyTest() {
     });
   }
 
+  // FIXME: click a webtoon resulted in by searching (feat. setSurveyListByKeyword)
   function clickItemHandler(itemId: number, genreId: number) {
     setSurveyList((prev) => {
       return prev.map((el) => {
@@ -131,6 +131,7 @@ export default function SurveyTest() {
       </p>
       <SearchBar ref={keywordRef} searchData={fetchSearchedData} />
       <Survey
+        cnt={count(surveyList) + count(surveyListByKeyword)}
         surveyList={
           keywordRef.current?.input?.value ? surveyListByKeyword : surveyList
         }
@@ -142,7 +143,17 @@ export default function SurveyTest() {
   );
 }
 
-function uniqueWebtoons(arr: SurveyItemType[]) {
+function count(arr: SurveyItemType[]) {
+  return arr
+    ?.map((el) => (el.clicked ? 1 : 0))
+    ?.reduce((a: number, b) => a + b, 0);
+}
+
+function uniqueWebtoons(
+  arr: SurveyItemType[],
+  arrTobeSpliced?: Webtoon[],
+  at?: number
+): SurveyItemType[] {
   const result = [];
   const set = new Set();
   for (const item of arr) {
@@ -150,6 +161,16 @@ function uniqueWebtoons(arr: SurveyItemType[]) {
     set.add(item.webtoonId);
     result.push(item);
   }
+  if (arrTobeSpliced && at) {
+    const toBe: SurveyItemType[] = [];
+    for (const item of arrTobeSpliced) {
+      if (set.has(item.webtoonId)) continue;
+      set.add(item.webtoonId);
+      toBe.push({ ...item, clicked: false });
+    }
+    result.splice(at, 0, ...toBe);
+  }
+
   // console.log("result: ", result);
   return result;
 }

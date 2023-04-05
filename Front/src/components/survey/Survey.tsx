@@ -12,6 +12,7 @@ import { Webtoon } from "../../gql/graphql";
 @dataList : 선택한 작품 리스트
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
 interface PropType {
+  cnt: number;
   surveyList: SurveyItemType[];
   onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (offset: number) => void;
@@ -25,21 +26,12 @@ interface SurveyItemType extends Webtoon {
 export default function Survey(props: PropType) {
   const navigate = useNavigate();
 
-  const cnt = (() => {
-    const set = new Set<number>();
-    for (const survey of props.surveyList) {
-      if (survey.webtoonId && survey.clicked && !set.has(survey.webtoonId))
-        set.add(survey.webtoonId);
-    }
-    return set.size;
-  })();
-
   return (
     <OuterBox>
       <RightDiv>
         <SelectedNumDiv>
           <b>
-            선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
+            선택한 웹툰 <CountSpan>{props.cnt}</CountSpan>개
           </b>
         </SelectedNumDiv>
       </RightDiv>
