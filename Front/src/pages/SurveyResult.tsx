@@ -285,14 +285,14 @@ export default function AnalysisResult() {
     >
       <TitleText>당신의 독자 유형은?</TitleText>
       {/* //FIXME: 이미지 안옴 */}
-      <Image url={result?.getFromSpring[0].myType.image} />
+      <Image type="userType" url={result?.getFromSpring[0].myType.image} />
       <article>
-        <StyledSection>
+        <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
           <Text bold="true" size="1.7rem">
             {result?.getFromSpring[0].myType.userType}
           </Text>
-        </StyledSection>
+        </StyledSection2>
         <StyledSection>
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
@@ -481,8 +481,7 @@ export default function AnalysisResult() {
             <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
             &nbsp;작가
           </Text>
-          <Text>대표작 -{result?.authorWebtoon[0].title}</Text>
-          <Text>주요 연재 장르 - {result?.authorWebtoon[0].genreId}</Text>
+          <Text size="0.9rem">대표작 -{result?.authorWebtoon[0].title}</Text>
         </StyledSection>
         <StyledSection>
           <BtnContainer direction="vertical">
@@ -519,6 +518,10 @@ export default function AnalysisResult() {
     </Layout>
   );
 }
+const StyledSection2 = styled.section`
+  display: block;
+  margin: 2rem auto;
+`;
 const StyledSection = styled.section`
   display: block;
   margin: 5rem auto;
