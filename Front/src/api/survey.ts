@@ -36,6 +36,80 @@ const SELECT_WEBTOON = graphql(`
   }
 `);
 
+const SAVE_WEBTOON = graphql(`
+  mutation SAVEWEBTOON($webtoonPk: [Int!]!, $userPk: Int!) {
+    saveWebtoon(webtoonPk: $webtoonPk, userPk: $userPk) {
+      success
+    }
+  }
+`);
+
+const GET_SURVEY_RESULT_1 = graphql(`
+  query RESULT1($nbtiPk: Int!, $userPk: Int!, $webtoonPk: [Int!]) {
+    resultNbtiWebtoon(nbtiPk: $nbtiPk, userPk: $userPk) {
+      webtoonId
+      genreId
+      title
+      image
+      platform
+      endFlag
+      rate
+      view
+      likeRate
+    }
+    myKeyword(webtoonPk: $webtoonPk) {
+      myKeywordName
+      myKeywordId
+    }
+    getFromSpring(userPk: $userPk) {
+      myType {
+        userType
+        image
+        count
+      }
+      webtoonCounts
+      platformRatio
+      doneRatio
+      genreRatio
+    }
+    myGenre(webtoonPk: $webtoonPk) {
+      genreId
+    }
+  }
+`);
+
+const GET_SURVEY_RESULT_2 = graphql(`
+  query RESULT2(
+    $keywords: [Int!]!
+    $topN: Int!
+    $genrePk: Int!
+    $webtoonPk: [Int!]!
+  ) {
+    keywordSimilarWebtoon(keywords: $keywords, topN: $topN) {
+      webtoonId
+      genreId
+      title
+      image
+      platform
+      endFlag
+      rate
+      view
+    }
+    authorWebtoon(genrePk: $genrePk, webtoonPk: $webtoonPk) {
+      webtoonId
+      genreId
+      image
+      title
+      platform
+      rate
+      endFlag
+      searchTitle
+      view
+      authorName
+    }
+  }
+`);
+
 const GET_ADDITIONAL_3_WEBTOONS = graphql(`
   query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {
     additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {
@@ -56,4 +130,7 @@ export {
   SEARCH_WEBTOON,
   SELECT_WEBTOON,
   GET_ADDITIONAL_3_WEBTOONS,
+  SAVE_WEBTOON,
+  GET_SURVEY_RESULT_1,
+  GET_SURVEY_RESULT_2,
 };

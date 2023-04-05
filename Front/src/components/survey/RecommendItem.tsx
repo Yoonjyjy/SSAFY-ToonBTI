@@ -3,16 +3,38 @@ import React from "react";
 import styled from "styled-components";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Webtoon } from "../../gql/graphql";
+import { RecomWebtoonType } from "../../pages/SurveyResult";
 
 interface ItemProps {
-  item: RecommListItemType;
+  type?: string;
+  item: RecomWebtoonType;
 }
 
-interface RecommListItemType extends Webtoon {
-  per: number;
-}
-
-export default function RecommendItem({ item }: ItemProps) {
+export default function RecommendItem({ type, item }: ItemProps) {
+  if (type === "keyword") {
+    return (
+      <StyledDiv>
+        {item.image ? (
+          <img src={item.image} height="150px" />
+        ) : (
+          <StyledPlayer
+            autoplay
+            loop
+            src={`/simple-spinner.json`}
+          ></StyledPlayer>
+        )}
+        {item.title.length > 11 ? (
+          <StyledText>
+            <b>{item.title.slice(0, 11) + "..."}</b>
+          </StyledText>
+        ) : (
+          <StyledText>
+            <b>{item.title}</b>
+          </StyledText>
+        )}
+      </StyledDiv>
+    );
+  }
   return (
     <StyledDiv>
       {item.image ? (
@@ -21,8 +43,16 @@ export default function RecommendItem({ item }: ItemProps) {
         <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
       )}
 
-      <StyledText>{item.title}</StyledText>
-      <StyledTextColor>취향저격율 {item.per}%</StyledTextColor>
+      {item.title.length > 11 ? (
+        <StyledText>
+          <b>{item.title.slice(0, 11) + "..."}</b>
+        </StyledText>
+      ) : (
+        <StyledText>
+          <b>{item.title}</b>
+        </StyledText>
+      )}
+      <StyledTextColor>취향저격율 {item.likeRate.toFixed(2)}%</StyledTextColor>
     </StyledDiv>
   );
 }
