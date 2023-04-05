@@ -12,39 +12,29 @@ import { Webtoon } from "../../gql/graphql";
 @dataList : 선택한 작품 리스트
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
 interface PropType {
-  surveyList: SurveyItemType[];
+  cnt: number;
+  surveyList: Webtoon[];
+  result: Map<number, boolean>;
   onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (offset: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }
 
-interface SurveyItemType extends Webtoon {
-  clicked: boolean;
-}
-
 export default function Survey(props: PropType) {
   const navigate = useNavigate();
-
-  const cnt = (() => {
-    const set = new Set<number>();
-    for (const survey of props.surveyList) {
-      if (survey.webtoonId && survey.clicked && !set.has(survey.webtoonId))
-        set.add(survey.webtoonId);
-    }
-    return set.size;
-  })();
 
   return (
     <OuterBox>
       <RightDiv>
         <SelectedNumDiv>
           <b>
-            선택한 웹툰 <CountSpan>{cnt}</CountSpan>개
+            선택한 웹툰 <CountSpan>{props.cnt}</CountSpan>개
           </b>
         </SelectedNumDiv>
       </RightDiv>
       <ItemList
         dataList={props.surveyList}
+        result={props.result}
         onClickItem={props.onClickItem}
         fetchAdditionalData={props.fetchAdditionalData}
         offsetRef={props.offsetRef}
@@ -55,8 +45,11 @@ export default function Survey(props: PropType) {
           height={3}
           onClick={(e) => {
             e.preventDefault();
-            //TODO: graphQL 데이터 서버로 보내기
-            navigate("/survey/result", { state: { data: props.surveyList } });
+            const webtoons = [];
+            for (const [key, val] of props.result.entries()) {
+              if (val) webtoons.push(key);
+            }
+            navigate("/survey/result", { state: webtoons });
           }}
         >
           <b>나의 취향 분석하기</b>

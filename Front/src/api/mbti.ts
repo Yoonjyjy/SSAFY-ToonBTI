@@ -28,37 +28,37 @@ const GET_ALL_TYPES = graphql(`
 `);
 
 const GET_TYPE = graphql(`
-  query GetType($userType:String) {
-    getType(userType:$userType){
-      myType{
+  query GetType($userType: String) {
+    getType(userType: $userType) {
+      myType {
         userType
         description
         image
         count
       }
-      bestType{
+      bestType {
         userType
         description
         image
         count
       }
-      worstType{
+      worstType {
         userType
         description
         image
         count
       }
-      firstType{
+      firstType {
         userType
         description
         image
         count
       }
-      secondType{
-      userType
-      description
-      image
-      count
+      secondType {
+        userType
+        description
+        image
+        count
       }
     }
   }
@@ -67,6 +67,8 @@ const GET_TYPE = graphql(`
 const ADD_USER_RESPONSE = graphql(`
   mutation AddUserResponse($input: UserAnswerInput) {
     addUserResponse(input: $input) {
+      userId
+      uuid
       myType {
         nbtiId
         userType

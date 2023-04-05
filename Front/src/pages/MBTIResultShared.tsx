@@ -112,9 +112,7 @@ export default function MBTIResultShared() {
   }
 
   function clickResultAllHandler() {
-    navigate("/mbti/result/all", {
-      //   state: data?.addUserResponse?.myType?.nbtiId,
-    });
+    navigate("/mbti/result/all");
   }
   if (typeInfo && totalData && allTypesData) {
     return (
