@@ -14,6 +14,8 @@ type Query {
     getAllTypes: [User]
     # 한가지 유형 보기
     getType(userType: String): TypeResult
+    # 내 웹툰 랭킹 정보
+    getRanking(userId: Long): WebtoonUser
 }
 
 type Mutation {
@@ -23,6 +25,10 @@ type Mutation {
     createResult(userId: Long): WebtoonResult
 }
 
+type WebtoonUser{
+    myRank: Int
+    allUser: Int
+}
 
 type Question {
     questionNo: Long!

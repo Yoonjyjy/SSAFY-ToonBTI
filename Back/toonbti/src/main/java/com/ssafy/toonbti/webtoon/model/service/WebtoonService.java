@@ -8,6 +8,7 @@ import com.ssafy.toonbti.user.model.repository.UserNbtiRepositroy;
 import com.ssafy.toonbti.user.model.repository.UserRepository;
 import com.ssafy.toonbti.webtoon.model.dto.WebtoonDTO;
 import com.ssafy.toonbti.webtoon.model.dto.WebtoonResultDTO;
+import com.ssafy.toonbti.webtoon.model.dto.WebtoonUserDTO;
 import com.ssafy.toonbti.webtoon.model.entity.UserWebtoon;
 import com.ssafy.toonbti.webtoon.model.entity.Webtoon;
 import com.ssafy.toonbti.webtoon.model.repository.UserWebtoonRepository;
@@ -35,6 +36,20 @@ public class WebtoonService {
         int[] finishedRatio = getFinishedRatio(user);
         int[] genreList = getGenreList(user);
         return WebtoonResultDTO.of(userDTO, cnt, platformRatio, finishedRatio, genreList);
+    }
+
+    public WebtoonUserDTO getRanking(Long userId) {
+        List<Object[]> objects = userWebtoonRepository.findRanking();
+        int userid = Math.toIntExact(userId);
+        int myRank = -1;
+        for (int i = 0; i < objects.size(); i++) {
+            if(userid == (int) objects.get(i)[1]){
+                myRank = i + 1;
+                break;
+            }
+        }
+
+        return WebtoonUserDTO.of(myRank,objects.size());
     }
 
     public int[] getPlatformRatio(User user) {
