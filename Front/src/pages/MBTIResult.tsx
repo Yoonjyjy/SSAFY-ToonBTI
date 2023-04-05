@@ -119,7 +119,7 @@ export default function MBTIResult() {
             <StyledHeader level={4}>
               {res?.myType?.userType}
               <br></br>
-              {getTypeName(res?.myType?.userType as Mbti)[0]} -{" "}
+              {getTypeName(res?.myType?.userType as Mbti)[0]} {" - "}
               {getTypeName(res?.myType?.userType as Mbti)[1]}
             </StyledHeader>
           </StyledTypeName>
