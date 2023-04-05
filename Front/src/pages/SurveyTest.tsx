@@ -7,14 +7,10 @@ import { Survey } from "../components/survey";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_WEBTOON } from "../api/survey";
 import { django } from "../api";
-import { Webtoon } from "../gql/graphql";
+import { GetAdditional3WebtoonsQuery, Webtoon } from "../gql/graphql";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
-
-interface SurveyItemType extends Webtoon {
-  clicked: boolean;
-}
 
 // TODO: infinite scroll
 export default function SurveyTest() {
@@ -22,10 +18,9 @@ export default function SurveyTest() {
   const { state: nbtiPk = 17 } = useLocation(); // default val is 17
   const offsetRef = useRef<number>(0);
   const keywordRef = useRef<InputRef>(null);
-  const [surveyList, setSurveyList] = useState<SurveyItemType[]>([]);
-  const [surveyListByKeyword, setSurveyListByKeyword] = useState<
-    SurveyItemType[]
-  >([]);
+  const [webtoons, setWebtoons] = useState<Webtoon[]>([]);
+  const [webtoonsByKeyword, setWebtoonsByKeyword] = useState<Webtoon[]>([]);
+  const [result, setResult] = useState<Map<number, boolean>>(new Map());
   const prevClickedItemId = useRef<number | null>(null);
 
   useEffect(() => {
@@ -40,53 +35,70 @@ export default function SurveyTest() {
   const [searchWebtoons] = useLazyQuery(SEARCH_WEBTOON, {
     client: django,
     onCompleted(data) {
-      const newSurveyList = data.searchWebtoon?.map((el) => ({
-        ...el,
-        clicked: false,
-      })) as SurveyItemType[];
-      setSurveyListByKeyword(newSurveyList);
+      setWebtoonsByKeyword(data.searchWebtoon as Webtoon[]);
     },
   });
 
   const [getWebtoons, { error: webtoonsError }] = useLazyQuery(NBTI_WEBTOON, {
-    variables: {
-      nbtiPk,
-      offset: offsetRef.current,
-    },
     client: django,
     onCompleted(data) {
-      const newSurveyList = data.nbtiWebtoon?.map((el) => ({
-        ...el,
-        clicked: false,
-      })) as SurveyItemType[];
-
-      setSurveyList((prev) => uniqueWebtoons([...prev, ...newSurveyList]));
+      setWebtoons((prev) => {
+        const newResult = new Map();
+        const newWebtoons = [...prev];
+        for (const item of prev) {
+          newResult.set(item.webtoonId, false);
+        }
+        for (const item of data.nbtiWebtoon as Webtoon[]) {
+          if (item.webtoonId && !newResult.has(item.webtoonId)) {
+            newResult.set(item.webtoonId, false);
+            newWebtoons.push(item);
+          }
+        }
+        setResult(newResult);
+        return newWebtoons;
+      });
     },
   });
 
   const [getRelative3Webtoons] = useLazyQuery(GET_ADDITIONAL_3_WEBTOONS, {
     client: django,
     onCompleted(data) {
-      if (prevClickedItemId.current) {
-        setSurveyList((prev) => {
-          const newSurveyList = [...surveyList];
-          for (let i = 0; i < newSurveyList.length; i++) {
-            if (
-              data.additionalWebtoon &&
-              newSurveyList[i].webtoonId === prevClickedItemId.current
-            ) {
-              return uniqueWebtoons(
-                newSurveyList,
-                data.additionalWebtoon as Webtoon[],
-                i + 1
-              );
-            }
-          }
-          return prev;
-        });
+      if (keywordRef.current?.input?.value) {
+        addRelatives(setWebtoonsByKeyword, data, webtoonsByKeyword);
+        return;
       }
+      addRelatives(setWebtoons, data, webtoons);
     },
   });
+
+  function addRelatives(
+    setter: React.Dispatch<React.SetStateAction<Webtoon[]>>,
+    data: GetAdditional3WebtoonsQuery,
+    toons: Webtoon[]
+  ) {
+    setter((prev) => {
+      const newRelatives = [];
+      const newResult = new Map(result);
+      for (let i = 0; i < toons.length; i++) {
+        if (
+          toons[i].webtoonId &&
+          toons[i].webtoonId === prevClickedItemId.current
+        ) {
+          for (const item of data.additionalWebtoon as Webtoon[]) {
+            if (newResult.has(item.webtoonId as number)) continue;
+
+            newRelatives.push(item);
+            newResult.set(item.webtoonId as number, false);
+          }
+          setResult(newResult);
+          const newWebtoons = [...prev];
+          newWebtoons.splice(i + 1, 0, ...newRelatives);
+          return newWebtoons;
+        }
+      }
+      return prev;
+    });
+  }
 
   function fetchSearchedData(keyword: string) {
     // console.log("keyword: ", keyword);
@@ -104,22 +116,25 @@ export default function SurveyTest() {
     });
   }
 
-  // FIXME: click a webtoon resulted in by searching (feat. setSurveyListByKeyword)
   function clickItemHandler(itemId: number, genreId: number) {
-    setSurveyList((prev) => {
-      return prev.map((el) => {
-        if (el.webtoonId === itemId) el.clicked = !el.clicked;
-        return el;
-      });
-    });
     prevClickedItemId.current = itemId;
-    console.log("click item item: ", prevClickedItemId.current, genreId);
+    setResult((prev) => {
+      return new Map(prev).set(itemId, !prev.get(itemId));
+    });
     getRelative3Webtoons({
       variables: { webtoonPk: itemId, genrePk: genreId },
     });
+    console.log("click item item: ", prevClickedItemId.current, genreId);
   }
 
   if (webtoonsError) navigate("/404");
+
+  const cnt = (() => {
+    let count = 0;
+    const it = result.values();
+    for (const clicked of it) count += clicked ? 1 : 0;
+    return count;
+  })();
 
   return (
     <Layout type="survey" title="웹툰 취향 분석 테스트" hasPrevious>
@@ -131,48 +146,17 @@ export default function SurveyTest() {
       </p>
       <SearchBar ref={keywordRef} searchData={fetchSearchedData} />
       <Survey
-        cnt={count(surveyList) + count(surveyListByKeyword)}
+        cnt={cnt}
         surveyList={
-          keywordRef.current?.input?.value ? surveyListByKeyword : surveyList
+          keywordRef.current?.input?.value ? webtoonsByKeyword : webtoons
         }
+        result={result}
         onClickItem={clickItemHandler}
         offsetRef={offsetRef}
         fetchAdditionalData={getAdditionalData}
       />
     </Layout>
   );
-}
-
-function count(arr: SurveyItemType[]) {
-  return arr
-    ?.map((el) => (el.clicked ? 1 : 0))
-    ?.reduce((a: number, b) => a + b, 0);
-}
-
-function uniqueWebtoons(
-  arr: SurveyItemType[],
-  arrTobeSpliced?: Webtoon[],
-  at?: number
-): SurveyItemType[] {
-  const result = [];
-  const set = new Set();
-  for (const item of arr) {
-    if (set.has(item.webtoonId)) continue;
-    set.add(item.webtoonId);
-    result.push(item);
-  }
-  if (arrTobeSpliced && at) {
-    const toBe: SurveyItemType[] = [];
-    for (const item of arrTobeSpliced) {
-      if (set.has(item.webtoonId)) continue;
-      set.add(item.webtoonId);
-      toBe.push({ ...item, clicked: false });
-    }
-    result.splice(at, 0, ...toBe);
-  }
-
-  // console.log("result: ", result);
-  return result;
 }
 
 const StyledHeader = styled(Title)`

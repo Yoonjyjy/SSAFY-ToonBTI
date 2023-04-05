@@ -6,12 +6,9 @@ import { InfiniteScroll } from "../common";
 // import { NBTI_WEBTOON } from "../../api/survey";
 import { Webtoon } from "../../gql/graphql";
 
-interface SurveyItemType extends Webtoon {
-  clicked: boolean;
-}
-
 interface ItemListProps {
-  dataList: SurveyItemType[];
+  dataList: Webtoon[];
+  result: Map<number, boolean>;
   onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (nextPage: number) => void;
   offsetRef: React.MutableRefObject<number>;
@@ -52,6 +49,7 @@ export default function ItemList(props: ItemListProps) {
             return (
               <Item
                 key={item.webtoonId}
+                isClicked={!!props.result.get(item.webtoonId as number)}
                 item={item}
                 onClickItem={props.onClickItem}
               />

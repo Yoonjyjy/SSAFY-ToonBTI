@@ -10,19 +10,17 @@ import { Webtoon } from "../../gql/graphql";
  * @onClickItem : 각 아이템을 선택했을 때 실행될 함수 ( clickedList에 포함 혹은 제외시킴 )
  */
 interface ItemProps {
-  item: SurveyItemType;
+  item: Webtoon;
+  isClicked: boolean;
   onClickItem: (itemId: number, genreId: number) => void;
 }
-interface SurveyItemType extends Webtoon {
-  clicked: boolean;
-}
 
-export default function Item({ item, onClickItem }: ItemProps) {
+export default function Item({ item, onClickItem, isClicked }: ItemProps) {
   return (
     <QueueAnim type={["left", "right"]} duration={900}>
       <ItemBox
         key={item.webtoonId}
-        selected={item.clicked}
+        selected={isClicked}
         onClick={() =>
           onClickItem(item.webtoonId as number, item.genreId as number)
         }

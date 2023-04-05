@@ -13,14 +13,11 @@ import { Webtoon } from "../../gql/graphql";
 @setDataList : 작품 리스트 아이템 추가 및 삭제 */
 interface PropType {
   cnt: number;
-  surveyList: SurveyItemType[];
+  surveyList: Webtoon[];
+  result: Map<number, boolean>;
   onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (offset: number) => void;
   offsetRef: React.MutableRefObject<number>;
-}
-
-interface SurveyItemType extends Webtoon {
-  clicked: boolean;
 }
 
 export default function Survey(props: PropType) {
@@ -37,6 +34,7 @@ export default function Survey(props: PropType) {
       </RightDiv>
       <ItemList
         dataList={props.surveyList}
+        result={props.result}
         onClickItem={props.onClickItem}
         fetchAdditionalData={props.fetchAdditionalData}
         offsetRef={props.offsetRef}
