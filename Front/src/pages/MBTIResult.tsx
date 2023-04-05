@@ -127,7 +127,7 @@ export default function MBTIResult() {
 
           <StyledList>
             {res?.myType?.description?.split("\\n").map((line: string) => {
-              return <li key={line}>{line}</li>;
+              return <StyledLi key={line}>{line}</StyledLi>;
             })}
           </StyledList>
           <br />
@@ -252,7 +252,8 @@ export default function MBTIResult() {
 
       <ShareButton
         text="웹툰 독자 유형 공유하기"
-        src={`${import.meta.env.VITE_TEST_URL}`}
+        // src={`${import.meta.env.VITE_TEST_URL}`}
+        src="http://localhost:5173"
         param="mbti/result"
       />
     </Layout>
@@ -303,7 +304,7 @@ const StyledList = styled(Text)`
   word-break: keep-all;
   white-space: pre-line;
   display: block;
-
+  /* gap: 50px; */
   span {
     font-weight: 600;
     line-height: 2rem;
@@ -345,4 +346,11 @@ const StyledPlayer = styled(Player)`
   height: 40vw;
   max-width: 800px;
   max-height: 800px;
+`;
+
+const StyledLi = styled.li`
+  /* list-style-position: inside;
+  text-indent: -20px; */
+  padding-left: 30px;
+  text-indent: -20px;
 `;
