@@ -45,8 +45,11 @@ export default function Survey(props: PropType) {
           height={3}
           onClick={(e) => {
             e.preventDefault();
-            //TODO: graphQL 데이터 서버로 보내기
-            navigate("/survey/result", { state: { data: props.surveyList } });
+            const webtoons = [];
+            for (const [key, val] of props.result.entries()) {
+              if (val) webtoons.push(key);
+            }
+            navigate("/survey/result", { state: webtoons });
           }}
         >
           <b>나의 취향 분석하기</b>

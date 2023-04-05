@@ -12,13 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /**
-   * Allows use of a JSON String for input / output from the GraphQL schema.
-   *
-   * Use of this type is *not recommended* as you lose the benefits of having a defined, static
-   * schema (one of the key benefits of GraphQL).
-   */
-  JSONString: any;
   /** A 64-bit signed integer */
   Long: any;
 };
@@ -28,20 +21,6 @@ export type Answer = {
   answer?: Maybe<Scalars['String']>;
   answerId: Scalars['ID'];
   question?: Maybe<Question>;
-};
-
-export type AuthorWebtoon = {
-  __typename?: 'AuthorWebtoon';
-  authorName?: Maybe<Scalars['String']>;
-  endFlag?: Maybe<Scalars['Int']>;
-  genreId?: Maybe<Scalars['Int']>;
-  image?: Maybe<Scalars['String']>;
-  platform?: Maybe<Scalars['String']>;
-  rate?: Maybe<Scalars['Float']>;
-  searchTitle?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  view?: Maybe<Scalars['Int']>;
-  webtoonId?: Maybe<Scalars['Int']>;
 };
 
 export type GetFromSpring = {
@@ -75,7 +54,7 @@ export enum Mbti {
 export type Mutation = {
   __typename?: 'Mutation';
   /**  유형 결과 페이지 반환 */
-  addUserResponse?: Maybe<TypeResult>;
+  addUserResponse?: Maybe<UserResult>;
   /**  웹툰 결과 페이지 반환 */
   createResult?: Maybe<WebtoonResult>;
   saveWebtoon?: Maybe<SaveWebtoonMutation>;
@@ -116,24 +95,10 @@ export type MyType = {
   userType?: Maybe<Scalars['String']>;
 };
 
-export type NbtiWebtoon = {
-  __typename?: 'NbtiWebtoon';
-  endFlag?: Maybe<Scalars['Int']>;
-  genreId?: Maybe<Scalars['Int']>;
-  image?: Maybe<Scalars['String']>;
-  likeRate?: Maybe<Scalars['Float']>;
-  platform?: Maybe<Scalars['String']>;
-  rate?: Maybe<Scalars['Float']>;
-  searchTitle?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  view?: Maybe<Scalars['Int']>;
-  webtoonId?: Maybe<Scalars['Int']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   additionalWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
-  authorWebtoon?: Maybe<Array<Maybe<AuthorWebtoon>>>;
+  authorWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
   /**  시작할 때 나오는 참여 인원 수 */
   countAllUsers?: Maybe<Scalars['Long']>;
   /**  전체 유형 순위 보기 */
@@ -149,9 +114,8 @@ export type Query = {
   myGenre?: Maybe<Array<Maybe<MyGenre>>>;
   myKeyword?: Maybe<Array<Maybe<MyKeyword>>>;
   nbtiWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
-  resultNbtiWebtoon?: Maybe<Array<Maybe<NbtiWebtoon>>>;
+  resultNbtiWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
   searchWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
-  selectWebtoon?: Maybe<Scalars['JSONString']>;
 };
 
 
@@ -214,13 +178,6 @@ export type QuerySearchWebtoonArgs = {
   searchName?: InputMaybe<Scalars['String']>;
 };
 
-
-export type QuerySelectWebtoonArgs = {
-  nbtiPk?: InputMaybe<Scalars['Int']>;
-  userPk?: InputMaybe<Scalars['Int']>;
-  webtoonIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
 export type Question = {
   __typename?: 'Question';
   answersList?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -262,11 +219,24 @@ export type UserAnswerInput = {
   answers?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type UserResult = {
+  __typename?: 'UserResult';
+  bestType?: Maybe<User>;
+  firstType?: Maybe<User>;
+  myType?: Maybe<User>;
+  secondType?: Maybe<User>;
+  userId?: Maybe<Scalars['Long']>;
+  uuid?: Maybe<Scalars['String']>;
+  worstType?: Maybe<User>;
+};
+
 export type Webtoon = {
   __typename?: 'Webtoon';
+  authorName?: Maybe<Scalars['String']>;
   endFlag?: Maybe<Scalars['Int']>;
   genreId?: Maybe<Scalars['Int']>;
   image?: Maybe<Scalars['String']>;
+  likeRate?: Maybe<Scalars['Float']>;
   platform?: Maybe<Scalars['String']>;
   rate?: Maybe<Scalars['Float']>;
   searchTitle?: Maybe<Scalars['String']>;
@@ -317,7 +287,7 @@ export type AddUserResponseMutationVariables = Exact<{
 }>;
 
 
-export type AddUserResponseMutation = { __typename?: 'Mutation', addUserResponse?: { __typename?: 'TypeResult', myType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, bestType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, worstType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, firstType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, secondType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null } | null };
+export type AddUserResponseMutation = { __typename?: 'Mutation', addUserResponse?: { __typename?: 'UserResult', userId?: any | null, uuid?: string | null, myType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, bestType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, worstType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, firstType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null, secondType?: { __typename?: 'User', nbtiId?: any | null, userType: Mbti, description?: string | null, image?: string | null, count?: any | null } | null } | null };
 
 export type CreateResultMutationVariables = Exact<{
   userId?: InputMaybe<Scalars['Long']>;
@@ -341,15 +311,6 @@ export type SearchWebtoonQueryVariables = Exact<{
 
 export type SearchWebtoonQuery = { __typename?: 'Query', searchWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null } | null> | null };
 
-export type Select_WebtoonQueryVariables = Exact<{
-  nbtiPk: Scalars['Int'];
-  userPk: Scalars['Int'];
-  webtoonIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type Select_WebtoonQuery = { __typename?: 'Query', selectWebtoon?: any | null };
-
 export type SavewebtoonMutationVariables = Exact<{
   webtoonPk: Array<Scalars['Int']> | Scalars['Int'];
   userPk: Scalars['Int'];
@@ -365,7 +326,7 @@ export type Result1QueryVariables = Exact<{
 }>;
 
 
-export type Result1Query = { __typename?: 'Query', resultNbtiWebtoon?: Array<{ __typename?: 'NbtiWebtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null, likeRate?: number | null } | null> | null, myKeyword?: Array<{ __typename?: 'MyKeyword', myKeywordName?: Array<string | null> | null, myKeywordId?: Array<number | null> | null } | null> | null, getFromSpring?: Array<{ __typename?: 'GetFromSpring', webtoonCounts?: number | null, platformRatio?: Array<number | null> | null, doneRatio?: Array<number | null> | null, genreRatio?: Array<number | null> | null, myType?: { __typename?: 'MyType', userType?: string | null, image?: string | null, count?: number | null } | null } | null> | null, myGenre?: Array<{ __typename?: 'MyGenre', genreId?: number | null } | null> | null };
+export type Result1Query = { __typename?: 'Query', resultNbtiWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null, likeRate?: number | null } | null> | null, myKeyword?: Array<{ __typename?: 'MyKeyword', myKeywordName?: Array<string | null> | null, myKeywordId?: Array<number | null> | null } | null> | null, getFromSpring?: Array<{ __typename?: 'GetFromSpring', webtoonCounts?: number | null, platformRatio?: Array<number | null> | null, doneRatio?: Array<number | null> | null, genreRatio?: Array<number | null> | null, myType?: { __typename?: 'MyType', userType?: string | null, image?: string | null, count?: number | null } | null } | null> | null, myGenre?: Array<{ __typename?: 'MyGenre', genreId?: number | null } | null> | null };
 
 export type Result2QueryVariables = Exact<{
   keywords: Array<Scalars['Int']> | Scalars['Int'];
@@ -375,7 +336,7 @@ export type Result2QueryVariables = Exact<{
 }>;
 
 
-export type Result2Query = { __typename?: 'Query', keywordSimilarWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null } | null> | null, authorWebtoon?: Array<{ __typename?: 'AuthorWebtoon', webtoonId?: number | null, genreId?: number | null, image?: string | null, title?: string | null, platform?: string | null, rate?: number | null, endFlag?: number | null, searchTitle?: string | null, view?: number | null, authorName?: string | null } | null> | null };
+export type Result2Query = { __typename?: 'Query', keywordSimilarWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null } | null> | null, authorWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, image?: string | null, title?: string | null, platform?: string | null, rate?: number | null, endFlag?: number | null, searchTitle?: string | null, view?: number | null, authorName?: string | null } | null> | null };
 
 export type GetAdditional3WebtoonsQueryVariables = Exact<{
   webtoonPk: Scalars['Int'];
@@ -390,11 +351,10 @@ export const GetQuestionsDocument = {"kind":"Document","definitions":[{"kind":"O
 export const CountAllUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CountAllUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"countAllUsers"}}]}}]} as unknown as DocumentNode<CountAllUserQuery, CountAllUserQueryVariables>;
 export const GetAllTypesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTypes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAllTypes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}}]}}]}}]} as unknown as DocumentNode<GetAllTypesQuery, GetAllTypesQueryVariables>;
 export const GetTypeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetType"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getType"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bestType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"worstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"firstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"secondType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<GetTypeQuery, GetTypeQueryVariables>;
-export const AddUserResponseDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddUserResponse"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserAnswerInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addUserResponse"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bestType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"worstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"firstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"secondType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<AddUserResponseMutation, AddUserResponseMutationVariables>;
+export const AddUserResponseDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddUserResponse"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserAnswerInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addUserResponse"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bestType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"worstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"firstType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"secondType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiId"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<AddUserResponseMutation, AddUserResponseMutationVariables>;
 export const CreateResultDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateResult"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Long"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createResult"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"doneRatio"}},{"kind":"Field","name":{"kind":"Name","value":"genreRatio"}},{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"platformRatio"}},{"kind":"Field","name":{"kind":"Name","value":"webtoonCounts"}}]}}]}}]} as unknown as DocumentNode<CreateResultMutation, CreateResultMutationVariables>;
 export const Nbti_WebtoonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"NBTI_Webtoon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nbtiWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"nbtiPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}}]}}]}}]} as unknown as DocumentNode<Nbti_WebtoonQuery, Nbti_WebtoonQueryVariables>;
 export const SearchWebtoonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchWebtoon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"searchName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"searchName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"searchName"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}}]}}]}}]} as unknown as DocumentNode<SearchWebtoonQuery, SearchWebtoonQueryVariables>;
-export const Select_WebtoonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Select_Webtoon"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"selectWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"nbtiPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}]}]}}]} as unknown as DocumentNode<Select_WebtoonQuery, Select_WebtoonQueryVariables>;
 export const SavewebtoonDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SAVEWEBTOON"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<SavewebtoonMutation, SavewebtoonMutationVariables>;
 export const Result1Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RESULT1"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resultNbtiWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"nbtiPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}},{"kind":"Field","name":{"kind":"Name","value":"likeRate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"myKeyword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myKeywordName"}},{"kind":"Field","name":{"kind":"Name","value":"myKeywordId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"getFromSpring"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"webtoonCounts"}},{"kind":"Field","name":{"kind":"Name","value":"platformRatio"}},{"kind":"Field","name":{"kind":"Name","value":"doneRatio"}},{"kind":"Field","name":{"kind":"Name","value":"genreRatio"}}]}},{"kind":"Field","name":{"kind":"Name","value":"myGenre"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"genreId"}}]}}]}}]} as unknown as DocumentNode<Result1Query, Result1QueryVariables>;
 export const Result2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RESULT2"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"keywords"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"topN"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"keywordSimilarWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"keywords"},"value":{"kind":"Variable","name":{"kind":"Name","value":"keywords"}}},{"kind":"Argument","name":{"kind":"Name","value":"topN"},"value":{"kind":"Variable","name":{"kind":"Name","value":"topN"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authorWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"genrePk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}}},{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"searchTitle"}},{"kind":"Field","name":{"kind":"Name","value":"view"}},{"kind":"Field","name":{"kind":"Name","value":"authorName"}}]}}]}}]} as unknown as DocumentNode<Result2Query, Result2QueryVariables>;

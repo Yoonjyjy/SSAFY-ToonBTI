@@ -81,9 +81,10 @@ export default function MBTIResult() {
   }, []);
 
   function clickHandler() {
-    navigate("/survey", {
-      state: data?.addUserResponse?.myType?.nbtiId,
-    });
+    localStorage.setItem("nbtiPk", data?.addUserResponse?.myType?.nbtiId);
+    localStorage.setItem("uuid", data?.addUserResponse?.uuid as string);
+    localStorage.setItem("userId", data?.addUserResponse?.userId);
+    navigate("/survey");
   }
 
   function clickHomeHandler() {
@@ -91,9 +92,10 @@ export default function MBTIResult() {
   }
 
   function clickResultAllHandler() {
-    navigate("/mbti/result/all", {
-      state: data?.addUserResponse?.myType?.nbtiId,
-    });
+    localStorage.setItem("nbtiPk", data?.addUserResponse?.myType?.nbtiId);
+    localStorage.setItem("uuid", data?.addUserResponse?.uuid as string);
+    localStorage.setItem("userId", data?.addUserResponse?.userId);
+    navigate("/mbti/result/all");
   }
 
   return (

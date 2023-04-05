@@ -30,12 +30,6 @@ const SEARCH_WEBTOON = graphql(`
   }
 `);
 
-const SELECT_WEBTOON = graphql(`
-  query Select_Webtoon($nbtiPk: Int!, $userPk: Int!, $webtoonIds: [Int]!) {
-    selectWebtoon(nbtiPk: $nbtiPk, userPk: $userPk)
-  }
-`);
-
 const SAVE_WEBTOON = graphql(`
   mutation SAVEWEBTOON($webtoonPk: [Int!]!, $userPk: Int!) {
     saveWebtoon(webtoonPk: $webtoonPk, userPk: $userPk) {
@@ -128,7 +122,6 @@ const GET_ADDITIONAL_3_WEBTOONS = graphql(`
 export {
   NBTI_WEBTOON,
   SEARCH_WEBTOON,
-  SELECT_WEBTOON,
   GET_ADDITIONAL_3_WEBTOONS,
   SAVE_WEBTOON,
   GET_SURVEY_RESULT_1,

@@ -17,7 +17,6 @@ import {
 import { django } from "../api";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { COUNT_ALL_USERS } from "../api/mbti";
-import { finished } from "stream";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 
@@ -100,16 +99,18 @@ const data = {
   accuracy: 73.2,
 };
 
-const webtoonPk = [3, 4, 5];
-const userPk = 1700;
-const nbtiPk = 17;
-const genrePk = 234;
+// const webtoonPk = [3, 4, 5];
+// const userPk = Number(localStorage.getItem("userId"));
+// const nbtiPk = Number(localStorage.getItem("nbtiPk"));
+// const genrePk = 234;
 const topN = 5;
-const keywordsList = [35, 11, 45, 15];
+// const keywordsList = [35, 11, 45, 15];
 
 export default function AnalysisResult() {
+  const userPk = Number(localStorage.getItem("userId"));
+  const nbtiPk = Number(localStorage.getItem("nbtiPk"));
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state: webtoonPk } = useLocation();
   const [result, setResult] = useState<any>(); // TODO: type 지정
   const [kakaoRatio, setKaKaoRatio] = useState<number>(0);
   const [naverRatio, setNaverRatio] = useState<number>(0);
@@ -156,12 +157,6 @@ export default function AnalysisResult() {
   const [fetchTestResult2, { loading: fetchTestResult2Loading }] = useLazyQuery(
     GET_SURVEY_RESULT_2,
     {
-      variables: {
-        keywords: keywordsList,
-        topN: topN,
-        genrePk: genrePk,
-        webtoonPk: webtoonPk,
-      },
       client: django,
       onCompleted(data) {
         setResult({ ...result, ...data });
