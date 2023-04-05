@@ -203,23 +203,23 @@ export default function AnalysisResult() {
         ) {
           calRatio(
             "kakao",
-            data?.getFromSpring[0].platformRatio[0],
-            data?.getFromSpring[0].platformRatio[1]
+            data?.getFromSpring[0].platformRatio[0] as number,
+            data?.getFromSpring[0].platformRatio[1] as number
           );
           calRatio(
             "naver",
-            data?.getFromSpring[0].platformRatio[1],
-            data?.getFromSpring[0].platformRatio[0]
+            data?.getFromSpring[0].platformRatio[1] as number,
+            data?.getFromSpring[0].platformRatio[0] as number
           );
           calRatio(
             "finished",
-            data?.getFromSpring[0].doneRatio[0],
-            data?.getFromSpring[0].doneRatio[1]
+            data?.getFromSpring[0].doneRatio[0] as number,
+            data?.getFromSpring[0].doneRatio[1] as number
           );
           calRatio(
             "unfinished",
-            data?.getFromSpring[0].doneRatio[1],
-            data?.getFromSpring[0].doneRatio[0]
+            data?.getFromSpring[0].doneRatio[1] as number,
+            data?.getFromSpring[0].doneRatio[0] as number
           );
         }
 
