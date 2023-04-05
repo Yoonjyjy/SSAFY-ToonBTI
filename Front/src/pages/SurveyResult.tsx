@@ -504,9 +504,10 @@ export default function AnalysisResult() {
         <StyledSection>
           <ShareButton
             text="웹툰 취향 분석 결과 공유하기"
-            // text=""
             src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
+            type={userPk}
+            // type={result?.}
           />
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302

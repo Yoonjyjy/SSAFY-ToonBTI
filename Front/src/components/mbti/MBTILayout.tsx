@@ -38,42 +38,42 @@ export default function CommonLayout(props: PropType) {
     setIsModalOpen(false);
   };
 
-  function getTypeName(type: string): string {
+  function getTypeName(type: string): string[] {
     switch (type) {
       case "LSRA":
-        return "이태원 클라스 - 조이서";
+        return ["오로지 너를 이기고 싶어", "오로지"];
       case "LSRT":
-        return "유미의 세포들 - 응큼이";
+        return ["연애의 정령", "힙제이"];
       case "LSEA":
-        return "신과 함께 - 변호사";
+        return ["경자 전성시대", "경자"];
       case "LSET":
-        return "천리마마트 - 문석구";
+        return ["갓 오브 하이스쿨", "진모리"];
       case "LWRA":
-        return "연애 혁명 - 왕자림";
+        return ["바른연애 길잡이", "정바름"];
       case "LWRT":
-        return "연애 혁명 - 공주영";
+        return ["유일무이 로맨스", "탁무이"];
       case "LWEA":
-        return "신과 함께 - 김자홍";
+        return ["헬퍼", "장관남"];
       case "LWET":
-        return "미생 - 과장님";
+        return ["마술사", "에더마스크"];
       case "HSRA":
-        return "나 혼자만 레벨업 - 성진우";
+        return ["전지적 독자 시점", "김독자"];
       case "HSRT":
-        return "유미의 세포들 - 사랑세포";
+        return ["어쩌다보니 천생연분", "한지아"];
       case "HSEA":
-        return "하이브 - 개장수";
+        return ["삼봉이발소", "김삼봉"];
       case "HSET":
-        return "프리드로우 - 동까";
+        return ["나 혼자만 레벨업", "성진우"];
       case "HWRA":
-        return "치즈인더트랩 - 백인호";
+        return ["유미의 세포들", "유미"];
       case "HWRT":
-        return "패션왕 - 우기명";
+        return ["연놈", "백소연"];
       case "HWEA":
-        return "노블레스 - 라이제르";
+        return ["재벌집 막내아들", "진도준"];
       case "HWET":
-        return "이태원 클라스 - 박새로이";
+        return ["프리드로우", "동까"];
       default:
-        return "";
+        return [""];
     }
   }
 
@@ -97,7 +97,7 @@ export default function CommonLayout(props: PropType) {
           <StyledHeader level={5}>
             {props.mbti} ({props.per}%)
           </StyledHeader>
-          {getTypeName(props.mbti)}
+          {getTypeName(props.mbti)[0]} <br></br> {getTypeName(props.mbti)[1]}
         </StyledTypeName>
       </StyledAllMBTI>
 
@@ -127,7 +127,9 @@ export default function CommonLayout(props: PropType) {
               <StyledHeader level={4}>
                 {props.mbti} ({props.per}%)
               </StyledHeader>
-              <center>{getTypeName(props.mbti)}</center>
+              <center>
+                {getTypeName(props.mbti)[0]} - {getTypeName(props.mbti)[1]}
+              </center>
             </StyledTypeName>
 
             <StyledList>
@@ -171,7 +173,8 @@ export default function CommonLayout(props: PropType) {
                   )}
                   <StyledTypeName>
                     <StyledStrong>{el.mbti}</StyledStrong>
-                    {getTypeName(el.mbti)}
+                    {getTypeName(el.mbti)[0]} <br></br>{" "}
+                    {getTypeName(el.mbti)[1]}
                   </StyledTypeName>
                 </StyledCol>
               )
