@@ -50,7 +50,7 @@ export default function MBTIResultAll() {
       <MBTITypeButton />
       <ShareButton
         text="웹툰 독자 유형 공유하기"
-        src="http://localhost:5173"
+        src={`${import.meta.env.VITE_TEST_URL}`}
         param="mbti/result"
       />
     </Layout>
