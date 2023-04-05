@@ -1,62 +1,76 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Item from "./Item";
 import styled from "styled-components";
 import { Row } from "antd";
-import { InfiniteScroll } from "../common";
-// import { NBTI_WEBTOON } from "../../api/survey";
 import { Webtoon } from "../../gql/graphql";
 
 interface ItemListProps {
   dataList: Webtoon[];
   result: Map<number, boolean>;
   onClickItem: (itemId: number, genreId: number) => void;
-  fetchAdditionalData: (nextPage: number) => void;
-  offsetRef: React.MutableRefObject<number>;
+  onScroll: (offset: number) => void;
 }
 
 export default function ItemList(props: ItemListProps) {
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  const curPage = props.offsetRef.current;
-  const isLastPage = false;
+  const [loading, setLoading] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [lastElement, setLastElement] = useState<HTMLDivElement | null>();
 
-  // FIXME: replace this with getAdditionalData on SurveyTest.tsx
-  // function callback(
-  //   entries: IntersectionObserverEntry[],
-  //   observer: IntersectionObserver
-  // ) {
-  //   entries.forEach((entry) => {
-  //     if (entry.isIntersecting && !isLoading) {
-  //       //fetch data
-  //       props.offsetRef.current += 1;
-  //       props.fetchAdditionalData(props.offsetRef.current + 1);
-  //     }
-  //   });
-  // }
-  function callback() {
-    /** */
-  }
+  const observer = useRef(
+    new IntersectionObserver((entries) => {
+      const first = entries[0];
+      if (first.isIntersecting) {
+        setOffset((no) => no + 1);
+      }
+    })
+  );
+
+  useEffect(() => {
+    // console.log("offset: ", offset);
+    setLoading(true);
+    if (offset <= 20) {
+      props.onScroll(offset);
+    }
+    setLoading(false);
+  }, [offset]);
+
+  useEffect(() => {
+    const currentElement = lastElement;
+    const currentObserver = observer.current;
+
+    if (currentElement) {
+      currentObserver.observe(currentElement);
+    }
+
+    return () => {
+      if (currentElement) {
+        currentObserver.unobserve(currentElement);
+      }
+    };
+  }, [lastElement]);
 
   return (
     <ItemListOuterDiv>
-      <InfiniteScroll
-        isLoading={false}
-        callback={callback}
-        page={curPage}
-        isLastPage={isLastPage}
-      >
-        <ItemListBox>
-          {props.dataList.map((item) => {
-            return (
+      <ItemListBox>
+        {props.dataList.map((item, i) => {
+          return i === props.dataList.length - 1 && !loading ? (
+            <div ref={setLastElement} key={item.webtoonId}>
               <Item
-                key={item.webtoonId}
                 isClicked={!!props.result.get(item.webtoonId as number)}
                 item={item}
                 onClickItem={props.onClickItem}
               />
-            );
-          })}
-        </ItemListBox>
-      </InfiniteScroll>
+            </div>
+          ) : (
+            <Item
+              key={item.webtoonId}
+              isClicked={!!props.result.get(item.webtoonId as number)}
+              item={item}
+              onClickItem={props.onClickItem}
+            />
+          );
+        })}
+      </ItemListBox>
     </ItemListOuterDiv>
   );
 }
