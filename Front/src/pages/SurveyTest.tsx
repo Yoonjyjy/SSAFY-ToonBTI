@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { InputRef, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, SearchBar } from "../components/common";
@@ -12,25 +12,13 @@ import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
-// TODO: infinite scroll
 export default function SurveyTest() {
   const navigate = useNavigate();
-  // const { state: nbtiPk = 17 } = useLocation(); // default val is 17
-  const offsetRef = useRef<number>(0);
   const keywordRef = useRef<InputRef>(null);
   const [webtoons, setWebtoons] = useState<Webtoon[]>([]);
   const [webtoonsByKeyword, setWebtoonsByKeyword] = useState<Webtoon[]>([]);
   const [result, setResult] = useState<Map<number, boolean>>(new Map());
   const prevClickedItemId = useRef<number | null>(null);
-
-  useEffect(() => {
-    getWebtoons({
-      variables: {
-        nbtiPk: Number(localStorage.getItem("nbtiPk")),
-        offset: offsetRef.current,
-      },
-    });
-  }, []);
 
   const [searchWebtoons] = useLazyQuery(SEARCH_WEBTOON, {
     client: django,
@@ -100,16 +88,14 @@ export default function SurveyTest() {
     });
   }
 
-  //FIXME: 여기서 리렌더링 계속됨
-  // function getAdditionalData(offset: number) {
-  //   console.log("더줘! ", offsetRef.current);
-  //   // const nbtiPk: number | null = Number(localStorage.getItem("nbtiPk"));
-  //   const nbtiPk = 17;
-  //   offsetRef.current = offsetRef.current + 1;
-  //   getWebtoons({
-  //     variables: { nbtiPk, offset: offsetRef.current },
-  //   });
-  // }
+  function loadWebtoonsHandler(offset: number) {
+    getWebtoons({
+      variables: {
+        nbtiPk: Number(localStorage.getItem("nbtiPk")),
+        offset: offset,
+      },
+    });
+  }
 
   function clickItemHandler(itemId: number, genreId: number) {
     prevClickedItemId.current = itemId;
@@ -152,10 +138,7 @@ export default function SurveyTest() {
         }
         result={result}
         onClickItem={clickItemHandler}
-        offsetRef={offsetRef}
-        fetchAdditionalData={() => {
-          /** */
-        }}
+        onScroll={loadWebtoonsHandler}
       />
     </Layout>
   );

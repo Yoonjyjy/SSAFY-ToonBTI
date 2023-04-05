@@ -16,8 +16,7 @@ interface PropType {
   surveyList: Webtoon[];
   result: Map<number, boolean>;
   onClickItem: (itemId: number, genreId: number) => void;
-  fetchAdditionalData: (offset: number) => void;
-  offsetRef: React.MutableRefObject<number>;
+  onScroll: (offset: number) => void;
 }
 
 export default function Survey(props: PropType) {
@@ -36,8 +35,7 @@ export default function Survey(props: PropType) {
         dataList={props.surveyList}
         result={props.result}
         onClickItem={props.onClickItem}
-        fetchAdditionalData={props.fetchAdditionalData}
-        offsetRef={props.offsetRef}
+        onScroll={props.onScroll}
       />
       <BtnContainer direction="vertical">
         <StyledButton
