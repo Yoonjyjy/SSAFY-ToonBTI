@@ -12,7 +12,7 @@ interface SurveyItemType extends Webtoon {
 
 interface ItemListProps {
   dataList: SurveyItemType[];
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: number, genreId: number) => void;
   fetchAdditionalData: (nextPage: number) => void;
   offsetRef: React.MutableRefObject<number>;
 }

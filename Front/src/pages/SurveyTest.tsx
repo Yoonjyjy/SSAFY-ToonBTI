@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { InputRef, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, SearchBar } from "../components/common";
-import { NBTI_WEBTOON } from "../api/survey";
+import { GET_ADDITIONAL_3_WEBTOONS, NBTI_WEBTOON } from "../api/survey";
 import { Survey } from "../components/survey";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_WEBTOON } from "../api/survey";
@@ -16,21 +16,22 @@ interface SurveyItemType extends Webtoon {
   clicked: boolean;
 }
 
-// TODO: infinite scroll & fetch 3 relative items
+// TODO: infinite scroll
 export default function SurveyTest() {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state: nbtiPk = 17 } = useLocation(); // default val is 17
   const offsetRef = useRef<number>(0);
   const keywordRef = useRef<InputRef>(null);
   const [surveyList, setSurveyList] = useState<SurveyItemType[]>([]);
   const [surveyListByKeyword, setSurveyListByKeyword] = useState<
     SurveyItemType[]
   >([]);
+  const prevClickedItemId = useRef<number | null>(null);
 
   useEffect(() => {
     getWebtoons({
       variables: {
-        nbtiPk: state.nbtiPk,
+        nbtiPk,
         offset: offsetRef.current,
       },
     });
@@ -49,7 +50,7 @@ export default function SurveyTest() {
 
   const [getWebtoons, { error: webtoonsError }] = useLazyQuery(NBTI_WEBTOON, {
     variables: {
-      nbtiPk: state.nbtiPk,
+      nbtiPk,
       offset: offsetRef.current,
     },
     client: django,
@@ -59,7 +60,32 @@ export default function SurveyTest() {
         clicked: false,
       })) as SurveyItemType[];
 
-      setSurveyList((prev) => [...prev, ...newSurveyList]);
+      setSurveyList((prev) => uniqueWebtoons([...prev, ...newSurveyList]));
+    },
+  });
+
+  const [getRelative3Webtoons] = useLazyQuery(GET_ADDITIONAL_3_WEBTOONS, {
+    client: django,
+    onCompleted(data) {
+      if (prevClickedItemId.current) {
+        setSurveyList((prev) => {
+          const newSurveyList = [...surveyList];
+          for (let i = 0; i < newSurveyList.length; i++) {
+            if (newSurveyList[i].webtoonId === prevClickedItemId.current) {
+              newSurveyList.splice(
+                i + 1,
+                0,
+                ...(data.additionalWebtoon?.map((newEl) => ({
+                  ...newEl,
+                  clicked: false,
+                })) as SurveyItemType[])
+              );
+              return uniqueWebtoons(newSurveyList);
+            }
+          }
+          return prev;
+        });
+      }
     },
   });
 
@@ -75,17 +101,22 @@ export default function SurveyTest() {
     const nbtiPk = 17;
     offsetRef.current = offsetRef.current + 1;
     getWebtoons({
-      variables: { nbtiPk: nbtiPk, offset: offsetRef.current },
+      variables: { nbtiPk, offset: offsetRef.current },
     });
   }
 
-  function clickItemHandler(itemId: number) {
-    setSurveyList((prev) =>
-      prev.map((el) => {
-        if (el.webtoonId === itemId) el.clicked != el.clicked;
+  function clickItemHandler(itemId: number, genreId: number) {
+    setSurveyList((prev) => {
+      return prev.map((el) => {
+        if (el.webtoonId === itemId) el.clicked = !el.clicked;
         return el;
-      })
-    );
+      });
+    });
+    prevClickedItemId.current = itemId;
+    console.log("click item item: ", prevClickedItemId.current, genreId);
+    getRelative3Webtoons({
+      variables: { webtoonPk: itemId, genrePk: genreId },
+    });
   }
 
   if (webtoonsError) navigate("/404");
@@ -109,6 +140,18 @@ export default function SurveyTest() {
       />
     </Layout>
   );
+}
+
+function uniqueWebtoons(arr: SurveyItemType[]) {
+  const result = [];
+  const set = new Set();
+  for (const item of arr) {
+    if (set.has(item.webtoonId)) continue;
+    set.add(item.webtoonId);
+    result.push(item);
+  }
+  // console.log("result: ", result);
+  return result;
 }
 
 const StyledHeader = styled(Title)`

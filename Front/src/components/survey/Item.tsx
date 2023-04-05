@@ -11,7 +11,7 @@ import { Webtoon } from "../../gql/graphql";
  */
 interface ItemProps {
   item: SurveyItemType;
-  onClickItem: (itemId: number) => void;
+  onClickItem: (itemId: number, genreId: number) => void;
 }
 interface SurveyItemType extends Webtoon {
   clicked: boolean;
@@ -23,7 +23,9 @@ export default function Item({ item, onClickItem }: ItemProps) {
       <ItemBox
         key={item.webtoonId}
         selected={item.clicked}
-        onClick={() => onClickItem(item.webtoonId as number)}
+        onClick={() =>
+          onClickItem(item.webtoonId as number, item.genreId as number)
+        }
         url={item.image as string}
       >
         {/* <Text>{item.title}</Text> */}

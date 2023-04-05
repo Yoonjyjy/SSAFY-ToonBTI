@@ -12,8 +12,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 
 const { Title, Text } = Typography;
 
-// FIXME: 나의 유형 desc, 잘 맞는 & 안 맞는 유형 percent, 유형에 대한 이미지 필요
-// FIXME: createResult() api 에 userId 필요
+// FIXME: 나의 유형 desc
 
 function percent(part: number, total: number): number {
   return Math.round((part / total) * 100);
@@ -85,7 +84,7 @@ export default function MBTIResult() {
 
   function clickHandler() {
     navigate("/survey", {
-      state: { nbtiPk: data?.addUserResponse?.myType?.nbtiId },
+      state: data?.addUserResponse?.myType?.nbtiId,
     });
   }
 
@@ -94,7 +93,9 @@ export default function MBTIResult() {
   }
 
   function clickResultAllHandler() {
-    navigate("/mbti/result/all");
+    navigate("/mbti/result/all", {
+      state: data?.addUserResponse?.myType?.nbtiId,
+    });
   }
 
   return (
