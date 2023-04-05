@@ -52,12 +52,9 @@ export interface RecomWebtoonType {
   webtoonId: number;
 }
 
-//TODO: data fetch
+//FIXME: 삭제하고 불러온 데이터로 써주세여
+
 const data = {
-  reader_category_img: test1,
-  reader_category_name: "LSEA",
-  read_books_num: 77,
-  total_reader_cnt: 3023,
   reader_percentage: 23.5,
   reader_title_list: [
     {
@@ -68,44 +65,14 @@ const data = {
     { id: 2, title: "카카오 매니아", color: "#FFD45B" },
     { id: 3, title: "완결작 킬러", color: "#757575" },
   ],
-  platform_ratio: {
-    Kakao: 63.5,
-    Naver: 36.5,
-  },
-  finished_ratio: {
-    finished: 43.7,
-    ongoing: 57.3,
-  },
-  genre_analysis: [
-    { id: 1, name: "판타지", count: 31 },
-    { id: 2, name: "드라마", count: 21 },
-    { id: 3, name: "로맨스", count: 10 },
-    { id: 4, name: "로맨스판타지", count: 30 },
-    { id: 5, name: "현대판타지", count: 9 },
-    { id: 6, name: "액션/무협", count: 33 },
-    { id: 7, name: "소년/감성", count: 11 },
-    { id: 8, name: "일상/개그", count: 50 },
-    { id: 9, name: "공포/추리", count: 3 },
-    { id: 10, name: "스포츠", count: 0 },
-  ],
-  favorite_genre: "판타지",
-  favorite_genre_author: {
-    name: "판타지",
-    main_author: "SIU",
-    author_list: ["SIU", "Omin", "테미스"],
-    main_work_title: ["신의 탑", "언니", "그만훼"],
-    main_genre: ["판타지"],
-    main_author_img: "/tiger.jpg",
-  },
   accuracy: 73.2,
 };
+const topN = 5; // 이건 고정 값이에요~
 
+//FIXME: 삭제하고 불러온 데이터로 써주세여
 const webtoonPk = [3, 4, 5];
 const userPk = 1700;
 const nbtiPk = 17;
-const genrePk = 234;
-const topN = 5;
-const keywordsList = [35, 11, 45, 15];
 
 export default function AnalysisResult() {
   const navigate = useNavigate();
@@ -157,9 +124,9 @@ export default function AnalysisResult() {
     GET_SURVEY_RESULT_2,
     {
       variables: {
-        keywords: keywordsList,
+        keywords: result?.myKeyword[0].myKeywordId,
         topN: topN,
-        genrePk: genrePk,
+        genrePk: result?.myGenre[0].genreId,
         webtoonPk: webtoonPk,
       },
       client: django,
@@ -284,7 +251,6 @@ export default function AnalysisResult() {
       hasPrevious
     >
       <TitleText>당신의 독자 유형은?</TitleText>
-      {/* //FIXME: 이미지 안옴 */}
       <Image type="userType" url={result?.getFromSpring[0].myType.image} />
       <article>
         <StyledSection2>
@@ -300,7 +266,8 @@ export default function AnalysisResult() {
               <PointSpan>{result?.getFromSpring[0].webtoonCounts}</PointSpan>개
             </Text>
           </CallOutDiv>
-          <Text>제법 많이 보셨군요!</Text> {/* 읽은 권수에 따른 다른 text */}
+          {/* //FIXME: 읽은 권수에 따른 다른 text */}
+          <Text>제법 많이 보셨군요!</Text>
         </StyledSection>
         <StyledSection>
           <Text>
@@ -466,6 +433,7 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text bold="true">
+            {/* FIXME: result?.myGenre[0].genreName 로 선택 */}
             {data.favorite_genre} 장르 독자들이 선호하는 대표 작가
           </Text>
           <Image
