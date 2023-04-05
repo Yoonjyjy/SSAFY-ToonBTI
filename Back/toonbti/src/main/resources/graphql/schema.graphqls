@@ -20,7 +20,7 @@ type Query {
 
 type Mutation {
     # 유형 결과 페이지 반환
-    addUserResponse(input: UserAnswerInput): TypeResult
+    addUserResponse(input: UserAnswerInput): UserResult
     # 웹툰 결과 페이지 반환
     createResult(userId: Long): WebtoonResult
 }
@@ -57,6 +57,16 @@ type User {
 }
 
 type TypeResult {
+    myType: User
+    bestType: User
+    worstType: User
+    firstType: User
+    secondType: User
+}
+
+type UserResult {
+    userId: Long
+    uuid: String
     myType: User
     bestType: User
     worstType: User
