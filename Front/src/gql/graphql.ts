@@ -141,6 +141,8 @@ export type Query = {
   getFromSpring?: Maybe<Array<Maybe<GetFromSpring>>>;
   /**  질문, 보기 리스트 */
   getQuestions?: Maybe<Array<Question>>;
+  /**  내 웹툰 랭킹 정보 */
+  getRanking?: Maybe<WebtoonUser>;
   /**  한가지 유형 보기 */
   getType?: Maybe<TypeResult>;
   keywordSimilarWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
@@ -167,6 +169,11 @@ export type QueryAuthorWebtoonArgs = {
 
 export type QueryGetFromSpringArgs = {
   userPk?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryGetRankingArgs = {
+  userId?: InputMaybe<Scalars['Long']>;
 };
 
 
@@ -275,6 +282,12 @@ export type WebtoonResult = {
   myType?: Maybe<User>;
   platformRatio?: Maybe<Array<Maybe<Scalars['Int']>>>;
   webtoonCounts?: Maybe<Scalars['Long']>;
+};
+
+export type WebtoonUser = {
+  __typename?: 'WebtoonUser';
+  allUser?: Maybe<Scalars['Int']>;
+  myRank?: Maybe<Scalars['Int']>;
 };
 
 export type GetQuestionsQueryVariables = Exact<{ [key: string]: never; }>;

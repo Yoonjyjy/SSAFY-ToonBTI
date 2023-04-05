@@ -48,11 +48,12 @@ export default function MBTIResultAll() {
       </StyledDiv>
       <MBTITypeDesc />
       <MBTITypeButton />
-      <ShareButton
+      {/* <ShareButton
         text="웹툰 독자 유형 공유하기"
         src={`${import.meta.env.VITE_TEST_URL}`}
         param="mbti/result"
-      />
+        type=""
+      /> */}
     </Layout>
   );
 }
