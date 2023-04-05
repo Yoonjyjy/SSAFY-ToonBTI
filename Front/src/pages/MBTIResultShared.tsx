@@ -142,7 +142,9 @@ export default function MBTIResultShared() {
               <StyledHeader level={4}>
                 {typeInfo?.getType?.myType?.userType}
                 <br></br>
-                {getTypeName(typeInfo?.getType?.myType?.userType as Mbti)}
+                {getTypeName(typeInfo?.getType?.myType?.userType as Mbti)[0] +
+                  " - " +
+                  getTypeName(typeInfo?.getType?.myType?.userType as Mbti)[1]}
               </StyledHeader>
             </StyledTypeName>
 
@@ -164,7 +166,7 @@ export default function MBTIResultShared() {
               mbti: typeInfo?.getType?.bestType?.userType,
               typeName: getTypeName(
                 typeInfo?.getType?.bestType?.userType as Mbti
-              ),
+              )[1],
               img: typeInfo?.getType?.bestType?.image,
             },
             {
@@ -172,7 +174,7 @@ export default function MBTIResultShared() {
               mbti: typeInfo?.getType?.worstType?.userType,
               typeName: getTypeName(
                 typeInfo?.getType?.worstType?.userType as Mbti
-              ),
+              )[1],
               img: typeInfo?.getType?.worstType?.image,
             },
           ].map(
@@ -212,7 +214,7 @@ export default function MBTIResultShared() {
                 mbti: typeInfo?.getType?.firstType?.userType,
                 typeName: getTypeName(
                   typeInfo?.getType?.firstType?.userType as Mbti
-                ),
+                )[1],
                 img: typeInfo?.getType?.firstType?.image,
                 per: percent(first, total),
               },
@@ -221,7 +223,7 @@ export default function MBTIResultShared() {
                 mbti: typeInfo?.getType?.secondType?.userType,
                 typeName: getTypeName(
                   typeInfo?.getType?.secondType?.userType as Mbti
-                ),
+                )[1],
                 img: typeInfo?.getType?.secondType?.image,
                 per: percent(second, total),
               },
