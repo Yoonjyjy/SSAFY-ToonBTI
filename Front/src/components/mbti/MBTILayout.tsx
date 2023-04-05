@@ -132,7 +132,7 @@ export default function CommonLayout(props: PropType) {
 
             <StyledList>
               {props.desc?.split("\\n").map((line: string) => {
-                return <li key={line}>{line}</li>;
+                return <StyledLi key={line}>{line}</StyledLi>;
               })}
             </StyledList>
             <br />
@@ -272,4 +272,11 @@ const StyledList = styled(Text)`
     font-weight: 600;
     line-height: 2rem;
   }
+`;
+
+const StyledLi = styled.li`
+  /* list-style-position: inside; */
+
+  /* padding-left: 30px; */
+  /* text-indent: -20px; */
 `;
