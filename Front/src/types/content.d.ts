@@ -1,5 +1,3 @@
-
-
 interface KeywordType {
   keyword: string;
 }

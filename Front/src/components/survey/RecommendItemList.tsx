@@ -11,7 +11,7 @@ interface PropType {
   type?: string;
   keyword?: string;
   text: string;
-  dataList: RecomWebtoonType[];
+  dataList: Webtoon[];
 }
 
 export default function RecommendItemList({

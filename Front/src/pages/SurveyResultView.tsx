@@ -1,50 +1,23 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import React from "react";
 import { Button, Space } from "antd";
 import styled from "styled-components";
-import {
-  DoughnutChart,
-  Layout,
-  MainImage,
-  ProgressiveBar,
-} from "../components/common";
+import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
-import ShareButton from "../components/common/ShareButton";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import {
-  SAVE_WEBTOON,
-  GET_SURVEY_RESULT_1,
-  GET_SURVEY_RESULT_2,
-} from "../api/survey";
-import { django } from "../api";
+import { useNavigate } from "react-router-dom";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { COUNT_ALL_USERS } from "../api/mbti";
 import theme from "../theme";
 import {
-  GetFromSpring,
   GetFromSpring2,
-  MyGenre,
-  MyKeyword,
+  GetFromSpring,
   Webtoon,
+  MyKeyword,
+  MyGenre,
 } from "../gql/graphql";
-import { resultKeyNameFromField } from "@apollo/client/utilities";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
-
-const GENRE = [
-  "판타지",
-  "드라마",
-  "로맨스",
-  "로맨스판타지",
-  "현대판타지",
-  "액션/무협",
-  "소년/감성",
-  "일상/개그",
-  "공포/추리",
-  "스포츠",
-];
 
 interface GenreListType {
   id: number;
@@ -52,244 +25,136 @@ interface GenreListType {
   count: number;
 }
 
-export interface RecomWebtoonType {
-  endFlag: number;
-  genreId: number;
-  image: string;
-  likeRate: number;
-  platform: string;
-  rate: number;
-  title: string;
-  view: number;
-  webtoonId: number;
-}
+const RATIO = {
+  kakaoRatio: 1,
+  naverRatio: 1,
+  finishedRatio: 1,
+  unfinishedRatio: 1,
+};
 
-const topN = 5;
+const USER: {
+  countAllUsers: number;
+  topN: number;
+  webtoonPk: number[];
+  rankList: GenreListType[];
+  genreAnalysis: GenreListType[];
+} = {
+  countAllUsers: 21414,
+  topN: 5,
+  webtoonPk: [1],
+  rankList: [{ name: "", count: 4, id: 2514 }],
+  genreAnalysis: [{ name: "", count: 4, id: 2514 }],
+};
+
+const RESULT: {
+  getFromSpring: GetFromSpring[];
+  getFromSpring2: GetFromSpring2[];
+  resultNbtiWebtoon: Webtoon[];
+  myKeyword: MyKeyword[];
+  authorWebtoon: Webtoon[];
+  keywordSimilarWebtoon: Webtoon[];
+  myGenre: MyGenre[];
+} = {
+  getFromSpring: [
+    {
+      doneRatio: [43, 22],
+      __typename: "GetFromSpring",
+      genreRatio: [0, 31, 0, 24, 0, 0, 2, 0, 8, 0, 0],
+      myType: {
+        __typename: "MyType",
+        userType: "LSEA",
+        image: "/usertype/LSEA.jpg",
+        count: null,
+      },
+      platformRatio: [6, 59],
+      webtoonCounts: 65,
+    },
+  ],
+  getFromSpring2: [{ __typename: "GetFromSpring2", myRank: 17, allUser: 232 }],
+  keywordSimilarWebtoon: [
+    {
+      endFlag: 1,
+      genreId: null,
+      image:
+        "https://dn-img-page.kakao.com/download/resource?kid=MxYbp/hyLjbtRLPx/TVBct5PxlBNKPmUDi6oP91&filename=th3",
+      platform: "KAKAO",
+      rate: 9.9,
+      title: "며느라기",
+      view: 2824000,
+      webtoonId: 5729,
+      __typename: "Webtoon",
+    },
+    {
+      endFlag: 0,
+      genreId: null,
+      image:
+        "https://dn-img-page.kakao.com/download/resource?kid=6IPnH/hzhOmXFiUj/0V6UGF1R1EbSpgqSVkost0&filename=th3",
+      platform: "KAKAO",
+      rate: 9.9,
+      title: "사장님의 특별지시",
+      view: 12002000,
+      webtoonId: 4458,
+      __typename: "Webtoon",
+    },
+  ],
+  authorWebtoon: [],
+  myGenre: [{ __typename: "MyGenre", genreId: 8 }],
+  myKeyword: [
+    { __typename: "MyKeyword", myKeywordName: Array(4), myKeywordId: Array(4) },
+  ],
+  resultNbtiWebtoon: [
+    {
+      endFlag: 1,
+      genreId: 3,
+      image:
+        "https://image-comic.pstatic.net/webtoon/720121/thumbnail/thumbnail_IMAG21_7221302526240580196.jpg",
+      likeRate: 80.59701492537314,
+      platform: "NAVER",
+      rate: 9.98,
+      title: " 치즈인더트랩",
+      view: 0,
+      webtoonId: 256,
+      __typename: "Webtoon",
+    },
+  ],
+};
 
 export default function AnalysisResult() {
-  const userPk = Number(localStorage.getItem("userId"));
-  const nbtiPk = Number(localStorage.getItem("nbtiPk"));
   const navigate = useNavigate();
-  const { state: webtoonPk } = useLocation();
-  const [result, setResult] = useState<any>(); // TODO: type 지정
-  const [kakaoRatio, setKaKaoRatio] = useState<number>(0);
-  const [naverRatio, setNaverRatio] = useState<number>(0);
-  const [finishedRatio, setFinishedRatio] = useState<number>(0);
-  const [unfinishedRatio, setUnfinishedRatio] = useState<number>(0);
-  const [genreAnalysis, setGenreAnalysis] = useState<GenreListType[]>([]);
-  const [rankList, setRankList] = useState<GenreListType[]>([]);
-
-  // 비율 계산
-  function calRatio(c: string, a: number, b: number): void {
-    const ratio = Math.round((a / (a + b)) * 10000) / 100;
-    if (c === "kakao") {
-      setKaKaoRatio(ratio);
-    }
-    if (c === "naver") {
-      setNaverRatio(ratio);
-    }
-    if (c === "finished") {
-      setFinishedRatio(ratio);
-    }
-    if (c === "unfinished") {
-      setUnfinishedRatio(ratio);
-    }
-  }
-
-  // 전체 유저 cnt 호출
-  const { data: userCount, error } = useQuery(COUNT_ALL_USERS);
-  if (error) {
-    console.log(error);
-  }
-
-  const [saveWebtoonDB, { loading: saveWebtoonLoading }] = useMutation(
-    SAVE_WEBTOON,
-    {
-      variables: {
-        webtoonPk: webtoonPk,
-        userPk: userPk,
-      },
-      // { variables: { webtoonPk: state.webtoonPk, userPk: state.userPk } }
-      client: django,
-    }
-  );
-
-  const [fetchTestResult2, { loading: fetchTestResult2Loading }] = useLazyQuery(
-    GET_SURVEY_RESULT_2,
-    {
-      client: django,
-      onCompleted(data) {
-        setResult({ ...result, ...data });
-        if (genreAnalysis.length < 10) {
-          const temp: GenreListType[] = [];
-          // const tempAll: GenreListType[] = [];
-          for (let i = 1; i < 11; i++) {
-            // tempAll.push({
-            //   id: i,
-            //   name: GENRE[i - 1],
-            //   count: result?.getFromSpring[0].genreRatio[i],
-            // });
-            if (result?.getFromSpring[0].genreRatio[i] !== 0) {
-              temp.push({
-                id: i,
-                name: GENRE[i - 1],
-                count: result?.getFromSpring[0].genreRatio[i],
-              });
-            }
-          }
-          // setGenreAnalysis(tempAll);
-          setGenreAnalysis(temp);
-          setRankList(
-            temp
-              .slice()
-              .sort((a, b) => b.count - a.count)
-              .splice(0, 3)
-          );
-        }
-      },
-    }
-  );
-
-  const [fetchTestResult1, { loading: fetchTestResult1Loading }] = useLazyQuery(
-    GET_SURVEY_RESULT_1,
-    {
-      variables: {
-        nbtiPk: nbtiPk,
-        userPk: userPk,
-        webtoonPk: webtoonPk,
-      },
-      client: django,
-      onCompleted(data) {
-        setResult(data);
-        if (
-          data?.getFromSpring?.[0]?.platformRatio &&
-          data?.getFromSpring?.[0]?.doneRatio
-        ) {
-          calRatio(
-            "kakao",
-            data?.getFromSpring[0].platformRatio[0] as number,
-            data?.getFromSpring[0].platformRatio[1] as number
-          );
-          calRatio(
-            "naver",
-            data?.getFromSpring[0].platformRatio[1] as number,
-            data?.getFromSpring[0].platformRatio[0] as number
-          );
-          calRatio(
-            "finished",
-            data?.getFromSpring[0].doneRatio[0] as number,
-            data?.getFromSpring[0].doneRatio[1] as number
-          );
-          calRatio(
-            "unfinished",
-            data?.getFromSpring[0].doneRatio[1] as number,
-            data?.getFromSpring[0].doneRatio[0] as number
-          );
-        }
-
-        const keywordsList = data?.myKeyword?.[0]?.myKeywordId;
-        const genrePk = data?.myGenre?.[0]?.genreId;
-        // console.log(keywordsList, genrePk, webtoonPk);
-        fetchTestResult2({
-          variables: {
-            keywords: keywordsList as number[],
-            topN: topN, //고정 값
-            genrePk: genrePk as number,
-            webtoonPk: webtoonPk,
-          },
-        });
-      },
-    }
-  );
-
-  // FIXME: mutation test const [] = useLazyQuery()
 
   const reader_expert_value = [
     {
       id: 1,
       title:
-        (rankList[0]?.name == "로맨스판타지" ? "로판" : rankList[0]?.name) +
-        " 전문가",
+        (USER.rankList[0]?.name == "로맨스판타지"
+          ? "로판"
+          : USER.rankList[0]?.name) + " 전문가",
       color: "#99CCFF",
     },
     {
       id: 2,
-      title: (kakaoRatio > naverRatio ? "카카오" : "네이버") + " 매니아",
-      color: kakaoRatio > naverRatio ? theme.colors.kakao : theme.colors.green,
+      title:
+        (RATIO.kakaoRatio > RATIO.naverRatio ? "카카오" : "네이버") + " 매니아",
+      color:
+        RATIO.kakaoRatio > RATIO.naverRatio
+          ? theme.colors.kakao
+          : theme.colors.green,
     },
     {
       id: 3,
-      title: (finishedRatio > unfinishedRatio ? "완결작" : "연재작") + " 킬러",
+      title:
+        (RATIO.finishedRatio > RATIO.unfinishedRatio ? "완결작" : "연재작") +
+        " 킬러",
       color: "#757575",
     },
   ];
-
-  //data fetch
-  useEffect(() => {
-    saveWebtoonDB({
-      variables: {
-        webtoonPk: webtoonPk,
-        userPk: userPk,
-      },
-    });
-    fetchTestResult1({
-      variables: {
-        nbtiPk: nbtiPk,
-        userPk: userPk,
-        webtoonPk: webtoonPk,
-      },
-    });
-  }, []);
 
   // useEffect(() => {
   //   console.log(result);
   // }, [result]);
 
-  const loading =
-    saveWebtoonLoading || fetchTestResult1Loading || fetchTestResult2Loading;
-
   function calPercent(count: number, total: number) {
     return ((count / total) * 100).toFixed(2);
-  }
-
-  // TODO:
-  function shareHandler() {
-    const RATIO = {
-      kakaoRatio: kakaoRatio,
-      naverRatio: naverRatio,
-      finishedRatio: finishedRatio,
-      unfinishedRatio: unfinishedRatio,
-    };
-
-    const USER = {
-      countAllUsers: userCount?.countAllUsers,
-      topN,
-      webtoonPk,
-      rankList,
-      genreAnalysis,
-    };
-
-    const RESULT = {
-      getFromSpring: result.getFromSpring,
-      getFromSpring2: result.getFromSpring2,
-      resultNbtiWebtoon: result.resultNbtiWebtoon,
-      myKeyword: result.myKeyword,
-      authorWebtoon: result.authorWebtoon,
-      keywordSimilarWebtoon: result.keywordSimilarWebtoon,
-      myGenre: result.myGenre,
-    };
-  }
-
-  if (loading) {
-    return (
-      <Layout hasPrevious type="home">
-        <StyledText>
-          당신의 TooNBTI를 분석중이에요.
-          <br /> 잠시만 기다려주세요.
-        </StyledText>
-        <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
-      </Layout>
-    );
   }
 
   return (
@@ -299,42 +164,30 @@ export default function AnalysisResult() {
       hasPrevious
     >
       <TitleText>당신의 독자 유형은?</TitleText>
-      {result?.getFromSpring?.[0].myType?.image ? (
-        // <Image type="userType" url={result?.getFromSpring[0].myType.image} />
-        <MainImage
-          src={
-            "https://j8a302.p.ssafy.io/images/" +
-            result?.getFromSpring[0].myType.image
-          }
-          size={80}
-        />
+      {RESULT.getFromSpring[0].myType?.image ? (
+        <Image type="userType" url={RESULT.getFromSpring[0].myType.image} />
       ) : (
         <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
       )}
       <article>
         <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
-          <Text bold="true" size="1rem">
-            {result?.getFromSpring[0]?.myType?.thumbnailTitle +
-              " - " +
-              result?.getFromSpring[0]?.myType?.thumbnailCharacter}
-          </Text>
           <Text bold="true" size="1.7rem">
-            {result?.getFromSpring[0].myType.userType}
+            {RESULT.getFromSpring[0].myType?.userType}
           </Text>
         </StyledSection2>
         <StyledSection>
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
             <Text size="1.5rem">
-              <PointSpan>{webtoonPk.length}</PointSpan>개
+              <PointSpan>{USER.webtoonPk.length}</PointSpan>개
             </Text>
           </CallOutDiv>
-          {webtoonPk.length < 10 ? (
-            <Text>재밌는 웹툰들을 더 추천해드릴게요!</Text>
-          ) : webtoonPk.length < 30 ? (
+          {USER.webtoonPk.length < 10 ? (
+            <Text>웹툰에 더 관심을 가져보시는 건 어떨까요?</Text>
+          ) : USER.webtoonPk.length < 30 ? (
             <Text>제법 많이 보셨군요!</Text>
-          ) : webtoonPk.length < 50 ? (
+          ) : USER.webtoonPk.length < 50 ? (
             <Text>웹툰계의 대학원생이에요.</Text>
           ) : (
             <Text>혹시 웹툰학과 교수신가요?</Text>
@@ -346,8 +199,7 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text>
             현재&nbsp;
-            <PointSpan>{userCount?.countAllUsers}</PointSpan>명의 분석 독자들
-            중...
+            <PointSpan>{USER.countAllUsers}</PointSpan>명의 분석 독자들 중...
           </Text>
           <div style={{ width: "90%", margin: "auto" }}>
             <ProgressiveBar
@@ -355,8 +207,8 @@ export default function AnalysisResult() {
               progress={
                 100 -
                 Math.round(
-                  (result?.getFromSpring2?.[0].myRank /
-                    result?.getFromSpring2?.[0].allUser) *
+                  (RESULT.getFromSpring2[0].myRank! /
+                    RESULT.getFromSpring2[0].allUser!) *
                     100
                 )
               }
@@ -366,8 +218,8 @@ export default function AnalysisResult() {
             <GradientText>
               상위{" "}
               {Math.round(
-                (result?.getFromSpring2?.[0].myRank /
-                  result?.getFromSpring2?.[0].allUser) *
+                (RESULT.getFromSpring2[0].myRank! /
+                  RESULT.getFromSpring2[0].allUser!) *
                   100
               )}
               %
@@ -394,24 +246,22 @@ export default function AnalysisResult() {
           <Text size="1.3rem">플랫폼 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="kakao">카카오페이지 {kakaoRatio}%</RatioText>
-              <RatioText color="naver">네이버 {naverRatio}%</RatioText>
+              <RatioText color="kakao">
+                카카오페이지 {RATIO.kakaoRatio}%
+              </RatioText>
+              <RatioText color="naver">네이버 {RATIO.naverRatio}%</RatioText>
             </RatioTextBox>
             <ProgressiveBar
               type="platform"
-              progress={kakaoRatio}
+              progress={RATIO.kakaoRatio}
             ></ProgressiveBar>
             <RatioTextBox>
-              {kakaoRatio == naverRatio ? (
-                <RatioText>두 곳 모두 재밌게 즐기고 계시네요.</RatioText>
-              ) : kakaoRatio > naverRatio ? (
+              {RATIO.kakaoRatio > RATIO.naverRatio ? (
                 <RatioText color="kakao">카카오페이지</RatioText>
               ) : (
                 <RatioText color="naver">네이버</RatioText>
               )}
-              {kakaoRatio != naverRatio ? (
-                <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
-              ) : null}
+              <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
             </RatioTextBox>
           </div>
         </StyledSection>
@@ -419,23 +269,23 @@ export default function AnalysisResult() {
           <Text size="1.3rem">완결작 비율</Text>
           <div>
             <RatioTextBox space>
-              <RatioText color="finished">완결작 {finishedRatio}%</RatioText>
-              <RatioText color="ongoing">연재작 {unfinishedRatio}%</RatioText>
+              <RatioText color="finished">
+                완결작 {RATIO.finishedRatio}%
+              </RatioText>
+              <RatioText color="ongoing">
+                연재작 {RATIO.unfinishedRatio}%
+              </RatioText>
             </RatioTextBox>
             <ProgressiveBar
               type="endedOrOngoin"
-              progress={finishedRatio}
+              progress={RATIO.finishedRatio}
             ></ProgressiveBar>
-            {finishedRatio < unfinishedRatio ? (
+            {RATIO.finishedRatio < RATIO.unfinishedRatio ? (
               <RatioTextBox>
                 <RatioText color="finished"> 완결작</RatioText>
                 <RatioText>보다 더&nbsp;</RatioText>
                 <RatioText color="ongoing"> 연재작</RatioText>
                 <RatioText>을 더 선호해요.</RatioText>
-              </RatioTextBox>
-            ) : finishedRatio == unfinishedRatio ? (
-              <RatioTextBox>
-                <RatioText>골고루 즐기고 계시네요.</RatioText>
               </RatioTextBox>
             ) : (
               <RatioTextBox>
@@ -451,22 +301,25 @@ export default function AnalysisResult() {
           <Text size="1.3rem">사용자가 많이 본 장르</Text>
           <div>
             <GenreGraphSection className="genre_graph">
-              <DoughnutChart dataList={result?.getFromSpring[0].genreRatio} />
+              <DoughnutChart
+                dataList={RESULT.getFromSpring[0].genreRatio as number[]}
+              />
             </GenreGraphSection>
             <section className="genre_table">
               <GenreTableTitleDiv>
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
               </GenreTableTitleDiv>
               <GenreSect>
-                {genreAnalysis?.map((item) => {
+                {USER.genreAnalysis?.map((item) => {
                   return (
                     <GenreDiv key={item.id}>
-                      <GenreText preferred={rankList.includes(item)}>
+                      <GenreText preferred={USER.rankList.includes(item)}>
                         #{item.name}
                       </GenreText>
-                      <GenreHr preferred={rankList.includes(item)} />
-                      <GenreText preferred={rankList.includes(item)}>
-                        {item.count} ({calPercent(item.count, webtoonPk.length)}
+                      <GenreHr preferred={USER.rankList.includes(item)} />
+                      <GenreText preferred={USER.rankList.includes(item)}>
+                        {item.count} (
+                        {calPercent(item.count, USER.webtoonPk.length)}
                         %)
                       </GenreText>
                     </GenreDiv>
@@ -477,10 +330,10 @@ export default function AnalysisResult() {
             <RatioTextBox>
               <Text bold="true" size="1.1rem">
                 주로&nbsp;
-                {rankList.map((item, idx) => {
+                {USER.rankList.map((item, idx) => {
                   return (
                     <PointSpan key={item.id}>
-                      {item.name} {idx !== rankList.length - 1 && ", "}
+                      {item.name} {idx !== USER.rankList.length - 1 && ", "}
                     </PointSpan>
                   );
                 })}{" "}
@@ -493,23 +346,23 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.1rem">
             <BoldSpan color="yellow">
-              {result?.getFromSpring[0].myType.userType}
+              {RESULT.getFromSpring[0].myType!.userType}
             </BoldSpan>
             &nbsp; 유형의 독자들이 좋아하는 작품
           </Text>
           <section style={{ marginTop: "16px" }}>
             <RecommendItemList
               text="완결작 중 추천 웹툰"
-              dataList={result?.resultNbtiWebtoon?.filter(
-                (item: RecomWebtoonType) => item.endFlag === 1
+              dataList={RESULT.resultNbtiWebtoon?.filter(
+                (item) => item.endFlag === 1
               )}
             ></RecommendItemList>
           </section>
           <section>
             <RecommendItemList
               text="연재작 중 추천 웹툰"
-              dataList={result?.resultNbtiWebtoon?.filter(
-                (item: RecomWebtoonType) => item.endFlag === 0
+              dataList={RESULT.resultNbtiWebtoon?.filter(
+                (item) => item.endFlag === 0
               )}
             ></RecommendItemList>
           </section>
@@ -517,7 +370,9 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.1rem">사용자가 즐겨보는 키워드</Text>
           <StyledKeywordDiv>
-            {result?.myKeyword[0].myKeywordName.map((el: string) => {
+            {/* {rankList.map} */}
+            {/* mykeyword */}
+            {RESULT.myKeyword[0].myKeywordName!.map((el) => {
               return <StyledKeyword key={el}>#{el}</StyledKeyword>;
             })}
           </StyledKeywordDiv>
@@ -525,27 +380,28 @@ export default function AnalysisResult() {
         <StyledSection>
           <RecommendItemList
             type="keyword"
-            keyword={result?.myKeyword[0].myKeywordName[0]}
+            keyword={RESULT.myKeyword[0].myKeywordName![0]!}
             text="내가 선호하는 키워드의 작품"
-            dataList={result?.keywordSimilarWebtoon}
+            // text="# 키워드와 유사한 키워드의 작품"
+            dataList={RESULT.keywordSimilarWebtoon}
           ></RecommendItemList>
         </StyledSection>
-        {result?.authorWebtoon?.[0] && (
+        {RESULT.authorWebtoon?.[0] && (
           <StyledSection>
             <Text bold="true">
-              {result?.myGenre?.genreName} 장르 독자들이 선호하는 대표 작가
+              {RESULT.myGenre[0].genreName} 장르 독자들이 선호하는 대표 작가
             </Text>
             <Image
-              url={result?.authorWebtoon[0].image}
+              url={RESULT.authorWebtoon[0].image as string}
               width="10rem"
               height="14rem"
               borderRadius={4}
             ></Image>
             <Text>
-              <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
+              <BoldSpan>{RESULT.authorWebtoon[0].authorName}</BoldSpan>
               &nbsp;작가
             </Text>
-            <Text size="0.9rem">대표작 -{result?.authorWebtoon[0].title}</Text>
+            <Text size="0.9rem">대표작 -{RESULT.authorWebtoon[0].title}</Text>
           </StyledSection>
         )}
         <StyledSection>
@@ -557,22 +413,9 @@ export default function AnalysisResult() {
             >
               독자 유형 테스트 다시하기
             </StyledButton>
-            <StyledButton
-              onClick={() => {
-                navigate("/survey");
-              }}
-            >
-              웹툰 취향 분석 다시하기
-            </StyledButton>
           </BtnContainer>
         </StyledSection>
-        <StyledSection onClick={shareHandler}>
-          <ShareButton
-            text="웹툰 취향 분석 결과 공유하기"
-            src={`${import.meta.env.VITE_TEST_URL}`}
-            param="survey/result"
-            type={userPk}
-          />
+        <StyledSection>
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302
             <br></br>
@@ -730,11 +573,6 @@ const StyleSpan = styled.span`
   display: block;
   color: gray;
 `;
-const StyledText = styled.p`
-  color: black;
-  font-size: 1.2rem;
-  font-weight: 700;
-`;
 
 const StyledPlayer = styled(Player)`
   width: 75vw;
@@ -744,7 +582,6 @@ const StyledPlayer = styled(Player)`
 
 const StyledKeywordDiv = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
   justify-content: center;
@@ -753,7 +590,7 @@ const StyledKeywordDiv = styled.div`
 const StyledKeyword = styled.div`
   display: flex;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 1.1rem;
   border-radius: 10px;
   background-color: #eeeeee;
   padding: 4px 10px;

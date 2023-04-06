@@ -115,6 +115,8 @@ export type Query = {
   getFromSpring2?: Maybe<Array<Maybe<GetFromSpring2>>>;
   /**  질문, 보기 리스트 */
   getQuestions?: Maybe<Array<Question>>;
+  /**  배경에 사용할 12개의 랜덤 웹툰 이미지 */
+  getRanImgSet?: Maybe<Array<Scalars['String']>>;
   /**  내 웹툰 랭킹 정보 */
   getRanking?: Maybe<WebtoonUser>;
   /**  한가지 유형 보기 */
