@@ -222,8 +222,7 @@ def result_author(genre_pk, webtoon_pk):
     if webtoons.exists():
         # 가장 많이 출현한 작가의 웹툰 중 하나를 랜덤으로 선택함
         # 출현 횟수 가장 많은 작가를 뽑아낸다
-        # top_authors = webtoons.first().authorrole_set.filter(type='artist').values_list('author', flat=True)
-        top_authors = webtoons.authorrole_set.filter(type='artist').values_list('author', flat=True)
+        top_authors = webtoons.first().authorrole_set.filter(type='artist').values_list('author', flat=True)
         # 동일 수 작가 있을 수 있기 때문에 랜덤으로 한명 뽑는다
         random_author_id = random.choice(top_authors)
         # 해당 작가의 정보를 가져오고
@@ -231,8 +230,7 @@ def result_author(genre_pk, webtoon_pk):
         # 이름을 뽑아낸다
         author_name = author_name_object.name
         # 해당 작가의 웹툰 중 내가 보지 않았고 내 장르인 웹툰 중 하나를 뽑는다
-        # random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id, genre_id=genre_pk).exclude(webtoon_id__in=webtoon_pk))
-        random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id).exclude(webtoon_id__in=webtoon_pk))
+        random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id, genre_id=genre_pk).exclude(webtoon_id__in=webtoon_pk))
         if random_webtoon:
             # serlializer 돌리고
             ran_webtoon = WebtoonsSerializer(random_webtoon)
