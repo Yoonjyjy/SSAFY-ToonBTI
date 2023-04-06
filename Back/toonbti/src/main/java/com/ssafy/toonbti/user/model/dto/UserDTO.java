@@ -23,7 +23,7 @@ public class UserDTO {
 
     private String thumbnailTitle;
 
-    private String thubnailCharacter;
+    private String thumbnailCharacter;
 
     public static UserDTO of(@NotNull Nbti nbti){
         return UserDTO.builder()
@@ -32,7 +32,7 @@ public class UserDTO {
                 .description(nbti.getContent())
                 .image(nbti.getImage())
                 .thumbnailTitle(nbti.getThumbnailTitle())
-                .thubnailCharacter(nbti.getThumbnailCharacter())
+                .thumbnailCharacter(nbti.getThumbnailCharacter())
                 .build();
     }
 }
