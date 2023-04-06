@@ -1,6 +1,7 @@
 from graphene import List, Int, ObjectType, String, Schema, Float, Field, Boolean, Mutation
 from graphene_django import DjangoObjectType
 from .models import Webtoon, Userwebtoon
+from django.db import transaction
 import toonbtiAlgorithm.views as views
 
 # Webtoon을 위한 ObjectType을 정의합니다
@@ -80,8 +81,12 @@ class SaveWebtoonMutation(Mutation):
             # DB에 저장하기 전에 중복되는 데이터가 있는지 확인
             if not Userwebtoon.objects.filter(user_id=user_pk, webtoon_id=web_pk).exists():
                 # 중복된 데이터가 없으면 DB에 저장
-                added_select_webtoon.save()
-                flag = True
+                try:
+                    with transaction.atomic():
+                        added_select_webtoon.save()
+                    flag = True
+                except:
+                    flag = False
         # 저장됐다면 success = true
         if flag:        
             # 정상저장 시 success = true
