@@ -1,34 +1,68 @@
 import React from "react";
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import { ConfigProvider } from "antd";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-function App() {
-  const [count, setCount] = useState(0);
+import theme from "./theme";
+import {
+  SurveyResult,
+  SurveyTest,
+  Home,
+  MBTIResult,
+  MBTITest,
+  MBTIResultAll,
+  NotFound,
+  MBTIResultShared,
+  SurveyResultView,
+} from "./pages";
+import styled, { ThemeProvider } from "styled-components";
 
+export default function App() {
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <ConfigProvider
+      theme={{
+        token: {
+          fontFamily: "Pretendard",
+          colorText: "#000",
+        },
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <Wrap>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="/mbti" element={<MBTITest />} />
+            <Route path="/mbti/result" element={<MBTIResult />} />
+            <Route path="/mbti/result/:nbti" element={<MBTIResultShared />} />
+            <Route path="/mbti/result/all" element={<MBTIResultAll />} />
+            <Route path="/survey" element={<SurveyTest />} />
+            <Route path="/survey/result" element={<SurveyResult />} />
+            <Route path="/survey/result/:uuid" element={<SurveyResultView />} />
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </Wrap>
+      </ThemeProvider>
+    </ConfigProvider>
   );
 }
 
-export default App;
+const Wrap = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-image: url("");
+  background-repeat: no-repeat;
+  background-size: cover;
+  @media ${({ theme }) => theme.device.laptop} {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    background-image: url("");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .MobileFramePage {
+    z-index: 999;
+  }
+`;
