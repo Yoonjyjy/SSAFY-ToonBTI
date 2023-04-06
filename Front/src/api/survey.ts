@@ -66,6 +66,10 @@ const GET_SURVEY_RESULT_1 = graphql(`
       doneRatio
       genreRatio
     }
+    getFromSpring2(userPk: $userPk) {
+      myRank
+      allUser
+    }
     myGenre(webtoonPk: $webtoonPk) {
       genreId
     }

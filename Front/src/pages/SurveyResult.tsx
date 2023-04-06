@@ -5,9 +5,8 @@ import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
-// import ShareButton from "../components/common/ShareButton";
+import ShareButton from "../components/common/ShareButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import test1 from "/test1.png";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import {
   SAVE_WEBTOON,
@@ -52,53 +51,52 @@ export interface RecomWebtoonType {
   webtoonId: number;
 }
 
-//TODO: data fetch
-const data = {
-  reader_category_img: test1,
-  reader_category_name: "LSEA",
-  read_books_num: 77,
-  total_reader_cnt: 3023,
-  reader_percentage: 23.5,
-  reader_title_list: [
-    {
-      id: 1,
-      title: "로판 전문가",
-      color: "#99CCFF",
-    },
-    { id: 2, title: "카카오 매니아", color: "#FFD45B" },
-    { id: 3, title: "완결작 킬러", color: "#757575" },
-  ],
-  platform_ratio: {
-    Kakao: 63.5,
-    Naver: 36.5,
-  },
-  finished_ratio: {
-    finished: 43.7,
-    ongoing: 57.3,
-  },
-  genre_analysis: [
-    { id: 1, name: "판타지", count: 31 },
-    { id: 2, name: "드라마", count: 21 },
-    { id: 3, name: "로맨스", count: 10 },
-    { id: 4, name: "로맨스판타지", count: 30 },
-    { id: 5, name: "현대판타지", count: 9 },
-    { id: 6, name: "액션/무협", count: 33 },
-    { id: 7, name: "소년/감성", count: 11 },
-    { id: 8, name: "일상/개그", count: 50 },
-    { id: 9, name: "공포/추리", count: 3 },
-    { id: 10, name: "스포츠", count: 0 },
-  ],
-  favorite_genre: "판타지",
-  favorite_genre_author: {
-    name: "판타지",
-    main_author: "SIU",
-    author_list: ["SIU", "Omin", "테미스"],
-    main_work_title: ["신의 탑", "언니", "그만훼"],
-    main_genre: ["판타지"],
-    main_author_img: "/tiger.jpg",
-  },
-  accuracy: 73.2,
-};
+// const data = {
+//   reader_category_img: test1,
+//   reader_category_name: "LSEA",
+//   read_books_num: 77,
+//   total_reader_cnt: 3023,
+//   reader_percentage: 23.5,
+//   reader_title_list: [
+//     {
+//       id: 1,
+//       title: "로판 전문가",
+//       color: "#99CCFF",
+//     },
+//     { id: 2, title: "카카오 매니아", color: "#FFD45B" },
+//     { id: 3, title: "완결작 킬러", color: "#757575" },
+//   ],
+//   platform_ratio: {
+//     Kakao: 63.5,
+//     Naver: 36.5,
+//   },
+//   finished_ratio: {
+//     finished: 43.7,
+//     ongoing: 57.3,
+//   },
+//   genre_analysis: [
+//     { id: 1, name: "판타지", count: 31 },
+//     { id: 2, name: "드라마", count: 21 },
+//     { id: 3, name: "로맨스", count: 10 },
+//     { id: 4, name: "로맨스판타지", count: 30 },
+//     { id: 5, name: "현대판타지", count: 9 },
+//     { id: 6, name: "액션/무협", count: 33 },
+//     { id: 7, name: "소년/감성", count: 11 },
+//     { id: 8, name: "일상/개그", count: 50 },
+//     { id: 9, name: "공포/추리", count: 3 },
+//     { id: 10, name: "스포츠", count: 0 },
+//   ],
+//   favorite_genre: "판타지",
+//   favorite_genre_author: {
+//     name: "판타지",
+//     main_author: "SIU",
+//     author_list: ["SIU", "Omin", "테미스"],
+//     main_work_title: ["신의 탑", "언니", "그만훼"],
+//     main_genre: ["판타지"],
+//     main_author_img: "/tiger.jpg",
+//   },
+//   accuracy: 73.2,
+// };
 
 // const webtoonPk = [3, 4, 5];
 // const userPk = Number(localStorage.getItem("userId"));
@@ -164,11 +162,13 @@ export default function AnalysisResult() {
         if (genreAnalysis.length < 10) {
           const temp: GenreListType[] = [];
           for (let i = 0; i < 10; i++) {
-            temp.push({
-              id: i + 1,
-              name: GENRE[i],
-              count: result?.getFromSpring[0].genreRatio[i],
-            });
+            if (result?.getFromSpring[0].genreRatio[i] !== 0) {
+              temp.push({
+                id: i + 1,
+                name: GENRE[i],
+                count: result?.getFromSpring[0].genreRatio[i],
+              });
+            }
           }
           setGenreAnalysis(temp);
           setRankList(
@@ -300,8 +300,11 @@ export default function AnalysisResult() {
       hasPrevious
     >
       <TitleText>당신의 독자 유형은?</TitleText>
-      {/* //FIXME: 이미지 안옴 */}
-      <Image type="userType" url={result?.getFromSpring[0].myType.image} />
+      {result?.getFromSpring?.[0].myType?.image ? (
+        <Image type="userType" url={result?.getFromSpring[0].myType.image} />
+      ) : (
+        <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
+      )}
       <article>
         <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
@@ -338,14 +341,27 @@ export default function AnalysisResult() {
           <div style={{ width: "90%", margin: "auto" }}>
             <ProgressiveBar
               type="top"
-              // TODO: 상위 몇 프로인지 데이터 없음
-              progress={100 - data.reader_percentage}
+              progress={
+                100 -
+                Math.round(
+                  (result?.getFromSpring2?.[0].myRank /
+                    result?.getFromSpring2?.[0].allUser) *
+                    100
+                )
+              }
             ></ProgressiveBar>
           </div>
           <Text>
-            {/* // TODO: 상위 몇 프로인지 데이터 없음 */}
-            <GradientText>상위 {data.reader_percentage}%</GradientText>에
-            해당해요!
+            <GradientText>
+              상위{" "}
+              {Math.round(
+                (result?.getFromSpring2?.[0].myRank /
+                  result?.getFromSpring2?.[0].allUser) *
+                  100
+              )}
+              %
+            </GradientText>
+            에 해당해요!
           </Text>
         </StyledSection>
         <StyledSection>
@@ -500,7 +516,7 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text bold="true">
-            {data.favorite_genre} 장르 독자들이 선호하는 대표 작가
+            {result?.myGenre?.genreName} 장르 독자들이 선호하는 대표 작가
           </Text>
           <Image
             url={result?.authorWebtoon[0].image}
@@ -508,9 +524,11 @@ export default function AnalysisResult() {
             height="14rem"
             borderRadius={4}
           ></Image>
-          <Text bold="true">
-            <PointSpan>취향저격율 {data.accuracy}%</PointSpan>
-          </Text>
+          {/* <Text bold="true">
+            <PointSpan>
+              취향저격율 {result?.resultNbtiWebtoon?.likeRate}%
+            </PointSpan>
+          </Text> */}
           <Text>
             <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
             &nbsp;작가
@@ -526,23 +544,25 @@ export default function AnalysisResult() {
             >
               독자 유형 테스트 다시하기
             </StyledButton>
-            {/* <StyledButton
+            {/* TODO: html 파일 만들때 지워놓기 */}
+            <StyledButton
               onClick={() => {
                 navigate("/survey");
               }}
             >
               웹툰 취향 분석 다시하기
-            </StyledButton> */}
+            </StyledButton>
           </BtnContainer>
         </StyledSection>
         <StyledSection>
-          {/* <ShareButton
+          {/* TODO: html 파일 만들때 지워놓기 */}
+          <ShareButton
             text="웹툰 취향 분석 결과 공유하기"
             src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
             type={userPk}
             // type={result?.}
-          /> */}
+          />
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302
             <br></br>
@@ -621,6 +641,7 @@ const RatioTextBox = styled.div<{ space?: boolean }>`
   justify-content: ${(props) => (props.space ? "space-between" : "center")};
   font-size: 1rem;
 `;
+
 //TODO: color에 다른 다른 theme불러와야됑
 const RatioText = styled.p<{ color?: ColorType }>`
   color: ${({ color, theme }) =>
