@@ -77,6 +77,12 @@ def get_from_spring(user_pk):
         return result.json()['data']['createResult']
     return None
 
+def get_from_spring2(user_pk):
+    result = pts.get_ranking(user_pk)
+    if result:
+        print(result)
+        return result.json()['data']['getRanking']
+    return None
 
 # 같은 nbti 유형의 다른 사람들이 읽은 웹툰들을 카운트하고 그 중 내가 읽은 웹툰 제외
 # 가장 많이 읽은 웹툰 순으로 추천한다
