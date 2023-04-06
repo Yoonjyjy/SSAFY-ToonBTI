@@ -12,6 +12,7 @@ import {
   MBTIResultAll,
   NotFound,
   MBTIResultShared,
+  SurveyResultView,
 } from "./pages";
 import styled, { ThemeProvider } from "styled-components";
 
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/mbti/result/all" element={<MBTIResultAll />} />
             <Route path="/survey" element={<SurveyTest />} />
             <Route path="/survey/result" element={<SurveyResult />} />
+            <Route path="/survey/result/:uuid" element={<SurveyResultView />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </Wrap>

@@ -17,19 +17,12 @@ import {
   SAVE_WEBTOON,
   GET_SURVEY_RESULT_1,
   GET_SURVEY_RESULT_2,
+  SAVE_RESULT_JSON_FILE,
 } from "../api/survey";
 import { django } from "../api";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { COUNT_ALL_USERS } from "../api/mbti";
 import theme from "../theme";
-import {
-  GetFromSpring,
-  GetFromSpring2,
-  MyGenre,
-  MyKeyword,
-  Webtoon,
-} from "../gql/graphql";
-import { resultKeyNameFromField } from "@apollo/client/utilities";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 
@@ -202,8 +195,6 @@ export default function AnalysisResult() {
     }
   );
 
-  // FIXME: mutation test const [] = useLazyQuery()
-
   const reader_expert_value = [
     {
       id: 1,
@@ -252,32 +243,46 @@ export default function AnalysisResult() {
     return ((count / total) * 100).toFixed(2);
   }
 
-  // TODO:
+  const [
+    saveResultJSONFile,
+    { data: savedResultData, error: savedResultError },
+  ] = useMutation(SAVE_RESULT_JSON_FILE, {
+    onCompleted(data) {
+      console.log("fin data", data);
+    },
+  });
+
   function shareHandler() {
-    const RATIO = {
-      kakaoRatio: kakaoRatio,
-      naverRatio: naverRatio,
-      finishedRatio: finishedRatio,
-      unfinishedRatio: unfinishedRatio,
+    const root = {
+      RATIO: {
+        kakaoRatio: kakaoRatio,
+        naverRatio: naverRatio,
+        finishedRatio: finishedRatio,
+        unfinishedRatio: unfinishedRatio,
+      },
+      USER: {
+        countAllUsers: userCount?.countAllUsers,
+        topN,
+        webtoonPk,
+        rankList,
+        genreAnalysis,
+      },
+      RESULT: {
+        getFromSpring: result.getFromSpring,
+        getFromSpring2: result.getFromSpring2,
+        resultNbtiWebtoon: result.resultNbtiWebtoon,
+        myKeyword: result.myKeyword,
+        authorWebtoon: result.authorWebtoon,
+        keywordSimilarWebtoon: result.keywordSimilarWebtoon,
+        myGenre: result.myGenre,
+      },
     };
+    console.log("to be saved: ", JSON.stringify(root), userPk.toString());
 
-    const USER = {
-      countAllUsers: userCount?.countAllUsers,
-      topN,
-      webtoonPk,
-      rankList,
-      genreAnalysis,
-    };
-
-    const RESULT = {
-      getFromSpring: result.getFromSpring,
-      getFromSpring2: result.getFromSpring2,
-      resultNbtiWebtoon: result.resultNbtiWebtoon,
-      myKeyword: result.myKeyword,
-      authorWebtoon: result.authorWebtoon,
-      keywordSimilarWebtoon: result.keywordSimilarWebtoon,
-      myGenre: result.myGenre,
-    };
+    saveResultJSONFile({
+      variables: { data: JSON.stringify(root), uuid: userPk.toString() },
+    });
+    console.log(`/survey/result/${userPk}`);
   }
 
   if (loading) {

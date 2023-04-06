@@ -119,7 +119,7 @@ const RESULT: {
   ],
 };
 
-export default function AnalysisResult() {
+export default function SurveyResultView() {
   const navigate = useNavigate();
 
   const reader_expert_value = [

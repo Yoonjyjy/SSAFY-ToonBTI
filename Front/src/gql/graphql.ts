@@ -63,6 +63,8 @@ export type Mutation = {
   addUserResponse?: Maybe<UserResult>;
   /**  웹툰 결과 페이지 반환 */
   createResult?: Maybe<WebtoonResult>;
+  /**  웹툰 결과 정보 저장 */
+  saveResultJsonFile?: Maybe<Scalars['String']>;
   saveWebtoon?: Maybe<SaveWebtoonMutation>;
 };
 
@@ -74,6 +76,12 @@ export type MutationAddUserResponseArgs = {
 
 export type MutationCreateResultArgs = {
   userId?: InputMaybe<Scalars['Long']>;
+};
+
+
+export type MutationSaveResultJsonFileArgs = {
+  data?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -119,6 +127,8 @@ export type Query = {
   getRanImgSet?: Maybe<Array<Scalars['String']>>;
   /**  내 웹툰 랭킹 정보 */
   getRanking?: Maybe<WebtoonUser>;
+  /**  웹툰 결과 정보 보기 */
+  getResultJsonFile?: Maybe<Scalars['String']>;
   /**  한가지 유형 보기 */
   getType?: Maybe<TypeResult>;
   keywordSimilarWebtoon?: Maybe<Array<Maybe<Webtoon>>>;
@@ -154,6 +164,11 @@ export type QueryGetFromSpring2Args = {
 
 export type QueryGetRankingArgs = {
   userId?: InputMaybe<Scalars['Long']>;
+};
+
+
+export type QueryGetResultJsonFileArgs = {
+  uuid?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -364,6 +379,14 @@ export type GetAdditional3WebtoonsQueryVariables = Exact<{
 
 export type GetAdditional3WebtoonsQuery = { __typename?: 'Query', additionalWebtoon?: Array<{ __typename?: 'Webtoon', webtoonId?: number | null, genreId?: number | null, title?: string | null, image?: string | null, platform?: string | null, endFlag?: number | null, rate?: number | null, view?: number | null } | null> | null };
 
+export type SaveResultJsonFileMutationVariables = Exact<{
+  data?: InputMaybe<Scalars['String']>;
+  uuid?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SaveResultJsonFileMutation = { __typename?: 'Mutation', saveResultJsonFile?: string | null };
+
 
 export const GetQuestionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"questionNo"}},{"kind":"Field","name":{"kind":"Name","value":"question"}},{"kind":"Field","name":{"kind":"Name","value":"answersList"}}]}}]}}]} as unknown as DocumentNode<GetQuestionsQuery, GetQuestionsQueryVariables>;
 export const CountAllUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CountAllUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"countAllUsers"}}]}}]} as unknown as DocumentNode<CountAllUserQuery, CountAllUserQueryVariables>;
@@ -377,3 +400,4 @@ export const SavewebtoonDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const Result1Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RESULT1"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"resultNbtiWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"nbtiPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nbtiPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}},{"kind":"Field","name":{"kind":"Name","value":"likeRate"}}]}},{"kind":"Field","name":{"kind":"Name","value":"myKeyword"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myKeywordName"}},{"kind":"Field","name":{"kind":"Name","value":"myKeywordId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"getFromSpring"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailTitle"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailCharacter"}}]}},{"kind":"Field","name":{"kind":"Name","value":"webtoonCounts"}},{"kind":"Field","name":{"kind":"Name","value":"platformRatio"}},{"kind":"Field","name":{"kind":"Name","value":"doneRatio"}},{"kind":"Field","name":{"kind":"Name","value":"genreRatio"}}]}},{"kind":"Field","name":{"kind":"Name","value":"getFromSpring2"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myRank"}},{"kind":"Field","name":{"kind":"Name","value":"allUser"}}]}},{"kind":"Field","name":{"kind":"Name","value":"myGenre"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"genreName"}}]}}]}}]} as unknown as DocumentNode<Result1Query, Result1QueryVariables>;
 export const Result2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RESULT2"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"keywords"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"topN"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"keywordSimilarWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"keywords"},"value":{"kind":"Variable","name":{"kind":"Name","value":"keywords"}}},{"kind":"Argument","name":{"kind":"Name","value":"topN"},"value":{"kind":"Variable","name":{"kind":"Name","value":"topN"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}}]}},{"kind":"Field","name":{"kind":"Name","value":"authorWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"genrePk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}}},{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"searchTitle"}},{"kind":"Field","name":{"kind":"Name","value":"view"}},{"kind":"Field","name":{"kind":"Name","value":"authorName"}}]}}]}}]} as unknown as DocumentNode<Result2Query, Result2QueryVariables>;
 export const GetAdditional3WebtoonsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAdditional3Webtoons"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"additionalWebtoon"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"webtoonPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"webtoonPk"}}},{"kind":"Argument","name":{"kind":"Name","value":"genrePk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"genrePk"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"webtoonId"}},{"kind":"Field","name":{"kind":"Name","value":"genreId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"platform"}},{"kind":"Field","name":{"kind":"Name","value":"endFlag"}},{"kind":"Field","name":{"kind":"Name","value":"rate"}},{"kind":"Field","name":{"kind":"Name","value":"view"}}]}}]}}]} as unknown as DocumentNode<GetAdditional3WebtoonsQuery, GetAdditional3WebtoonsQueryVariables>;
+export const SaveResultJsonFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveResultJSONFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uuid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveResultJsonFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}},{"kind":"Argument","name":{"kind":"Name","value":"uuid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uuid"}}}]}]}}]} as unknown as DocumentNode<SaveResultJsonFileMutation, SaveResultJsonFileMutationVariables>;

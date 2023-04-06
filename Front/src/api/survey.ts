@@ -126,6 +126,12 @@ const GET_ADDITIONAL_3_WEBTOONS = graphql(`
   }
 `);
 
+const SAVE_RESULT_JSON_FILE = graphql(`
+  mutation SaveResultJSONFile($data: String, $uuid: String) {
+    saveResultJsonFile(data: $data, uuid: $uuid)
+  }
+`);
+
 export {
   NBTI_WEBTOON,
   SEARCH_WEBTOON,
@@ -133,4 +139,5 @@ export {
   SAVE_WEBTOON,
   GET_SURVEY_RESULT_1,
   GET_SURVEY_RESULT_2,
+  SAVE_RESULT_JSON_FILE,
 };

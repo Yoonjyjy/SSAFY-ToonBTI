@@ -25,6 +25,7 @@ const documents = {
     "\n  query RESULT1($nbtiPk: Int!, $userPk: Int!, $webtoonPk: [Int!]) {\n    resultNbtiWebtoon(nbtiPk: $nbtiPk, userPk: $userPk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n      likeRate\n    }\n    myKeyword(webtoonPk: $webtoonPk) {\n      myKeywordName\n      myKeywordId\n    }\n    getFromSpring(userPk: $userPk) {\n      myType {\n        userType\n        image\n        count\n        thumbnailTitle\n        thumbnailCharacter\n      }\n      webtoonCounts\n      platformRatio\n      doneRatio\n      genreRatio\n    }\n    getFromSpring2(userPk: $userPk) {\n      myRank\n      allUser\n    }\n    myGenre(webtoonPk: $webtoonPk) {\n      genreId\n      genreName\n    }\n  }\n": types.Result1Document,
     "\n  query RESULT2(\n    $keywords: [Int!]!\n    $topN: Int!\n    $genrePk: Int!\n    $webtoonPk: [Int!]!\n  ) {\n    keywordSimilarWebtoon(keywords: $keywords, topN: $topN) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n    authorWebtoon(genrePk: $genrePk, webtoonPk: $webtoonPk) {\n      webtoonId\n      genreId\n      image\n      title\n      platform\n      rate\n      endFlag\n      searchTitle\n      view\n      authorName\n    }\n  }\n": types.Result2Document,
     "\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.GetAdditional3WebtoonsDocument,
+    "\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n": types.SaveResultJsonFileDocument,
 };
 
 /**
@@ -89,6 +90,10 @@ export function graphql(source: "\n  query RESULT2(\n    $keywords: [Int!]!\n   
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"): (typeof documents)["\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n"): (typeof documents)["\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
