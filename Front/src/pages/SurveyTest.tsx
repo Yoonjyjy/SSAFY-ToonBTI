@@ -33,16 +33,13 @@ export default function SurveyTest() {
       setWebtoons((prev) => {
         const newResult = new Map();
         const newWebtoons = [...prev];
-        for (const item of prev) {
-          newResult.set(item.webtoonId, false);
-        }
         for (const item of data.nbtiWebtoon as Webtoon[]) {
-          if (item.webtoonId && !newResult.has(item.webtoonId)) {
+          if (item.webtoonId && !result.has(item.webtoonId)) {
             newResult.set(item.webtoonId, false);
             newWebtoons.push(item);
           }
         }
-        setResult(newResult);
+        setResult((prevRes) => new Map([...prevRes, ...newResult]));
         return newWebtoons;
       });
     },
