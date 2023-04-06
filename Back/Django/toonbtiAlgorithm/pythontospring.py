@@ -4,11 +4,13 @@ import requests
 def get_webtoon_result(user):
   query = """
       mutation GET_RESULT {
-          createResult(userId:"""+ str(user)+""") {
+          createResult(userId:"""+ str(user) +""") {
               myType{
                 userType
                 image
                 count
+                thumbnailTitle
+                thumbnailCharacter
               }
               webtoonCounts
               platformRatio
@@ -20,7 +22,6 @@ def get_webtoon_result(user):
 
   url = "https://j8a302.p.ssafy.io/apis"
   headers = {"Content-Type": "application/json"}
-
   response = requests.post(url, json={"query": query}, headers=headers)
   return response
 

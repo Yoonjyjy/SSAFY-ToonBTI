@@ -37,6 +37,8 @@ class MyType(ObjectType):
     userType = String()
     image = String()
     count = Int()
+    thumbnailTitle = String()
+    thumbnailCharacter = String()
     
 # 스프링에서 받은 정보의 type 정보
 class GetFromSpring(ObjectType):
@@ -67,20 +69,25 @@ class SaveWebtoonMutation(Mutation):
 
     # 웹툰 DB 저장 함수
     def mutate(self, info, webtoon_pk, user_pk):
-        try:
-            for web_pk in webtoon_pk:
-                # 유저id와 웹툰 아이디를 객체로 만들고
-                added_select_webtoon = Userwebtoon(
-                    user_id=user_pk,
-                    webtoon_id=web_pk
-                )
-                # DB에 저장하기 전에 중복되는 데이터가 있는지 확인
-                if not Userwebtoon.objects.filter(user_id=user_pk, webtoon_id=web_pk).exists():
-                    # 중복된 데이터가 없으면 DB에 저장
-                    added_select_webtoon.save()
+        # 저장이 되었는지 확인하는 플래그
+        flag= False
+        for web_pk in webtoon_pk:
+            # 유저id와 웹툰 아이디를 객체로 만들고
+            added_select_webtoon = Userwebtoon(
+                user_id=user_pk,
+                webtoon_id=web_pk
+            )
+            # DB에 저장하기 전에 중복되는 데이터가 있는지 확인
+            if not Userwebtoon.objects.filter(user_id=user_pk, webtoon_id=web_pk).exists():
+                # 중복된 데이터가 없으면 DB에 저장
+                added_select_webtoon.save()
+                flag = True
+        # 저장됐다면 success = true
+        if flag:        
             # 정상저장 시 success = true
             success = True
-        except:
+        # 저장 안됐다면  success = false
+        else:
             # 저장 실패 시 success = false
             success = False
         return SaveWebtoonMutation(success=success)
