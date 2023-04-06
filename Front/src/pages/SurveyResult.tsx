@@ -468,7 +468,11 @@ export default function AnalysisResult() {
                       </GenreText>
                       <GenreHr preferred={rankList.includes(item)} />
                       <GenreText preferred={rankList.includes(item)}>
-                        {item.count} ({calPercent(item.count, webtoonPk.length)}
+                        {item.count} (
+                        {calPercent(
+                          item.count,
+                          result?.getFromSpring[0].webtoonCounts
+                        )}
                         %)
                       </GenreText>
                     </GenreDiv>
