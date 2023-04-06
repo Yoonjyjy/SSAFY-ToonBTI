@@ -13,7 +13,7 @@ interface PropType {
   text: string;
   src: string;
   param: string;
-  type: Mbti | number;
+  type: Mbti | number | string;
 }
 
 export default function ShareButton(props: PropType) {

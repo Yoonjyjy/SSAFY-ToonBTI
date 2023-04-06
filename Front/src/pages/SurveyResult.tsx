@@ -61,6 +61,7 @@ const topN = 5;
 
 export default function AnalysisResult() {
   const userPk = Number(localStorage.getItem("userId"));
+  const uuid = localStorage.getItem("uuid");
   const nbtiPk = Number(localStorage.getItem("nbtiPk"));
   const navigate = useNavigate();
   const { state: webtoonPk } = useLocation();
@@ -243,13 +244,10 @@ export default function AnalysisResult() {
     return ((count / total) * 100).toFixed(2);
   }
 
-  const [
-    saveResultJSONFile,
-    { data: savedResultData, error: savedResultError },
-  ] = useMutation(SAVE_RESULT_JSON_FILE, {
-    onCompleted(data) {
-      console.log("fin data", data);
-    },
+  const [saveResultJSONFile] = useMutation(SAVE_RESULT_JSON_FILE, {
+    // onCompleted(data) {
+    //   console.log("fin data", data);
+    // },
   });
 
   function shareHandler() {
@@ -277,12 +275,11 @@ export default function AnalysisResult() {
         myGenre: result.myGenre,
       },
     };
-    console.log("to be saved: ", JSON.stringify(root), userPk.toString());
 
     saveResultJSONFile({
-      variables: { data: JSON.stringify(root), uuid: userPk.toString() },
+      variables: { data: JSON.stringify(root), uuid: uuid },
     });
-    console.log(`/survey/result/${userPk}`);
+    // console.log(`/survey/result/${uuid}`);
   }
 
   if (loading) {
@@ -576,7 +573,7 @@ export default function AnalysisResult() {
             text="웹툰 취향 분석 결과 공유하기"
             src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
-            type={userPk}
+            type={uuid as string}
           />
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302

@@ -132,6 +132,11 @@ const SAVE_RESULT_JSON_FILE = graphql(`
   }
 `);
 
+const GET_RESULT_JSON_FILE = graphql(`
+  query GetResultJSONFile($uuid: String) {
+    getResultJsonFile(uuid: $uuid)
+  }
+`);
 export {
   NBTI_WEBTOON,
   SEARCH_WEBTOON,
@@ -140,4 +145,5 @@ export {
   GET_SURVEY_RESULT_1,
   GET_SURVEY_RESULT_2,
   SAVE_RESULT_JSON_FILE,
+  GET_RESULT_JSON_FILE,
 };
