@@ -69,7 +69,8 @@ const StyledHeader = styled(Header)`
   height: 64;
   padding-inline: 50;
   line-height: 64px;
-  background-color: ${({ theme }) => theme.colors.yellow};
+  background-color: white;
+  /* background-color: ${({ theme }) => theme.colors.yellow}; */
 
   font-weight: bold;
   font-size: 1rem;

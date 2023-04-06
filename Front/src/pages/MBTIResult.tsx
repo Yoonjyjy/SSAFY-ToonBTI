@@ -16,45 +16,6 @@ function percent(part: number, total: number): number {
   return Math.round((part / total) * 100);
 }
 
-function getTypeName(type: string): string[] {
-  switch (type) {
-    case "LSRA":
-      return ["오로지 너를 이기고 싶어", "오로지"];
-    case "LSRT":
-      return ["연애의 정령", "힙제이"];
-    case "LSEA":
-      return ["경자 전성시대", "경자"];
-    case "LSET":
-      return ["갓 오브 하이스쿨", "진모리"];
-    case "LWRA":
-      return ["바른연애 길잡이", "정바름"];
-    case "LWRT":
-      return ["유일무이 로맨스", "탁무이"];
-    case "LWEA":
-      return ["헬퍼", "장관남"];
-    case "LWET":
-      return ["마술사", "에더마스크"];
-    case "HSRA":
-      return ["전지적 독자 시점", "김독자"];
-    case "HSRT":
-      return ["어쩌다보니 천생연분", "한지아"];
-    case "HSEA":
-      return ["삼봉이발소", "김삼봉"];
-    case "HSET":
-      return ["나 혼자만 레벨업", "성진우"];
-    case "HWRA":
-      return ["유미의 세포들", "유미"];
-    case "HWRT":
-      return ["연놈", "백소연"];
-    case "HWEA":
-      return ["재벌집 막내아들", "진도준"];
-    case "HWET":
-      return ["프리드로우", "동까"];
-    default:
-      return [""];
-  }
-}
-
 export default function MBTIResult() {
   const { state: answers } = useLocation();
   const navigate = useNavigate();
@@ -106,7 +67,7 @@ export default function MBTIResult() {
         {res?.myType?.image ? (
           <MainImage
             src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
-            size={40}
+            size={80}
           />
         ) : (
           <StyledPlayer
@@ -121,8 +82,8 @@ export default function MBTIResult() {
             <StyledHeader level={4}>
               {res?.myType?.userType}
               <br></br>
-              {getTypeName(res?.myType?.userType as Mbti)[0]} {" - "}
-              {getTypeName(res?.myType?.userType as Mbti)[1]}
+              {res?.myType?.thumbnailTitle} {" - "}
+              {res?.myType?.thumbnailCharacter}
             </StyledHeader>
           </StyledTypeName>
 
@@ -140,13 +101,13 @@ export default function MBTIResult() {
           {
             text: "나와 잘 맞는 유형",
             mbti: res?.bestType?.userType,
-            typeName: getTypeName(res?.bestType?.userType as Mbti)[1],
+            typeName: res?.bestType?.thumbnailCharacter,
             img: res?.bestType?.image,
           },
           {
             text: "나와 안 맞는 유형",
             mbti: res?.worstType?.userType,
-            typeName: getTypeName(res?.worstType?.userType as Mbti)[1],
+            typeName: res?.worstType?.thumbnailCharacter,
             img: res?.worstType?.image,
           },
         ].map(
@@ -184,14 +145,14 @@ export default function MBTIResult() {
             {
               text: "1위",
               mbti: res?.firstType?.userType,
-              typeName: getTypeName(res?.firstType?.userType as Mbti)[1],
+              typeName: res?.firstType?.thumbnailCharacter,
               img: res?.firstType?.image,
               per: percent(first, total),
             },
             {
               text: "2위",
               mbti: res?.secondType?.userType,
-              typeName: getTypeName(res?.secondType?.userType as Mbti)[1],
+              typeName: res?.secondType?.thumbnailCharacter,
               img: res?.secondType?.image,
               per: percent(second, total),
             },
