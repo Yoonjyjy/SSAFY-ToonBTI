@@ -119,7 +119,7 @@ export default function SurveyTest() {
       <StyledHeader level={3} style={{ margin: "0px" }}>
         웹툰 취향 분석 테스트
       </StyledHeader>
-      <p style={{ margin: "0px" }}>
+      <p style={{ margin: "0px", wordBreak: "keep-all" }}>
         지금까지 재미있게 봤던 웹툰들을 선택해주세요.
       </p>
       <SearchBar

@@ -7,6 +7,7 @@ import DoughnutChart from "./DoughnutChart";
 import ScrollControl from "./ScrollControl";
 import Spinner from "./Spinner";
 import SearchBar from "../survey/SearchBar";
+import HomeBackgroundImage from "./HomeBackgroundImage";
 
 export {
   ProgressiveBar,
@@ -18,4 +19,5 @@ export {
   ScrollControl,
   Spinner,
   SearchBar,
+  HomeBackgroundImage,
 };

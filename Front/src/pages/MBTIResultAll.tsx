@@ -56,7 +56,6 @@ const TextContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
   color: black;
-  // padding: 20px 10px 0px 10px;
 `;
 
 const StyledCol = styled(Col)`

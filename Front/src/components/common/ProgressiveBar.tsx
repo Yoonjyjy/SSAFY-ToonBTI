@@ -13,7 +13,7 @@ export default function ProgressiveBar({
   if (type === "top") {
     return (
       <Progress
-        strokeColor={{ "0%": "#72E5EC", "100%": "#A7FFBA" }}
+        strokeColor={{ "0%": "#FF7B7B", "100%": "#FFD7D7" }}
         percent={progress}
         showInfo={false}
         status="active"
