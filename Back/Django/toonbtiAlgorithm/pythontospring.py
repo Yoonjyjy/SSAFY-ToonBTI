@@ -23,3 +23,20 @@ def get_webtoon_result(user):
 
   response = requests.post(url, json={"query": query}, headers=headers)
   return response
+
+def get_ranking(user):
+  query = """
+    query GET_RANKING {
+      getRanking(userId:""" + str(user) + """) {
+        myRank
+        allUser
+      }
+    }
+  
+  """
+  
+  url = "https://j8a302.p.ssafy.io/apis"
+  headers = {"Content-Type": "application/json"}
+
+  response = requests.post(url, json={"query": query}, headers=headers)
+  return response
