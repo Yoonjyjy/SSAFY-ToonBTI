@@ -16,6 +16,8 @@ type Query {
     getType(userType: String): TypeResult
     # 내 웹툰 랭킹 정보
     getRanking(userId: Long): WebtoonUser
+    # 배경에 사용할 12개의 랜덤 웹툰 이미지
+    getRanImgSet: [String!]
 }
 
 type Mutation {
