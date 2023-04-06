@@ -3,20 +3,18 @@ package com.ssafy.toonbti.webtoon.model.service;
 import com.ssafy.toonbti.user.model.dto.UserDTO;
 import com.ssafy.toonbti.user.model.entity.User;
 import com.ssafy.toonbti.user.model.entity.UserNbti;
-import com.ssafy.toonbti.user.model.repository.NbtiRepositroy;
 import com.ssafy.toonbti.user.model.repository.UserNbtiRepositroy;
 import com.ssafy.toonbti.user.model.repository.UserRepository;
-import com.ssafy.toonbti.webtoon.model.dto.WebtoonDTO;
 import com.ssafy.toonbti.webtoon.model.dto.WebtoonResultDTO;
 import com.ssafy.toonbti.webtoon.model.dto.WebtoonUserDTO;
 import com.ssafy.toonbti.webtoon.model.entity.UserWebtoon;
-import com.ssafy.toonbti.webtoon.model.entity.Webtoon;
 import com.ssafy.toonbti.webtoon.model.repository.UserWebtoonRepository;
 import com.ssafy.toonbti.webtoon.model.repository.WebtoonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -26,6 +24,9 @@ public class WebtoonService {
     private final UserWebtoonRepository userWebtoonRepository;
     private final UserRepository userRepository;
     private final UserNbtiRepositroy userNbtiRepositroy;
+
+    private final EntityManager entityManager;
+    private final WebtoonRepository webtoonRepository;
 
     public WebtoonResultDTO createResult(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
@@ -99,5 +100,9 @@ public class WebtoonService {
             genre[Math.toIntExact(userWebtoon.getWebtoon().getGenre().getGenreId())]++;
         }
         return genre;
+    }
+
+    public List<String> getRanImgSet() {
+        return webtoonRepository.getRand12();
     }
 }
