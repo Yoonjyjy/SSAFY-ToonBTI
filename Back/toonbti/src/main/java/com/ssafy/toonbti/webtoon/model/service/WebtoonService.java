@@ -93,7 +93,7 @@ public class WebtoonService {
             9:공포/추리
             10:스포츠
          */
-        int[] genre = new int[10];
+        int[] genre = new int[11];
         List<UserWebtoon> userWebtoonList = userWebtoonRepository.findAllByUser(user);
         for (UserWebtoon userWebtoon: userWebtoonList) {
             genre[Math.toIntExact(userWebtoon.getWebtoon().getGenre().getGenreId())]++;

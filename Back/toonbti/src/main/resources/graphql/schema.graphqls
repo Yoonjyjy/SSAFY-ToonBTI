@@ -55,7 +55,7 @@ type User {
     image: String
     count: Long
     thumbnailTitle: String
-    thubnailCharacter: String
+    thumbnailCharacter: String
 }
 
 type TypeResult {
