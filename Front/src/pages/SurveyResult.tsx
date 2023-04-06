@@ -452,9 +452,14 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.3rem">사용자가 많이 본 장르</Text>
           <div>
-            <GenreGraphSection className="genre_graph">
+            {result?.getFromSpring?.[0] && (
+              <GenreGraphSection className="genre_graph">
+                <DoughnutChart dataList={result.getFromSpring[0].genreRatio} />
+              </GenreGraphSection>
+            )}
+            {/* <GenreGraphSection className="genre_graph">
               <DoughnutChart dataList={result?.getFromSpring[0].genreRatio} />
-            </GenreGraphSection>
+            </GenreGraphSection> */}
             <section className="genre_table">
               <GenreTableTitleDiv>
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
