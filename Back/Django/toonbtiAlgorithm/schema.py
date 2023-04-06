@@ -148,18 +148,19 @@ class Query(ObjectType):
     def resolve_searchWebtoon(self, info, search_name):
         webtoons = views.search_webtoon(search_name)
         wList = []
-        for webtoon in webtoons:
-            w = Webtoon()
-            w.webtoon_id = webtoon.webtoon_id
-            w.genre_id = webtoon.genre.genre_id
-            w.title = webtoon.title
-            w.image = webtoon.image
-            w.platform = webtoon.platform
-            w.end_flag = webtoon.end_flag
-            w.rate = webtoon.rate
-            w.view = webtoon.view
-            w.search_title = webtoon.search_title
-            wList.append(w)
+        if webtoons:
+            for webtoon in webtoons:
+                w = Webtoon()
+                w.webtoon_id = webtoon.webtoon_id
+                w.genre_id = webtoon.genre.genre_id
+                w.title = webtoon.title
+                w.image = webtoon.image
+                w.platform = webtoon.platform
+                w.end_flag = webtoon.end_flag
+                w.rate = webtoon.rate
+                w.view = webtoon.view
+                w.search_title = webtoon.search_title
+                wList.append(w)
         return wList
 
     '''
@@ -211,19 +212,20 @@ class Query(ObjectType):
     def resolve_resultNbtiWebtoon(self, info, nbti_pk, user_pk):
         webtoons = views.result_nbti_webtoon(nbti_pk, user_pk)
         wList = []
-        for webtoon in webtoons:
-            w = Webtoon()
-            w.webtoon_id = webtoon[0]['webtoon_id']
-            w.genre_id = webtoon[0]['genre']
-            w.title = webtoon[0]['title']
-            w.image = webtoon[0]['image']
-            w.platform = webtoon[0]['platform']
-            w.end_flag = webtoon[0]['end_flag']
-            w.rate = webtoon[0]['rate']
-            w.view = webtoon[0]['view']
-            w.search_title = webtoon[0]['search_title']
-            w.like_rate = webtoon[1]
-            wList.append(w)
+        if webtoons:
+            for webtoon in webtoons:
+                w = Webtoon()
+                w.webtoon_id = webtoon[0]['webtoon_id']
+                w.genre_id = webtoon[0]['genre']
+                w.title = webtoon[0]['title']
+                w.image = webtoon[0]['image']
+                w.platform = webtoon[0]['platform']
+                w.end_flag = webtoon[0]['end_flag']
+                w.rate = webtoon[0]['rate']
+                w.view = webtoon[0]['view']
+                w.search_title = webtoon[0]['search_title']
+                w.like_rate = webtoon[1]
+                wList.append(w)
         return wList
     
     '''
@@ -237,14 +239,15 @@ class Query(ObjectType):
         keywords = views.my_keyword(webtoon_pk)
         name_temp = []
         id_temp = []
-        for key in keywords:
-            name_temp.append(key['name'])
-            id_temp.append(key['tag_id'])
-        k = MyKeyword()
-        k.my_keyword_name = name_temp
-        k.my_keyword_id = id_temp
         kList = []
-        kList.append(k)
+        if keywords:
+            for key in keywords:
+                name_temp.append(key['name'])
+                id_temp.append(key['tag_id'])
+            k = MyKeyword()
+            k.my_keyword_name = name_temp
+            k.my_keyword_id = id_temp
+            kList.append(k)
         return kList
     
     '''
@@ -286,17 +289,18 @@ class Query(ObjectType):
     def resolve_authorWebtoon(self, info, genre_pk, webtoon_pk):
         webtoon = views.result_author(genre_pk, webtoon_pk)
         wList = []
-        w = Webtoon()
-        w.webtoon_id = webtoon[0]['webtoon_id']
-        w.genre_id = webtoon[0]['genre']
-        w.image = webtoon[0]['image']
-        w.title = webtoon[0]['title']
-        w.platform = webtoon[0]['platform']
-        w.rate = webtoon[0]['rate']
-        w.end_flag = webtoon[0]['end_flag']
-        w.view = webtoon[0]['view']
-        w.author_name = webtoon[1]
-        wList.append(w)
+        if webtoon:
+            w = Webtoon()
+            w.webtoon_id = webtoon[0]['webtoon_id']
+            w.genre_id = webtoon[0]['genre']
+            w.image = webtoon[0]['image']
+            w.title = webtoon[0]['title']
+            w.platform = webtoon[0]['platform']
+            w.rate = webtoon[0]['rate']
+            w.end_flag = webtoon[0]['end_flag']
+            w.view = webtoon[0]['view']
+            w.author_name = webtoon[1]
+            wList.append(w)
         return wList
     
     '''
@@ -313,13 +317,14 @@ class Query(ObjectType):
     def resolve_getFromSpring(self, info, user_pk):
         statistics = views.get_from_spring(user_pk)
         sList = []
-        s = GetFromSpring()
-        s.myType = statistics['myType']
-        s.webtoonCounts = statistics['webtoonCounts']
-        s.platformRatio = statistics['platformRatio']
-        s.doneRatio = statistics['doneRatio']
-        s.genreRatio = statistics['genreRatio']
-        sList.append(s)
+        if statistics:
+            s = GetFromSpring()
+            s.myType = statistics['myType']
+            s.webtoonCounts = statistics['webtoonCounts']
+            s.platformRatio = statistics['platformRatio']
+            s.doneRatio = statistics['doneRatio']
+            s.genreRatio = statistics['genreRatio']
+            sList.append(s)
         return sList      
     
     '''
@@ -333,10 +338,11 @@ class Query(ObjectType):
     def resolve_myGenre(self, info, webtoon_pk):
         genre = views.my_genre(webtoon_pk)
         gList = []
-        g = MyGenre()
-        g.genreId = genre.genre_id
-        g.genreName = genre.name
-        gList.append(g)
+        if genre:
+            g = MyGenre()
+            g.genreId = genre.genre_id
+            g.genreName = genre.name
+            gList.append(g)
         return gList
     
 schema = Schema(query=Query, mutation=Mutation)

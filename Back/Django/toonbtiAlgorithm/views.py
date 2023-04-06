@@ -64,9 +64,10 @@ def search_webtoon(search_name):
         ).distinct('title')
         # 웹툰과 작가 정보를 합쳐서 중복을 제거한 후 반환한다
         webtoons = (webtoons | author_webtoons).distinct()
-        return webtoons
-    else:
-        return
+        if webtoons:
+            return webtoons
+        return None
+    return None
 
 
 # 스프링에 통계 자료 요청
@@ -74,7 +75,7 @@ def get_from_spring(user_pk):
     result = pts.get_webtoon_result(user_pk)
     if result:
         return result.json()['data']['createResult']
-    return
+    return None
 
 
 # 같은 nbti 유형의 다른 사람들이 읽은 웹툰들을 카운트하고 그 중 내가 읽은 웹툰 제외
@@ -88,67 +89,144 @@ def result_nbti_webtoon(nbti_pk, user_pk):
     user_webtoons = []
     # 같은 유형이면서 웹툰을 고른 다른 유저들의 수를 셀 set
     other_user_cnt = set()
-    # 모은 동일 유형 유저의 정보를 순회
-    for nbti in nbti_webtoons:
-        # 각 유저의 user_id를 가지고
-        other_user_pk = nbti.user_id
-        # 내 user_id와 같다면 통과
-        if other_user_pk == user_pk:
-            continue
-        # 해당 유저가 읽은 웹툰을 웹툰선택 T에서 가져온다
-        user_webtoon = Userwebtoon.objects.filter(user_id=other_user_pk)
-        # 해당 웹툰들을 순회하면서
-        for id in user_webtoon:
-            # 해당 웹툰 id들을 user_webtoons에 담는다
-            user_webtoons.append(id.webtoon_id)
-            # 유저 id를 중복 제거해서 유일한 user id만 저장한다
-            other_user_cnt.add(id.user_id)
-    # 나온 웹툰 id를 set으로 정리하고
-    temp = list(set(user_webtoons))
-    # 각 웹툰의 출현횟수를 담을 배열
-    webtoon_cnt = []
-    # 웹툰 id를 순회하며
-    for t in temp:
-        # 각 웹툰의 등장횟수를 webtoon_cnt에 저장
-        webtoon_cnt.append([t, user_webtoons.count(t)])
-    # 횟수 기준 내림차순 정렬
-    webtoon_cnt = sorted(webtoon_cnt, key=lambda x: x[1], reverse=True)
-    # serializer 돌릴 객체 담을 배열
-    webtoon_infos = []
-    # [웹툰id, 등장횟수] 순회
-    for j in webtoon_cnt:
-        # 취향저격률
-        # 해당 웹툰이 나온 횟수 / 전체 유저 명 수 (곱하기 3은 너무 낮아서 넣은 수)
-        like_rate = j[1] / len(other_user_cnt) * 100 * 3
-        if like_rate > 100:
-            like_rate = 99.9
-        # 해당 웹툰 id로 웹툰 정보를 받아온다
-        webtoon_info = get_object_or_404(Webtoon, webtoon_id=j[0])
-        # serialize 하고
-        serializer = WebtoonsSerializer(webtoon_info)
-        # 그걸 webtoon_infos에 담는다
-        webtoon_infos.append([serializer.data, like_rate])
-    # 완결작, 연재작 담을 배열
-    done, ongoing = [], []
-    while True:
-        # 웹툰들의 정보를 순회하며
-        for info in webtoon_infos:
-            # 완결작이고 5개 미만으로 모였다면
-            if info[0]['end_flag'] == 1 and len(done) < 5:
-                # 완결작 웹툰에 담는다
-                done.append(info)
-            # 연재자이고 5개 미만으로 모였다면
-            elif info[0]['end_flag'] == 0 and len(ongoing) < 5:
-                # 연재작 웹툰에 담는다
-                ongoing.append(info)
-            # 완결작, 연재작 모두 5개씩 모였다면
-            if len(done) == 5 and len(ongoing) == 5:
+    if nbti_webtoons.exists():
+        # 모은 동일 유형 유저의 정보를 순회
+        for nbti in nbti_webtoons:
+            # 각 유저의 user_id를 가지고
+            other_user_pk = nbti.user_id
+            # 내 user_id와 같다면 통과
+            if other_user_pk == user_pk:
+                continue
+            # 해당 유저가 읽은 웹툰을 웹툰선택 T에서 가져온다
+            user_webtoon = Userwebtoon.objects.filter(user_id=other_user_pk)
+            if user_webtoon.exists():
+                # 해당 웹툰들을 순회하면서
+                for id in user_webtoon:
+                    # 해당 웹툰 id들을 user_webtoons에 담는다
+                    user_webtoons.append(id.webtoon_id)
+                    # 유저 id를 중복 제거해서 유일한 user id만 저장한다
+                    other_user_cnt.add(id.user_id)
+        if user_webtoons:
+            # 나온 웹툰 id를 set으로 정리하고
+            temp = list(set(user_webtoons))
+            # 각 웹툰의 출현횟수를 담을 배열
+            webtoon_cnt = []
+            # 웹툰 id를 순회하며
+            for t in temp:
+                # 각 웹툰의 등장횟수를 webtoon_cnt에 저장
+                webtoon_cnt.append([t, user_webtoons.count(t)])
+            # 횟수 기준 내림차순 정렬
+            webtoon_cnt = sorted(webtoon_cnt, key=lambda x: x[1], reverse=True)
+            # serializer 돌릴 객체 담을 배열
+            webtoon_infos = []
+            # [웹툰id, 등장횟수] 순회
+            for j in webtoon_cnt:
+                # 취향저격률
+                # 해당 웹툰이 나온 횟수 / 전체 유저 명 수 (곱하기 3은 너무 낮아서 넣은 수)
+                like_rate = j[1] / len(other_user_cnt) * 100 * 3
+                if like_rate > 100:
+                    like_rate = 99.9
+                # 해당 웹툰 id로 웹툰 정보를 받아온다
+                webtoon_info = get_object_or_404(Webtoon, webtoon_id=j[0])
+                # serialize 하고
+                serializer = WebtoonsSerializer(webtoon_info)
+                # 그걸 webtoon_infos에 담는다
+                webtoon_infos.append([serializer.data, like_rate])
+            # 완결작, 연재작 담을 배열
+            done, ongoing = [], []
+            while True:
+                # 웹툰들의 정보를 순회하며
+                for info in webtoon_infos:
+                    # 완결작이고 5개 미만으로 모였다면
+                    if info[0]['end_flag'] == 1 and len(done) < 5:
+                        # 완결작 웹툰에 담는다
+                        done.append(info)
+                    # 연재자이고 5개 미만으로 모였다면
+                    elif info[0]['end_flag'] == 0 and len(ongoing) < 5:
+                        # 연재작 웹툰에 담는다
+                        ongoing.append(info)
+                    # 완결작, 연재작 모두 5개씩 모였다면
+                    if len(done) == 5 and len(ongoing) == 5:
+                        # 종료
+                        break
                 # 종료
                 break
-        # 종료
-        break
-    result = done + ongoing
-    return result
+            result = done + ongoing
+            return result
+        return None
+    return None
+# # 같은 nbti 유형의 다른 사람들이 읽은 웹툰들을 카운트하고 그 중 내가 읽은 웹툰 제외
+# # 가장 많이 읽은 웹툰 순으로 추천한다
+# # 완결작 기준 상위 5개, 미완결작 기준 상위 5개 정렬
+# # 취향 저격률은 '해당 웹툰의 카운트 수/ 카운트 횟수'
+# def result_nbti_webtoon(nbti_pk, user_pk):
+#     # 유형저장 T에서 넘어온 nbti_pk값과 nbti_id가 같은 것만 필터링해서 담는다(nbti_id, user_id)
+#     nbti_webtoons = Usernbti.objects.filter(nbti_id=nbti_pk)
+#     # 같은 유형의 유저가 고른 웹툰 id를 담을 배열
+#     user_webtoons = []
+#     # 같은 유형이면서 웹툰을 고른 다른 유저들의 수를 셀 set
+#     other_user_cnt = set()
+#     # 모은 동일 유형 유저의 정보를 순회
+#     for nbti in nbti_webtoons:
+#         # 각 유저의 user_id를 가지고
+#         other_user_pk = nbti.user_id
+#         # 내 user_id와 같다면 통과
+#         if other_user_pk == user_pk:
+#             continue
+#         # 해당 유저가 읽은 웹툰을 웹툰선택 T에서 가져온다
+#         user_webtoon = Userwebtoon.objects.filter(user_id=other_user_pk)
+#         # 해당 웹툰들을 순회하면서
+#         for id in user_webtoon:
+#             # 해당 웹툰 id들을 user_webtoons에 담는다
+#             user_webtoons.append(id.webtoon_id)
+#             # 유저 id를 중복 제거해서 유일한 user id만 저장한다
+#             other_user_cnt.add(id.user_id)
+#     # 나온 웹툰 id를 set으로 정리하고
+#     temp = list(set(user_webtoons))
+#     # 각 웹툰의 출현횟수를 담을 배열
+#     webtoon_cnt = []
+#     # 웹툰 id를 순회하며
+#     for t in temp:
+#         # 각 웹툰의 등장횟수를 webtoon_cnt에 저장
+#         webtoon_cnt.append([t, user_webtoons.count(t)])
+#     # 횟수 기준 내림차순 정렬
+#     webtoon_cnt = sorted(webtoon_cnt, key=lambda x: x[1], reverse=True)
+#     # serializer 돌릴 객체 담을 배열
+#     webtoon_infos = []
+#     # [웹툰id, 등장횟수] 순회
+#     for j in webtoon_cnt:
+#         # 취향저격률
+#         # 해당 웹툰이 나온 횟수 / 전체 유저 명 수 (곱하기 3은 너무 낮아서 넣은 수)
+#         like_rate = j[1] / len(other_user_cnt) * 100 * 3
+#         if like_rate > 100:
+#             like_rate = 99.9
+#         # 해당 웹툰 id로 웹툰 정보를 받아온다
+#         webtoon_info = get_object_or_404(Webtoon, webtoon_id=j[0])
+#         # serialize 하고
+#         serializer = WebtoonsSerializer(webtoon_info)
+#         # 그걸 webtoon_infos에 담는다
+#         webtoon_infos.append([serializer.data, like_rate])
+#     # 완결작, 연재작 담을 배열
+#     done, ongoing = [], []
+#     while True:
+#         # 웹툰들의 정보를 순회하며
+#         for info in webtoon_infos:
+#             # 완결작이고 5개 미만으로 모였다면
+#             if info[0]['end_flag'] == 1 and len(done) < 5:
+#                 # 완결작 웹툰에 담는다
+#                 done.append(info)
+#             # 연재자이고 5개 미만으로 모였다면
+#             elif info[0]['end_flag'] == 0 and len(ongoing) < 5:
+#                 # 연재작 웹툰에 담는다
+#                 ongoing.append(info)
+#             # 완결작, 연재작 모두 5개씩 모였다면
+#             if len(done) == 5 and len(ongoing) == 5:
+#                 # 종료
+#                 break
+#         # 종료
+#         break
+#     result = done + ongoing
+#     return result
 
 
 # 내가 즐겨보는 키워드
@@ -160,28 +238,30 @@ def my_keyword(webtoon_pk):
     for pk in webtoon_pk:
         # 해당 웹툰 id와 일치하는 웹툰들의 태그를 가져옴
         tags = webtoonTag.objects.filter(webtoon_id=pk)
-        # 태그들을 순회하며
-        for t in tags:
-            # 해당 태그 아이디가 딕셔너리에 있다면
-            if t.tag_id in keyword_dict:
-                # 횟수 + 1
-                keyword_dict[t.tag_id] += 1
-            # 딕셔너리에 없다면
-            else:
-                # 새로 추가
-                keyword_dict[t.tag_id] = 1
-    # 많이 나온 횟수 기준으로 정렬해서 상위 4개만 뽑는다
-    res1 = sorted(keyword_dict.items(), key=lambda x: x[1], reverse=True)[:4]
-    result = []
-    # 태그 id를 순회하며
-    for r in res1:
-        # 태그 정보를 가져온다
-        tag = get_object_or_404(Tag, tag_id=r[0])
-        # serializer 돌리고
-        serializer = TagsSerializer(tag)
-        # 태그 이름을 result에 담아서 반환한다
-        result.append(serializer.data)
-    return result
+        if tags.exists():
+            # 태그들을 순회하며
+            for t in tags:
+                # 해당 태그 아이디가 딕셔너리에 있다면
+                if t.tag_id in keyword_dict:
+                    # 횟수 + 1
+                    keyword_dict[t.tag_id] += 1
+                # 딕셔너리에 없다면
+                else:
+                    # 새로 추가
+                    keyword_dict[t.tag_id] = 1
+        # 많이 나온 횟수 기준으로 정렬해서 상위 4개만 뽑는다
+        res1 = sorted(keyword_dict.items(), key=lambda x: x[1], reverse=True)[:4]
+        result = []
+        # 태그 id를 순회하며
+        for r in res1:
+            # 태그 정보를 가져온다
+            tag = get_object_or_404(Tag, tag_id=r[0])
+            # serializer 돌리고
+            serializer = TagsSerializer(tag)
+            # 태그 이름을 result에 담아서 반환한다
+            result.append(serializer.data)
+        return result
+    return None
 
 
 # 내 장르면서 내가 읽지 않은 웹툰, 내가 읽은 웹툰의 작가가 아닌 작가의 웹툰 중 하나와 작가를 추천
@@ -209,17 +289,51 @@ def result_author(genre_pk, webtoon_pk):
         # 이름을 뽑아낸다
         author_name = author_name_object.name
         # 해당 작가의 웹툰 중 내가 보지 않았고 내 장르인 웹툰 중 하나를 뽑는다
-        random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id, genre_id=genre_pk)
-                                    .exclude(webtoon_id__in=webtoon_pk)
-                                    )
-        # serlializer 돌리고
-        ran_webtoon = WebtoonsSerializer(random_webtoon)
-        # 해당 웹툰 정보와 작가 이름을 묶어서 반환한다
-        result = [ran_webtoon.data, author_name]
-        return result
-    else:
-        # 해당하는 웹툰이 없으면 빈 JSON을 반환함
-        return JsonResponse({})
+        random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id, genre_id=genre_pk).exclude(webtoon_id__in=webtoon_pk))
+        if random_webtoon:
+            # serlializer 돌리고
+            ran_webtoon = WebtoonsSerializer(random_webtoon)
+            # 해당 웹툰 정보와 작가 이름을 묶어서 반환한다
+            result = [ran_webtoon.data, author_name]
+            return result
+        return None
+    return None
+# 내 장르면서 내가 읽지 않은 웹툰, 내가 읽은 웹툰의 작가가 아닌 작가의 웹툰 중 하나와 작가를 추천
+# def result_author(genre_pk, webtoon_pk):
+#     # 내가 읽은 웹툰의 작가들의 ID를 가져옴(그림 작가(artist)만)
+#     authors = Author.objects.filter(authorrole__webtoon_id__in=webtoon_pk, authorrole__type='artist').distinct()
+#     # genre_pk와 같은 genre_id를 가진 웹툰 중,
+#     # 내가 읽은 웹툰이 아니면서, 
+#     # 내가 읽은 웹툰의 작가들을 제외한 웹툰들의 작가 출현 횟수를 구함
+#     webtoons = Webtoon.objects.filter(genre_id=genre_pk) \
+#         .exclude(webtoon_id__in=webtoon_pk) \
+#         .exclude(authorrole__author_id__in=authors) \
+#         .exclude(authorrole__type='story') \
+#         .annotate(author_count=Count('authorrole__author_id')) \
+#         .order_by('-author_count')
+#     # 위 조건의 웹툰이 존재한다면
+#     if webtoons.exists():
+#         # 가장 많이 출현한 작가의 웹툰 중 하나를 랜덤으로 선택함
+#         # 출현 횟수 가장 많은 작가를 뽑아낸다
+#         top_authors = webtoons.first().authorrole_set.filter(type='artist').values_list('author', flat=True)
+#         # 동일 수 작가 있을 수 있기 때문에 랜덤으로 한명 뽑는다
+#         random_author_id = random.choice(top_authors)
+#         # 해당 작가의 정보를 가져오고
+#         author_name_object = get_object_or_404(Author, author_id=random_author_id)
+#         # 이름을 뽑아낸다
+#         author_name = author_name_object.name
+#         # 해당 작가의 웹툰 중 내가 보지 않았고 내 장르인 웹툰 중 하나를 뽑는다
+#         random_webtoon = random.choice(Webtoon.objects.filter(authorrole__author=random_author_id, genre_id=genre_pk)
+#                                     .exclude(webtoon_id__in=webtoon_pk)
+#                                     )
+#         # serlializer 돌리고
+#         ran_webtoon = WebtoonsSerializer(random_webtoon)
+#         # 해당 웹툰 정보와 작가 이름을 묶어서 반환한다
+#         result = [ran_webtoon.data, author_name]
+#         return result
+#     else:
+#         # 해당하는 웹툰이 없으면 빈 JSON을 반환함
+#         return JsonResponse({})
 
 
 # 내 장르 알아내는 함수
@@ -276,16 +390,14 @@ def find_similar_webtoon(keywords, top_n):
     table = create_webtoon_tag_table()
 
     # 나의 키워드 4를 table과 비교하기 위해 내 키워드 정보도 행으로 만든다
-    my_keyword = pd.Series(
-        [1 if i in keywords else 0 for i in table.columns], index=table.columns)
+    my_keyword = pd.Series([1 if i in keywords else 0 for i in table.columns], index=table.columns)
 
     # 내 키워드 정보와 각 웹툰들의 태그 정보 간의 코사인 유사도를 계산한다
     similarities = table.apply(lambda x: 1 - cosine(my_keyword, x), axis=1)
 
-    # Get the top n most similar webtoon ids and their cosine similarity scores
     # 유사도가 가장 큰 것을 top_n(5)개 뽑아낸다
     top_n_similarities = similarities.nlargest(top_n)
-    # 그것의 webtoon id를 저장하도
+    # 그것의 webtoon id를 저장하고
     top_n_webtoon_ids = list(top_n_similarities.index)
     # 그것의 유사도를 저장한다
     top_n_cosine_similarities = list(top_n_similarities.values)
