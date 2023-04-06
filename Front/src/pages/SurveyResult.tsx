@@ -294,6 +294,8 @@ export default function AnalysisResult() {
     );
   }
 
+  console.log("chart? ", result?.getFromSpring?.[0].genreRatio);
+
   return (
     <Layout
       // type="survey"
