@@ -18,8 +18,12 @@ public class UserDTO {
     private String description;
     //독자 유형 이미지 경로
     private String image;
-
+    // 타입에 해당하는 사용자의 수
     private Long count;
+
+    private String thumbnailTitle;
+
+    private String thubnailCharacter;
 
     public static UserDTO of(@NotNull Nbti nbti){
         return UserDTO.builder()
@@ -27,6 +31,8 @@ public class UserDTO {
                 .userType(nbti.getName())
                 .description(nbti.getContent())
                 .image(nbti.getImage())
+                .thumbnailTitle(nbti.getThumbnailTitle())
+                .thubnailCharacter(nbti.getThumbnailCharacter())
                 .build();
     }
 }
