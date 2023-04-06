@@ -46,6 +46,10 @@ class GetFromSpring(ObjectType):
     doneRatio = List(Int)
     genreRatio = List(Int)
 
+class GetFromSpring2(ObjectType):
+    myRank = Int()
+    allUser = Int()
+    
 # 내 장르 정보 type
 class MyGenre(ObjectType):
     genreId = Int()
@@ -70,8 +74,10 @@ class SaveWebtoonMutation(Mutation):
                     user_id=user_pk,
                     webtoon_id=web_pk
                 )
-                # DB에 저장
-                added_select_webtoon.save()
+                # DB에 저장하기 전에 중복되는 데이터가 있는지 확인
+                if not Userwebtoon.objects.filter(user_id=user_pk, webtoon_id=web_pk).exists():
+                    # 중복된 데이터가 없으면 DB에 저장
+                    added_select_webtoon.save()
             # 정상저장 시 success = true
             success = True
         except:
@@ -88,6 +94,7 @@ class Mutation(ObjectType):
 class Query(ObjectType):
     myGenre = List(MyGenre, webtoon_pk=List(Int))
     getFromSpring = List(GetFromSpring, user_pk=Int())
+    getFromSpring2 = List(GetFromSpring2, user_pk=Int())
     authorWebtoon = List(Webtoon, genre_pk=Int(), webtoon_pk=List(Int))
     keywordSimilarWebtoon = List(Webtoon, keywords=List(Int), top_n=Int())
     myKeyword = List(MyKeyword, webtoon_pk=List(Int))
@@ -327,6 +334,15 @@ class Query(ObjectType):
             sList.append(s)
         return sList      
     
+    def resolve_getFromSpring2(self, info, user_pk):
+        statistic2 = views.get_from_spring2(user_pk)
+        sList = []
+        if statistic2:
+            s = GetFromSpring2()
+            s.myRank = statistic2['myRank']
+            s.allUser = statistic2['allUser']
+            sList.append(s)
+        return sList
     '''
     query SEARCH{
         myGenre(webtoonPk:[3,4,5]){
