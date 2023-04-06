@@ -333,7 +333,12 @@ class Query(ObjectType):
             s.genreRatio = statistics['genreRatio']
             sList.append(s)
         return sList      
-    
+    '''
+    getFromSpring2(userPk: $userPk){
+        myRank
+        allUser
+    }
+    '''
     def resolve_getFromSpring2(self, info, user_pk):
         statistic2 = views.get_from_spring2(user_pk)
         sList = []
