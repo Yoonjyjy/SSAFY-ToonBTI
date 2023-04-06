@@ -34,14 +34,21 @@ public class ResultService {
      * @param uuid 사용자 uuid
      * @return 사용자 결과 정보
      */
-    public String getResultJsonFile(String uuid) {
+    public String getResultJsonFile(String uuid){
         StringBuilder sb = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path+uuid+".txt"));
             sb.append(reader.readLine());
             logger.info("file data : {}", sb.toString());
-        } catch (IOException e) {
+        } catch (FileNotFoundException e){
+            logger.error("파일이 존재하지 않습니다: " + e.getMessage());
+            return "error";
+        } catch (IOException e){
             logger.error("파일 읽기 중 오류가 발생하였습니다: " + e.getMessage());
+            return "error";
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return "error";
         }
         return sb.toString();
     }
