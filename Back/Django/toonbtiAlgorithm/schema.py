@@ -208,7 +208,6 @@ class Query(ObjectType):
             w.search_title = webtoon.search_title
             wList.append(w)
         return wList
-    
     '''
     query SEARCH{
         resultNbtiWebtoon(nbtiPk:17, userPk:3){

@@ -197,7 +197,7 @@ def my_keyword(webtoon_pk):
             return result
         else:
             # 태그 안 뽑힐 시 인기 태그 10개 중 랜덤 4개 뽑아서 반환
-            tag_ids = [2,3,7,12,13,16,111,110,109,108]
+            tag_ids = [7,12,16,56,69,73,108,110]
             tag_pk = random.sample(tag_ids, 4)
             res = Tag.objects.filter(tag_id__in=tag_pk)
             serializer = TagsSerializer(res, many=True)
