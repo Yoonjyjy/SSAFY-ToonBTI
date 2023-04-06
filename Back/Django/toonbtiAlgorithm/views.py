@@ -183,18 +183,22 @@ def my_keyword(webtoon_pk):
                 else:
                     # 새로 추가
                     keyword_dict[t.tag_id] = 1
-        # 많이 나온 횟수 기준으로 정렬해서 상위 4개만 뽑는다
-        res1 = sorted(keyword_dict.items(), key=lambda x: x[1], reverse=True)[:4]
-        result = []
-        # 태그 id를 순회하며
-        for r in res1:
-            # 태그 정보를 가져온다
-            tag = get_object_or_404(Tag, tag_id=r[0])
-            # serializer 돌리고
-            serializer = TagsSerializer(tag)
-            # 태그 이름을 result에 담아서 반환한다
-            result.append(serializer.data)
-        return result
+            # 많이 나온 횟수 기준으로 정렬해서 상위 4개만 뽑는다
+            res1 = sorted(keyword_dict.items(), key=lambda x: x[1], reverse=True)[:4]
+            result = []
+            # 태그 id를 순회하며
+            for r in res1:
+                # 태그 정보를 가져온다
+                tag = get_object_or_404(Tag, tag_id=r[0])
+                # serializer 돌리고
+                serializer = TagsSerializer(tag)
+                # 태그 이름을 result에 담아서 반환한다
+                result.append(serializer.data)
+            return result
+        # else:
+        #     tag_ids = [2,3,7,12,13,16,111,110,109,108]
+        #     tag_id = random.sample(tag_ids, 4)
+        #     result = 
     return None
 
 
