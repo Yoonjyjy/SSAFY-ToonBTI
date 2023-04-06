@@ -6,6 +6,7 @@ import MBTIResultAll from "./MBTIResultAll";
 import MBTITest from "./MBTITest";
 import NotFound from "./NotFound";
 import MBTIResultShared from "./MBTIResultShared";
+import SurveyResultView from "./SurveyResultView";
 
 export {
   Home,
@@ -16,6 +17,7 @@ export {
   MBTITest,
   NotFound,
   MBTIResultShared,
+  SurveyResultView,
 };
 
 window.Kakao.init(import.meta.env.VITE_KAKAO_SHARE_KEY);

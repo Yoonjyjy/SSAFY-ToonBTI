@@ -17,6 +17,7 @@ import {
   SAVE_WEBTOON,
   GET_SURVEY_RESULT_1,
   GET_SURVEY_RESULT_2,
+  SAVE_RESULT_JSON_FILE,
 } from "../api/survey";
 import { django } from "../api";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -56,59 +57,7 @@ export interface RecomWebtoonType {
   webtoonId: number;
 }
 
-// const data = {
-//   reader_category_img: test1,
-//   reader_category_name: "LSEA",
-//   read_books_num: 77,
-//   total_reader_cnt: 3023,
-//   reader_percentage: 23.5,
-//   reader_title_list: [
-//     {
-//       id: 1,
-//       title: "로판 전문가",
-//       color: "#99CCFF",
-//     },
-//     { id: 2, title: "카카오 매니아", color: "#FFD45B" },
-//     { id: 3, title: "완결작 킬러", color: "#757575" },
-//   ],
-//   platform_ratio: {
-//     Kakao: 63.5,
-//     Naver: 36.5,
-//   },
-//   finished_ratio: {
-//     finished: 43.7,
-//     ongoing: 57.3,
-//   },
-//   genre_analysis: [
-//     { id: 1, name: "판타지", count: 31 },
-//     { id: 2, name: "드라마", count: 21 },
-//     { id: 3, name: "로맨스", count: 10 },
-//     { id: 4, name: "로맨스판타지", count: 30 },
-//     { id: 5, name: "현대판타지", count: 9 },
-//     { id: 6, name: "액션/무협", count: 33 },
-//     { id: 7, name: "소년/감성", count: 11 },
-//     { id: 8, name: "일상/개그", count: 50 },
-//     { id: 9, name: "공포/추리", count: 3 },
-//     { id: 10, name: "스포츠", count: 0 },
-//   ],
-//   favorite_genre: "판타지",
-//   favorite_genre_author: {
-//     name: "판타지",
-//     main_author: "SIU",
-//     author_list: ["SIU", "Omin", "테미스"],
-//     main_work_title: ["신의 탑", "언니", "그만훼"],
-//     main_genre: ["판타지"],
-//     main_author_img: "/tiger.jpg",
-//   },
-//   accuracy: 73.2,
-// };
-
-// const webtoonPk = [3, 4, 5];
-// const userPk = Number(localStorage.getItem("userId"));
-// const nbtiPk = Number(localStorage.getItem("nbtiPk"));
-// const genrePk = 234;
 const topN = 5;
-// const keywordsList = [35, 11, 45, 15];
 
 export default function AnalysisResult() {
   const userPk = Number(localStorage.getItem("userId"));
@@ -283,15 +232,57 @@ export default function AnalysisResult() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
+  // useEffect(() => {
+  //   console.log(result);
+  // }, [result]);
 
   const loading =
     saveWebtoonLoading || fetchTestResult1Loading || fetchTestResult2Loading;
 
   function calPercent(count: number, total: number) {
     return ((count / total) * 100).toFixed(2);
+  }
+
+  const [
+    saveResultJSONFile,
+    { data: savedResultData, error: savedResultError },
+  ] = useMutation(SAVE_RESULT_JSON_FILE, {
+    onCompleted(data) {
+      console.log("fin data", data);
+    },
+  });
+
+  function shareHandler() {
+    const root = {
+      RATIO: {
+        kakaoRatio: kakaoRatio,
+        naverRatio: naverRatio,
+        finishedRatio: finishedRatio,
+        unfinishedRatio: unfinishedRatio,
+      },
+      USER: {
+        countAllUsers: userCount?.countAllUsers,
+        topN,
+        webtoonPk,
+        rankList,
+        genreAnalysis,
+      },
+      RESULT: {
+        getFromSpring: result.getFromSpring,
+        getFromSpring2: result.getFromSpring2,
+        resultNbtiWebtoon: result.resultNbtiWebtoon,
+        myKeyword: result.myKeyword,
+        authorWebtoon: result.authorWebtoon,
+        keywordSimilarWebtoon: result.keywordSimilarWebtoon,
+        myGenre: result.myGenre,
+      },
+    };
+    console.log("to be saved: ", JSON.stringify(root), userPk.toString());
+
+    saveResultJSONFile({
+      variables: { data: JSON.stringify(root), uuid: userPk.toString() },
+    });
+    console.log(`/survey/result/${userPk}`);
   }
 
   if (loading) {
@@ -544,27 +535,24 @@ export default function AnalysisResult() {
             dataList={result?.keywordSimilarWebtoon}
           ></RecommendItemList>
         </StyledSection>
-        <StyledSection>
-          <Text bold="true">
-            {result?.myGenre[0].genreName} 장르의 이 작가는 어때요?
-          </Text>
-          <Image
-            url={result?.authorWebtoon[0].image}
-            width="10rem"
-            height="14rem"
-            borderRadius={4}
-          ></Image>
-          {/* <Text bold="true">
-            <PointSpan>
-              취향저격율 {result?.resultNbtiWebtoon?.likeRate}%
-            </PointSpan>
-          </Text> */}
-          <Text>
-            <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
-            &nbsp;작가
-          </Text>
-          <Text size="0.9rem">대표작 - {result?.authorWebtoon[0].title}</Text>
-        </StyledSection>
+        {result?.authorWebtoon?.[0] && (
+          <StyledSection>
+            <Text bold="true">
+              {result?.myGenre?.genreName} 장르 독자들이 선호하는 대표 작가
+            </Text>
+            <Image
+              url={result?.authorWebtoon[0].image}
+              width="10rem"
+              height="14rem"
+              borderRadius={4}
+            ></Image>
+            <Text>
+              <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
+              &nbsp;작가
+            </Text>
+            <Text size="0.9rem">대표작 -{result?.authorWebtoon[0].title}</Text>
+          </StyledSection>
+        )}
         <StyledSection>
           <BtnContainer direction="vertical">
             <StyledButton
@@ -574,7 +562,6 @@ export default function AnalysisResult() {
             >
               독자 유형 테스트 다시하기
             </StyledButton>
-            {/* TODO: html 파일 만들때 지워놓기 */}
             <StyledButton
               onClick={() => {
                 navigate("/survey");
@@ -584,8 +571,7 @@ export default function AnalysisResult() {
             </StyledButton>
           </BtnContainer>
         </StyledSection>
-        <StyledSection>
-          {/* TODO: html 파일 만들때 지워놓기 */}
+        <StyledSection onClick={shareHandler}>
           <ShareButton
             text="웹툰 취향 분석 결과 공유하기"
             src={`${import.meta.env.VITE_TEST_URL}`}

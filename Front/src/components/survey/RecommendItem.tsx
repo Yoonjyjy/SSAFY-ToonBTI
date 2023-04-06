@@ -1,13 +1,12 @@
-//FIXME:
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from "react";
 import styled from "styled-components";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Webtoon } from "../../gql/graphql";
-import { RecomWebtoonType } from "../../pages/SurveyResult";
 
 interface ItemProps {
   type?: string;
-  item: RecomWebtoonType;
+  item: Webtoon;
 }
 
 export default function RecommendItem({ type, item }: ItemProps) {
@@ -23,9 +22,9 @@ export default function RecommendItem({ type, item }: ItemProps) {
             src={`/simple-spinner.json`}
           ></StyledPlayer>
         )}
-        {item.title.length > 11 ? (
+        {item.title!.length > 11 ? (
           <StyledText>
-            <b>{item.title.slice(0, 11) + "..."}</b>
+            <b>{item.title!.slice(0, 11) + "..."}</b>
           </StyledText>
         ) : (
           <StyledText>
@@ -43,16 +42,16 @@ export default function RecommendItem({ type, item }: ItemProps) {
         <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
       )}
 
-      {item.title.length > 11 ? (
+      {item.title!.length > 11 ? (
         <StyledText>
-          <b>{item.title.slice(0, 11) + "..."}</b>
+          <b>{item.title!.slice(0, 11) + "..."}</b>
         </StyledText>
       ) : (
         <StyledText>
           <b>{item.title}</b>
         </StyledText>
       )}
-      <StyledTextColor>취향저격율 {item.likeRate.toFixed(2)}%</StyledTextColor>
+      <StyledTextColor>취향저격율 {item.likeRate!.toFixed(2)}%</StyledTextColor>
     </StyledDiv>
   );
 }

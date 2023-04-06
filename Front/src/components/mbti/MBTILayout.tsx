@@ -17,7 +17,7 @@ interface PropType {
 }
 
 export default function CommonLayout(props: PropType) {
-  const { data: typeInfo, error } = useQuery(GET_TYPE, {
+  const { data: typeInfo } = useQuery(GET_TYPE, {
     variables: {
       userType: props.mbti,
     },
@@ -184,19 +184,6 @@ const StyledHeader = styled(Title)`
   font-weight: bold;
   font-size: 1rem;
   margin: 0px;
-`;
-
-const StyledContent = styled(Text)`
-  text-align: center;
-  line-height: 1.5rem;
-  word-break: keep-all;
-  white-space: pre-line;
-  display: block;
-
-  span {
-    font-weight: 600;
-    line-height: 2rem;
-  }
 `;
 
 const TextContainer = styled(Space)`
