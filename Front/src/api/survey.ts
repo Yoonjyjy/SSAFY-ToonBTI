@@ -60,6 +60,8 @@ const GET_SURVEY_RESULT_1 = graphql(`
         userType
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       webtoonCounts
       platformRatio
@@ -72,6 +74,7 @@ const GET_SURVEY_RESULT_1 = graphql(`
     }
     myGenre(webtoonPk: $webtoonPk) {
       genreId
+      genreName
     }
   }
 `);

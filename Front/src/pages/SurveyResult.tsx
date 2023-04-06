@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Space } from "antd";
 import styled from "styled-components";
-import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
+import {
+  DoughnutChart,
+  Layout,
+  MainImage,
+  ProgressiveBar,
+} from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
@@ -161,15 +166,22 @@ export default function AnalysisResult() {
         setResult({ ...result, ...data });
         if (genreAnalysis.length < 10) {
           const temp: GenreListType[] = [];
-          for (let i = 0; i < 10; i++) {
+          // const tempAll: GenreListType[] = [];
+          for (let i = 1; i < 11; i++) {
+            // tempAll.push({
+            //   id: i,
+            //   name: GENRE[i - 1],
+            //   count: result?.getFromSpring[0].genreRatio[i],
+            // });
             if (result?.getFromSpring[0].genreRatio[i] !== 0) {
               temp.push({
-                id: i + 1,
-                name: GENRE[i],
+                id: i,
+                name: GENRE[i - 1],
                 count: result?.getFromSpring[0].genreRatio[i],
               });
             }
           }
+          // setGenreAnalysis(tempAll);
           setGenreAnalysis(temp);
           setRankList(
             temp
@@ -221,6 +233,7 @@ export default function AnalysisResult() {
 
         const keywordsList = data?.myKeyword?.[0]?.myKeywordId;
         const genrePk = data?.myGenre?.[0]?.genreId;
+        // console.log(keywordsList, genrePk, webtoonPk);
         fetchTestResult2({
           variables: {
             keywords: keywordsList as number[],
@@ -301,13 +314,25 @@ export default function AnalysisResult() {
     >
       <TitleText>당신의 독자 유형은?</TitleText>
       {result?.getFromSpring?.[0].myType?.image ? (
-        <Image type="userType" url={result?.getFromSpring[0].myType.image} />
+        // <Image type="userType" url={result?.getFromSpring[0].myType.image} />
+        <MainImage
+          src={
+            "https://j8a302.p.ssafy.io/images/" +
+            result?.getFromSpring[0].myType.image
+          }
+          size={80}
+        />
       ) : (
         <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
       )}
       <article>
         <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
+          <Text bold="true" size="1rem">
+            {result?.getFromSpring[0]?.myType?.thumbnailTitle +
+              " - " +
+              result?.getFromSpring[0]?.myType?.thumbnailCharacter}
+          </Text>
           <Text bold="true" size="1.7rem">
             {result?.getFromSpring[0].myType.userType}
           </Text>
@@ -320,7 +345,7 @@ export default function AnalysisResult() {
             </Text>
           </CallOutDiv>
           {webtoonPk.length < 10 ? (
-            <Text>웹툰에 더 관심을 가져보시는 건 어떨까요?</Text>
+            <Text>재밌는 웹툰들을 더 추천해드릴게요!</Text>
           ) : webtoonPk.length < 30 ? (
             <Text>제법 많이 보셨군요!</Text>
           ) : webtoonPk.length < 50 ? (
@@ -391,12 +416,16 @@ export default function AnalysisResult() {
               progress={kakaoRatio}
             ></ProgressiveBar>
             <RatioTextBox>
-              {kakaoRatio > naverRatio ? (
+              {kakaoRatio == naverRatio ? (
+                <RatioText>두 곳 모두 재밌게 즐기고 계시네요.</RatioText>
+              ) : kakaoRatio > naverRatio ? (
                 <RatioText color="kakao">카카오페이지</RatioText>
               ) : (
                 <RatioText color="naver">네이버</RatioText>
               )}
-              <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
+              {kakaoRatio != naverRatio ? (
+                <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
+              ) : null}
             </RatioTextBox>
           </div>
         </StyledSection>
@@ -417,6 +446,10 @@ export default function AnalysisResult() {
                 <RatioText>보다 더&nbsp;</RatioText>
                 <RatioText color="ongoing"> 연재작</RatioText>
                 <RatioText>을 더 선호해요.</RatioText>
+              </RatioTextBox>
+            ) : finishedRatio == unfinishedRatio ? (
+              <RatioTextBox>
+                <RatioText>골고루 즐기고 계시네요.</RatioText>
               </RatioTextBox>
             ) : (
               <RatioTextBox>
@@ -498,8 +531,6 @@ export default function AnalysisResult() {
         <StyledSection>
           <Text size="1.1rem">사용자가 즐겨보는 키워드</Text>
           <StyledKeywordDiv>
-            {/* {rankList.map} */}
-            {/* mykeyword */}
             {result?.myKeyword[0].myKeywordName.map((el: string) => {
               return <StyledKeyword key={el}>#{el}</StyledKeyword>;
             })}
@@ -510,13 +541,12 @@ export default function AnalysisResult() {
             type="keyword"
             keyword={result?.myKeyword[0].myKeywordName[0]}
             text="내가 선호하는 키워드의 작품"
-            // text="# 키워드와 유사한 키워드의 작품"
             dataList={result?.keywordSimilarWebtoon}
           ></RecommendItemList>
         </StyledSection>
         <StyledSection>
           <Text bold="true">
-            {result?.myGenre?.genreName} 장르 독자들이 선호하는 대표 작가
+            {result?.myGenre[0].genreName} 장르의 이 작가는 어때요?
           </Text>
           <Image
             url={result?.authorWebtoon[0].image}
@@ -533,7 +563,7 @@ export default function AnalysisResult() {
             <BoldSpan>{result?.authorWebtoon[0].authorName}</BoldSpan>
             &nbsp;작가
           </Text>
-          <Text size="0.9rem">대표작 -{result?.authorWebtoon[0].title}</Text>
+          <Text size="0.9rem">대표작 - {result?.authorWebtoon[0].title}</Text>
         </StyledSection>
         <StyledSection>
           <BtnContainer direction="vertical">
@@ -561,7 +591,6 @@ export default function AnalysisResult() {
             src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
             type={userPk}
-            // type={result?.}
           />
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302
@@ -734,6 +763,7 @@ const StyledPlayer = styled(Player)`
 
 const StyledKeywordDiv = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
   justify-content: center;
@@ -742,7 +772,7 @@ const StyledKeywordDiv = styled.div`
 const StyledKeyword = styled.div`
   display: flex;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 14px;
   border-radius: 10px;
   background-color: #eeeeee;
   padding: 4px 10px;

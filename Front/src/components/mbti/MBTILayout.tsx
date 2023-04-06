@@ -12,6 +12,8 @@ interface PropType {
   desc: string;
   img: string;
   per: number;
+  title: string;
+  character: string;
 }
 
 export default function CommonLayout(props: PropType) {
@@ -38,45 +40,6 @@ export default function CommonLayout(props: PropType) {
     setIsModalOpen(false);
   };
 
-  function getTypeName(type: string): string[] {
-    switch (type) {
-      case "LSRA":
-        return ["오로지 너를 이기고 싶어", "오로지"];
-      case "LSRT":
-        return ["연애의 정령", "힙제이"];
-      case "LSEA":
-        return ["경자 전성시대", "경자"];
-      case "LSET":
-        return ["갓 오브 하이스쿨", "진모리"];
-      case "LWRA":
-        return ["바른연애 길잡이", "정바름"];
-      case "LWRT":
-        return ["유일무이 로맨스", "탁무이"];
-      case "LWEA":
-        return ["헬퍼", "장관남"];
-      case "LWET":
-        return ["마술사", "에더마스크"];
-      case "HSRA":
-        return ["전지적 독자 시점", "김독자"];
-      case "HSRT":
-        return ["어쩌다보니 천생연분", "한지아"];
-      case "HSEA":
-        return ["삼봉이발소", "김삼봉"];
-      case "HSET":
-        return ["나 혼자만 레벨업", "성진우"];
-      case "HWRA":
-        return ["유미의 세포들", "유미"];
-      case "HWRT":
-        return ["연놈", "백소연"];
-      case "HWEA":
-        return ["재벌집 막내아들", "진도준"];
-      case "HWET":
-        return ["프리드로우", "동까"];
-      default:
-        return [""];
-    }
-  }
-
   return (
     <StyledLayout>
       <StyledAllMBTI onClick={showModal}>
@@ -97,7 +60,7 @@ export default function CommonLayout(props: PropType) {
           <StyledHeader level={5}>
             {props.mbti} ({props.per}%)
           </StyledHeader>
-          {getTypeName(props.mbti)[0]} <br></br> {getTypeName(props.mbti)[1]}
+          {props.title} <br></br> {props.character}
         </StyledTypeName>
       </StyledAllMBTI>
 
@@ -128,7 +91,7 @@ export default function CommonLayout(props: PropType) {
                 {props.mbti} ({props.per}%)
               </StyledHeader>
               <center>
-                {getTypeName(props.mbti)[0]} - {getTypeName(props.mbti)[1]}
+                {props.title} - {props.character}
               </center>
             </StyledTypeName>
 
@@ -147,11 +110,15 @@ export default function CommonLayout(props: PropType) {
               text: "나와 잘 맞는 유형",
               mbti: typeInfo?.getType?.bestType?.userType,
               img: typeInfo?.getType?.bestType?.image,
+              title: typeInfo?.getType?.bestType?.thumbnailTitle,
+              character: typeInfo?.getType?.bestType?.thumbnailCharacter,
             },
             {
               text: "나와 안 맞는 유형",
               mbti: typeInfo?.getType?.worstType?.userType,
               img: typeInfo?.getType?.worstType?.image,
+              title: typeInfo?.getType?.worstType?.thumbnailTitle,
+              character: typeInfo?.getType?.worstType?.thumbnailCharacter,
             },
           ].map(
             (el) =>
@@ -173,8 +140,8 @@ export default function CommonLayout(props: PropType) {
                   )}
                   <StyledTypeName>
                     <StyledStrong>{el.mbti}</StyledStrong>
-                    {getTypeName(el.mbti)[0]} <br></br>{" "}
-                    {getTypeName(el.mbti)[1]}
+                    {el.title} <br></br>
+                    {el.character}
                   </StyledTypeName>
                 </StyledCol>
               )

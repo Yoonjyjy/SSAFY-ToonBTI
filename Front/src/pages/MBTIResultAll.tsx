@@ -2,18 +2,16 @@ import React from "react";
 import { Space, Row, Col, Typography } from "antd";
 import styled from "styled-components";
 import { Layout, MBTILayout } from "../components/common";
-import ShareButton from "../components/common/ShareButton";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_TYPES } from "../api/mbti";
-import { MBTITypeButton, MBTITypeDesc } from "../components/mbti";
+import { MBTITypeDesc } from "../components/mbti";
 import { useNavigate } from "react-router-dom";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export default function MBTIResultAll() {
   const navigate = useNavigate();
   const { data, error } = useQuery(GET_ALL_TYPES); // TODO: handle while loading
-  // const { data, error } = useQuery(COUNT_ALL_USERS); // TODO: handle while loading
 
   const total = data?.getAllTypes
     ?.map((el) => el?.count)
@@ -29,6 +27,7 @@ export default function MBTIResultAll() {
       <StyledDiv>
         <TextContainer direction="vertical" size={5}>
           <StyledHeader level={3}>전체 독자 유형</StyledHeader>
+          <StyledContent>각 유형을 눌러 확인해보세요!</StyledContent>
         </TextContainer>
         <Row gutter={[16, 16]}>
           {sortedData.map(
@@ -40,6 +39,8 @@ export default function MBTIResultAll() {
                     desc={el.description as string}
                     img={el.image as string}
                     per={percent(el.count, total)}
+                    title={el.thumbnailTitle as string}
+                    character={el.thumbnailCharacter as string}
                   />
                 </StyledCol>
               )
@@ -47,13 +48,6 @@ export default function MBTIResultAll() {
         </Row>
       </StyledDiv>
       <MBTITypeDesc />
-      {/* <MBTITypeButton /> */}
-      {/* <ShareButton
-        text="웹툰 독자 유형 공유하기"
-        src={`${import.meta.env.VITE_TEST_URL}`}
-        param="mbti/result"
-        type=""
-      /> */}
     </Layout>
   );
 }
@@ -74,6 +68,19 @@ const StyledHeader = styled(Title)`
   font-weight: bold;
   font-size: 1rem;
   margin: 0px;
+`;
+
+const StyledContent = styled(Text)`
+  text-align: center;
+  line-height: 1.5rem;
+  word-break: keep-all;
+  white-space: pre-line;
+  display: block;
+
+  span {
+    font-weight: 600;
+    line-height: 2rem;
+  }
 `;
 
 const StyledDiv = styled.div`

@@ -21,6 +21,7 @@ export default function App() {
       theme={{
         token: {
           fontFamily: "Pretendard",
+          colorText: "#000",
         },
       }}
     >

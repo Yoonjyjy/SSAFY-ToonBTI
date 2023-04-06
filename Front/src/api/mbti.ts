@@ -23,6 +23,8 @@ const GET_ALL_TYPES = graphql(`
       description
       image
       userType
+      thumbnailTitle
+      thumbnailCharacter
     }
   }
 `);
@@ -35,30 +37,40 @@ const GET_TYPE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       bestType {
         userType
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       worstType {
         userType
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       firstType {
         userType
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       secondType {
         userType
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
     }
   }
@@ -75,6 +87,8 @@ const ADD_USER_RESPONSE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       bestType {
         nbtiId
@@ -82,6 +96,8 @@ const ADD_USER_RESPONSE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       worstType {
         nbtiId
@@ -89,6 +105,8 @@ const ADD_USER_RESPONSE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       firstType {
         nbtiId
@@ -96,6 +114,8 @@ const ADD_USER_RESPONSE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
       secondType {
         nbtiId
@@ -103,6 +123,8 @@ const ADD_USER_RESPONSE = graphql(`
         description
         image
         count
+        thumbnailTitle
+        thumbnailCharacter
       }
     }
   }
