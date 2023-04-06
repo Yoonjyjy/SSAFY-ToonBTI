@@ -27,11 +27,6 @@ export default function MBTITest() {
     }
   }
 
-  function clickHandler() {
-    /** TODO: */
-    navigate("/mbti/result");
-  }
-
   if (error) {
     navigate("/404");
   }

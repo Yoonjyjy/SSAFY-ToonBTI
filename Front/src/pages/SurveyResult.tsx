@@ -5,7 +5,7 @@ import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
 import Image from "../components/common/Image";
 import Text from "../components/common/Text";
 import RecommendItemList from "../components/survey/RecommendItemList";
-import ShareButton from "../components/common/ShareButton";
+// import ShareButton from "../components/common/ShareButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import test1 from "/test1.png";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -17,7 +17,6 @@ import {
 import { django } from "../api";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { COUNT_ALL_USERS } from "../api/mbti";
-import { finished } from "stream";
 import theme from "../theme";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
@@ -314,14 +313,14 @@ export default function AnalysisResult() {
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
             <Text size="1.5rem">
-              <PointSpan>{result?.getFromSpring[0].webtoonCounts}</PointSpan>개
+              <PointSpan>{webtoonPk.length}</PointSpan>개
             </Text>
           </CallOutDiv>
-          {result?.getFromSpring[0].webtoonCounts < 10 ? (
+          {webtoonPk.length < 10 ? (
             <Text>웹툰에 더 관심을 가져보시는 건 어떨까요?</Text>
-          ) : result?.getFromSpring[0].webtoonCounts < 30 ? (
+          ) : webtoonPk.length < 30 ? (
             <Text>제법 많이 보셨군요!</Text>
-          ) : result?.getFromSpring[0].webtoonCounts < 50 ? (
+          ) : webtoonPk.length < 50 ? (
             <Text>웹툰계의 대학원생이에요.</Text>
           ) : (
             <Text>혹시 웹툰학과 교수신가요?</Text>
@@ -432,11 +431,7 @@ export default function AnalysisResult() {
                       </GenreText>
                       <GenreHr preferred={rankList.includes(item)} />
                       <GenreText preferred={rankList.includes(item)}>
-                        {item.count} (
-                        {calPercent(
-                          item.count,
-                          result?.getFromSpring[0].webtoonCounts
-                        )}
+                        {item.count} ({calPercent(item.count, webtoonPk.length)}
                         %)
                       </GenreText>
                     </GenreDiv>
@@ -531,23 +526,23 @@ export default function AnalysisResult() {
             >
               독자 유형 테스트 다시하기
             </StyledButton>
-            <StyledButton
+            {/* <StyledButton
               onClick={() => {
                 navigate("/survey");
               }}
             >
               웹툰 취향 분석 다시하기
-            </StyledButton>
+            </StyledButton> */}
           </BtnContainer>
         </StyledSection>
         <StyledSection>
-          <ShareButton
+          {/* <ShareButton
             text="웹툰 취향 분석 결과 공유하기"
             src={`${import.meta.env.VITE_TEST_URL}`}
             param="survey/result"
             type={userPk}
             // type={result?.}
-          />
+          /> */}
           <StyleSpan>
             @SSAFY 8기 특화 3반 A302
             <br></br>
