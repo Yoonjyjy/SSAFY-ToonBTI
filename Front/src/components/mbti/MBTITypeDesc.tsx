@@ -12,7 +12,11 @@ export default function MBTITypeDesc() {
       </TextContainer>
       <InfoContainer direction="vertical" size={0}>
         <InfoDesContainer direction="vertical">
-          <StyledHeader level={2}>L & H</StyledHeader>
+          <StyledHeader level={2}>
+            <span style={{ color: "#FFA7A7" }}>L</span>{" "}
+            <span style={{ color: "lightgrey" }}>&</span>{" "}
+            <span style={{ color: "#1E9EFF" }}>H</span>
+          </StyledHeader>
           <StyledContent>
             <span>Light vs Heavy</span>
             <br />
@@ -23,7 +27,11 @@ export default function MBTITypeDesc() {
         </InfoDesContainer>
         <Divider />
         <InfoDesContainer direction="vertical">
-          <StyledHeader level={2}>S & W</StyledHeader>
+          <StyledHeader level={2}>
+            <span style={{ color: "#C190FF" }}>S</span>{" "}
+            <span style={{ color: "lightgrey" }}>&</span>{" "}
+            <span style={{ color: "#FFBC00" }}>W</span>
+          </StyledHeader>
           <StyledContent>
             <span>Strong vs Weak</span>
             <br />
@@ -36,7 +44,11 @@ export default function MBTITypeDesc() {
         </InfoDesContainer>
         <Divider />
         <InfoDesContainer direction="vertical">
-          <StyledHeader level={2}>R & E</StyledHeader>
+          <StyledHeader level={2}>
+            <span style={{ color: "#03C659" }}>R</span>{" "}
+            <span style={{ color: "lightgrey" }}>&</span>{" "}
+            <span style={{ color: "#A38E3C" }}>E</span>
+          </StyledHeader>
           <StyledContent>
             <span>Romance vs Event</span>
             <br />
@@ -49,7 +61,11 @@ export default function MBTITypeDesc() {
         </InfoDesContainer>
         <Divider />
         <InfoDesContainer direction="vertical">
-          <StyledHeader level={2}>A & T</StyledHeader>
+          <StyledHeader level={2}>
+            <span style={{ color: "#8D8D8D" }}>A</span>{" "}
+            <span style={{ color: "lightgrey" }}>&</span>{" "}
+            <span style={{ color: "#FF69A8" }}>T</span>
+          </StyledHeader>
           <StyledContent>
             <span>Alone vs Together</span>
             <br />
@@ -68,8 +84,7 @@ export default function MBTITypeDesc() {
 const InfoContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
-  display: flexwrap;
-  background-color: ${({ theme }) => theme.colors.yellowbg};
+  display: flex-wrap;
   padding: 30px 10px 30px 10px;
   border-radius: 10px;
 `;
@@ -78,14 +93,12 @@ const InfoDesContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
   color: black;
-  background-color: ${({ theme }) => theme.colors.yellowbg};
 `;
 
 const TextContainer = styled(Space)`
   line-height: 1rem;
   width: 100%;
   color: black;
-  // padding: 20px 10px 0px 10px;
 `;
 
 const StyledHeader = styled(Title)`
@@ -97,7 +110,6 @@ const StyledHeader = styled(Title)`
 
 const StyledContent = styled(Text)`
   text-align: center;
-  // font-weight: bold;
   white-space: pre-wrap;
   line-height: 1.3rem;
 

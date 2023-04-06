@@ -54,13 +54,12 @@ export default function MBTITest() {
             return <div key={line}>{line}</div>;
           })}
       </StyleSpan>
-      {/* <StyledPlayer autoplay loop src={`/${step + 1}.json`}></StyledPlayer> */}
       {step === 2 ? (
         <img
           src={`/test${step + 1}.jpg`}
           style={{ width: "80%", margin: "auto" }}
         ></img>
-      ) : step === 1 || step === 3 || step === 8 ? (
+      ) : step === 1 || step === 3 || step === 8 || step === 6 ? (
         <img
           src={`/test${step + 1}.jpeg`}
           style={{ width: "80%", margin: "auto" }}

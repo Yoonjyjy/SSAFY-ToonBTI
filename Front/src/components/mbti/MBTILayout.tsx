@@ -50,17 +50,14 @@ export default function CommonLayout(props: PropType) {
             size={40}
           />
         ) : (
-          <StyledPlayer
-            autoplay
-            loop
-            src={`/spinner.json`}
-          ></StyledPlayer>
+          <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
         )}
         <StyledTypeName>
           <StyledHeader level={5}>
             {props.mbti} ({props.per}%)
           </StyledHeader>
-          {props.title} <br></br> {props.character}
+          <StyledTitle>{props.title}</StyledTitle>
+          <StyledCharacter>{props.character}</StyledCharacter>
         </StyledTypeName>
       </StyledAllMBTI>
 
@@ -79,11 +76,7 @@ export default function CommonLayout(props: PropType) {
               size={70}
             />
           ) : (
-            <StyledPlayer
-              autoplay
-              loop
-              src={`/spinner.json`}
-            ></StyledPlayer>
+            <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
           )}
           <TextContainer direction="vertical" size={5}>
             <StyledTypeName>
@@ -140,8 +133,8 @@ export default function CommonLayout(props: PropType) {
                   )}
                   <StyledTypeName>
                     <StyledStrong>{el.mbti}</StyledStrong>
-                    {el.title} <br></br>
-                    {el.character}
+                    <StyledTitle>{el.title}</StyledTitle>
+                    <StyledCharacter>{el.character}</StyledCharacter>
                   </StyledTypeName>
                 </StyledCol>
               )
@@ -183,7 +176,7 @@ const StyledHeader = styled(Title)`
   text-align: center;
   font-weight: bold;
   font-size: 1rem;
-  margin: 0px;
+  margin: 0;
 `;
 
 const TextContainer = styled(Space)`
@@ -204,7 +197,7 @@ const StyledTypeName = styled.div`
   flex-direction: column;
   line-height: 1rem;
   margin: 10px 0px;
-  gap: 10px;
+  gap: 6px;
 `;
 
 const StyledStrong = styled.strong`
@@ -236,4 +229,13 @@ const StyledLi = styled.li`
 
   /* padding-left: 30px; */
   /* text-indent: -20px; */
+`;
+
+const StyledTitle = styled.p`
+  margin: 0 auto;
+  font-weight: 400;
+`;
+const StyledCharacter = styled.p`
+  margin: 0 auto;
+  font-size: 0.8rem;
 `;

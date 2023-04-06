@@ -15,8 +15,7 @@ export default function HomeBackgroundImage() {
   if (data) {
     return (
       <>
-      
-      <StyledBlackDiv></StyledBlackDiv>
+        <StyledBlackDiv></StyledBlackDiv>
         <StyledGrid>
           {images?.map((i, idx) => (
             <StyledDiv key={i} url={i} idx={idx}></StyledDiv>
@@ -48,17 +47,10 @@ const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   overflow: hidden;
-<<<<<<< HEAD
   position: fixed;
-=======
->>>>>>> fd73f39 (style : design 작업중)
   top: -60px;
   left: -30px;
   width: 120vw;
   height: 120vh;
   gap: 8px;
-  
-  position: relative;
-  overflow: hidden;
-  
 `;

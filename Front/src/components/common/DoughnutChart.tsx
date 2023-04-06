@@ -51,13 +51,13 @@ export default function DoughnutChart({ dataList }: PropType) {
     { id: number; name: string; count: number }[]
   >([]);
   useEffect(() => {
-    const newDataList2 = [...newDataList];
-    if (newDataList2.length < 10) {
-      for (let i = 0; i < dataList?.length; i++) {
-        newDataList2.push({ id: i + 1, name: Genre[i], count: dataList[i] });
-      }
-      setNewDataList(newDataList2);
+    // const newDataList2 = [...newDataList]; // 받아온 데이터 리스트를 복사해
+    const newDataList2 = []; // 받아온 데이터 리스트를 복사해
+    // if (newDataList2.length < 10) {  // 열개 이하이면
+    for (let i = 1; i < 11; i++) {
+      newDataList2.push({ id: i, name: Genre[i - 1], count: dataList[i] });
     }
+    setNewDataList(newDataList2);
     const rankList = newDataList.slice().sort((a, b) => b.count - a.count);
     // originData.labels = rankList.map((row) => row.name);
     originData.datasets[0].data = rankList.map((row) => row.count);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Space } from "antd";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import {
   DoughnutChart,
   Layout,
@@ -127,23 +128,17 @@ export default function AnalysisResult() {
       client: django,
       onCompleted(data) {
         setResult({ ...result, ...data });
-        if (genreAnalysis.length < 10) {
-          const temp: GenreListType[] = [];
-          // const tempAll: GenreListType[] = [];
-          for (let i = 1; i < 11; i++) {
-            // tempAll.push({
-            //   id: i,
-            //   name: GENRE[i - 1],
-            //   count: result?.getFromSpring[0].genreRatio[i],
-            // });
-            if (result?.getFromSpring[0].genreRatio[i] !== 0) {
-              temp.push({
-                id: i,
-                name: GENRE[i - 1],
-                count: result?.getFromSpring[0].genreRatio[i],
-              });
-            }
+        const temp: GenreListType[] = [];
+        for (let i = 1; i < 11; i++) {
+          console.log("fetch2", result);
+          if (result?.getFromSpring[0].genreRatio[i] !== 0) {
+            temp.push({
+              id: i,
+              name: GENRE[i - 1],
+              count: result?.getFromSpring[0].genreRatio[i],
+            });
           }
+          console.log(temp);
           // setGenreAnalysis(tempAll);
           setGenreAnalysis(temp);
           setRankList(
@@ -196,7 +191,9 @@ export default function AnalysisResult() {
 
         const keywordsList = data?.myKeyword?.[0]?.myKeywordId;
         const genrePk = data?.myGenre?.[0]?.genreId;
-        // console.log(keywordsList, genrePk, webtoonPk);
+        console.log(data?.myKeyword?.[0]?.myKeywordId);
+        console.log(data?.myGenre?.[0]?.genreId);
+        console.log(webtoonPk);
         fetchTestResult2({
           variables: {
             keywords: keywordsList as number[],
@@ -246,9 +243,9 @@ export default function AnalysisResult() {
     });
   }, []);
 
-  // useEffect(() => {
-  //   console.log(result);
-  // }, [result]);
+  useEffect(() => {
+    console.log(result);
+  }, [result]);
 
   const loading =
     saveWebtoonLoading || fetchTestResult1Loading || fetchTestResult2Loading;
@@ -317,7 +314,6 @@ export default function AnalysisResult() {
     >
       <TitleText>당신의 독자 유형은?</TitleText>
       {result?.getFromSpring?.[0].myType?.image ? (
-        // <Image type="userType" url={result?.getFromSpring[0].myType.image} />
         <MainImage
           src={
             "https://j8a302.p.ssafy.io/images/" +
@@ -330,149 +326,184 @@ export default function AnalysisResult() {
       )}
       <article>
         <StyledSection2>
-          <Text>웹툰 취향 분석 결과는...</Text>
-<<<<<<< HEAD
-          <Text bold="true" size="1rem">
-            {result?.getFromSpring[0]?.myType?.thumbnailTitle +
-              " - " +
-              result?.getFromSpring[0]?.myType?.thumbnailCharacter}
-          </Text>
-          <Text bold="true" size="1.7rem">
-=======
-          <Text bold="true" size="1.7rem" color="#FF6C6C">
->>>>>>> fd73f39 (style : design 작업중)
-            {result?.getFromSpring[0].myType.userType}
-          </Text>
-        </StyledSection2>
-        <StyledSection>
-          <Text size="0.9rem">내가 지금까지 읽은 웹툰의 수는?</Text>
-          <div>
-            <Text size="1.5rem">
-              <PointSpan>{webtoonPk.length}</PointSpan>개
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text>웹툰 취향 분석 결과는...</Text>
+            <Text bold="true" size="1.7rem" color="#FF6C6C">
+              {result?.getFromSpring[0].myType.userType}
             </Text>
-          </div>
-          {webtoonPk.length < 10 ? (
-<<<<<<< HEAD
-            <Text>재밌는 웹툰들을 더 추천해드릴게요!</Text>
-=======
-            <Text>유명한 것만 보셨나요?<br/>저희 추천작도 한 번 보실래요?</Text>
->>>>>>> fd73f39 (style : design 작업중)
-          ) : webtoonPk.length < 30 ? (
-            <Text>제법 많이 보셨군요!</Text>
-          ) : webtoonPk.length < 50 ? (
-            <Text>이제는 현생을 사시길 바라요.</Text>
-          ) : (
-            <Text>혹시 예일대 웹툰학과 교수신가요?</Text>
-          )}
+          </motion.div>
+        </StyledSection2>
 
-          {/* 읽은 권수에 따른 다른 text */}
-          {/* <Text>제법 많이 보셨군요!</Text>  */}
-        </StyledSection>
+        {/* 내가 지금까지 읽은 웹툰의 수 */}
         <StyledSection>
-          <Text>
-            현재&nbsp;
-            <PointSpan>{userCount?.countAllUsers}</PointSpan>명의 분석 독자들
-            중
-          </Text>
-          <div style={{ width: "90%", margin: "auto" }}>
-            <ProgressiveBar
-              type="top"
-              progress={
-                100 -
-                Math.round(
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="0.9rem">내가 지금까지 읽은 웹툰의 수는?</Text>
+            <div>
+              <Text size="1.5rem">
+                <PointSpan>{webtoonPk.length}</PointSpan>개
+              </Text>
+            </div>
+            {webtoonPk.length < 10 ? (
+              <Text>
+                유명한 것만 보셨나요?
+                <br />
+                저희 추천작도 한 번 보실래요?
+              </Text>
+            ) : webtoonPk.length < 30 ? (
+              <Text>제법 많이 보셨군요!</Text>
+            ) : webtoonPk.length < 50 ? (
+              <Text>이제는 현생을 사시길 바라요.</Text>
+            ) : (
+              <Text>혹시 예일대 웹툰학과 교수신가요?</Text>
+            )}
+          </motion.div>
+        </StyledSection>
+        {/* 상위 n 퍼센트 */}
+        <StyledSection>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text>
+              현재&nbsp;
+              <PointSpan>{userCount?.countAllUsers}</PointSpan>명의 분석 독자들
+              중
+            </Text>
+            <div style={{ width: "90%", margin: "auto" }}>
+              <ProgressiveBar
+                type="top"
+                progress={
+                  100 -
+                  Math.round(
+                    (result?.getFromSpring2?.[0].myRank /
+                      result?.getFromSpring2?.[0].allUser) *
+                      100
+                  )
+                }
+              ></ProgressiveBar>
+            </div>
+            <Text>
+              <GradientText>
+                상위{" "}
+                {Math.round(
                   (result?.getFromSpring2?.[0].myRank /
                     result?.getFromSpring2?.[0].allUser) *
                     100
-                )
-              }
-            ></ProgressiveBar>
-          </div>
-          <Text>
-            <GradientText>
-              상위{" "}
-              {Math.round(
-                (result?.getFromSpring2?.[0].myRank /
-                  result?.getFromSpring2?.[0].allUser) *
-                  100
-              )}
-              %
-            </GradientText>
-            에 해당해요!
-          </Text>
+                )}
+                %
+              </GradientText>
+              에 해당해요!
+            </Text>
+          </motion.div>
         </StyledSection>
+        {/* 전문가 수치 */}
         <StyledSection>
-          <Text size="1.2rem">나의 전문가 수치</Text>
-          <RoundBoxDiv>
-            {/* TODO: 전문가 수치 */}
-            {reader_expert_value.map((item) => (
-              <RoundUpperDiv key={item.id}>
-                <RoundDiv color={item.color}>
-                  <Text color="#ffffff" bold="true" type="responsive">
-                    {item.title}
-                  </Text>
-                </RoundDiv>
-              </RoundUpperDiv>
-            ))}
-          </RoundBoxDiv>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="1.2rem">나의 전문가 수치</Text>
+            <RoundBoxDiv>
+              {/* TODO: 전문가 수치 */}
+              {reader_expert_value.map((item) => (
+                <RoundUpperDiv key={item.id}>
+                  <RoundDiv color={item.color}>
+                    <Text color="#ffffff" bold="true" type="responsive">
+                      {item.title}
+                    </Text>
+                  </RoundDiv>
+                </RoundUpperDiv>
+              ))}
+            </RoundBoxDiv>
+          </motion.div>
         </StyledSection>
+        {/* 플랫폼 비율 */}
         <StyledSection>
-          <Text size="1.2rem">플랫폼 비율</Text>
-          <div>
-            <RatioTextBox space>
-              <RatioText color="kakao">카카오페이지 {kakaoRatio}%</RatioText>
-              <RatioText color="naver">네이버 {naverRatio}%</RatioText>
-            </RatioTextBox>
-            <ProgressiveBar
-              type="platform"
-              progress={kakaoRatio}
-            ></ProgressiveBar>
-            <RatioTextBox>
-              {kakaoRatio == naverRatio ? (
-                <RatioText>두 곳 모두 재밌게 즐기고 계시네요.</RatioText>
-              ) : kakaoRatio > naverRatio ? (
-                <RatioText color="kakao">카카오페이지</RatioText>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="1.2rem">플랫폼 비율</Text>
+            <div>
+              <RatioTextBox space>
+                <RatioText color="kakao">카카오페이지 {kakaoRatio}%</RatioText>
+                <RatioText color="naver">네이버 {naverRatio}%</RatioText>
+              </RatioTextBox>
+              <ProgressiveBar
+                type="platform"
+                progress={kakaoRatio}
+              ></ProgressiveBar>
+              <RatioTextBox>
+                {kakaoRatio == naverRatio ? (
+                  <RatioText>두 곳 모두 재밌게 즐기고 계시네요.</RatioText>
+                ) : kakaoRatio > naverRatio ? (
+                  <RatioText color="kakao">카카오페이지</RatioText>
+                ) : (
+                  <RatioText color="naver">네이버</RatioText>
+                )}
+                {kakaoRatio != naverRatio ? (
+                  <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
+                ) : null}
+              </RatioTextBox>
+            </div>
+          </motion.div>
+        </StyledSection>
+        {/* 완결작 비율 */}
+        <StyledSection>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="1.2rem">완결작 비율</Text>
+            <div>
+              <RatioTextBox space>
+                <RatioText color="finished">완결작 {finishedRatio}%</RatioText>
+                <RatioText color="ongoing">연재작 {unfinishedRatio}%</RatioText>
+              </RatioTextBox>
+              <ProgressiveBar
+                type="endedOrOngoin"
+                progress={finishedRatio}
+              ></ProgressiveBar>
+              {finishedRatio < unfinishedRatio ? (
+                <RatioTextBox>
+                  <RatioText color="finished"> 완결작</RatioText>
+                  <RatioText>보다&nbsp;</RatioText>
+                  <RatioText color="ongoing"> 연재작</RatioText>
+                  <RatioText>을 더 선호해요.</RatioText>
+                </RatioTextBox>
+              ) : finishedRatio == unfinishedRatio ? (
+                <RatioTextBox>
+                  <RatioText>골고루 즐기고 계시네요.</RatioText>
+                </RatioTextBox>
               ) : (
-                <RatioText color="naver">네이버</RatioText>
+                <RatioTextBox>
+                  <RatioText color="ongoing">연재작 </RatioText>
+                  <RatioText>보다 더&nbsp;</RatioText>
+                  <RatioText color="finished"> 완결작</RatioText>
+                  <RatioText>을 더 선호해요.</RatioText>
+                </RatioTextBox>
               )}
-              {kakaoRatio != naverRatio ? (
-                <RatioText>의 웹툰을 더 많이 읽고 있어요.</RatioText>
-              ) : null}
-            </RatioTextBox>
-          </div>
+            </div>
+          </motion.div>
         </StyledSection>
+        {/* 사용자가 많이 본 장르 - 파이차트 */}
         <StyledSection>
-          <Text size="1.2rem">완결작 비율</Text>
-          <div>
-            <RatioTextBox space>
-              <RatioText color="finished">완결작 {finishedRatio}%</RatioText>
-              <RatioText color="ongoing">연재작 {unfinishedRatio}%</RatioText>
-            </RatioTextBox>
-            <ProgressiveBar
-              type="endedOrOngoin"
-              progress={finishedRatio}
-            ></ProgressiveBar>
-            {finishedRatio < unfinishedRatio ? (
-              <RatioTextBox>
-                <RatioText color="finished"> 완결작</RatioText>
-                <RatioText>보다&nbsp;</RatioText>
-                <RatioText color="ongoing"> 연재작</RatioText>
-                <RatioText>을 더 선호해요.</RatioText>
-              </RatioTextBox>
-            ) : finishedRatio == unfinishedRatio ? (
-              <RatioTextBox>
-                <RatioText>골고루 즐기고 계시네요.</RatioText>
-              </RatioTextBox>
-            ) : (
-              <RatioTextBox>
-                <RatioText color="ongoing">연재작 </RatioText>
-                <RatioText>보다 더&nbsp;</RatioText>
-                <RatioText color="finished"> 완결작</RatioText>
-                <RatioText>을 더 선호해요.</RatioText>
-              </RatioTextBox>
-            )}
-          </div>
-        </StyledSection>
-        <StyledSection>
+          {/* <motion.div
+          // initial={{ opacity: 0 }}
+          // whileInView={{ opacity: 1 }}
+          // viewport={{ once: true }}> */}
           <Text size="1.2rem">사용자가 많이 본 장르</Text>
           <div>
             {result?.getFromSpring?.[0] && (
@@ -480,9 +511,6 @@ export default function AnalysisResult() {
                 <DoughnutChart dataList={result.getFromSpring[0].genreRatio} />
               </GenreGraphSection>
             )}
-            {/* <GenreGraphSection className="genre_graph">
-              <DoughnutChart dataList={result?.getFromSpring[0].genreRatio} />
-            </GenreGraphSection> */}
             <section className="genre_table">
               <GenreTableTitleDiv>
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
@@ -526,47 +554,82 @@ export default function AnalysisResult() {
               </Text>
             </RatioTextBox>
           </div>
+          {/* </motion.div> */}
         </StyledSection>
+        {/* 추전 작품 리스트 */}
         <StyledSection>
-          <Text size="1.1rem">
-            <BoldSpan color="pink">
-              {result?.getFromSpring[0].myType.userType}
-            </BoldSpan>
-            &nbsp; 유형의 독자들이 좋아하는 작품
-          </Text>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="1.1rem">
+              <BoldSpan color="pink">
+                {result?.getFromSpring[0].myType.userType}
+              </BoldSpan>
+              &nbsp; 유형의 독자들이 좋아하는 작품
+            </Text>
+          </motion.div>
           <section style={{ marginTop: "16px" }}>
-            <RecommendItemList
-              text="완결작 중 추천 웹툰"
-              dataList={result?.resultNbtiWebtoon?.filter(
-                (item: RecomWebtoonType) => item.endFlag === 1
-              )}
-            ></RecommendItemList>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              <RecommendItemList
+                text="완결작 중 추천 웹툰"
+                dataList={result?.resultNbtiWebtoon?.filter(
+                  (item: RecomWebtoonType) => item.endFlag === 1
+                )}
+              ></RecommendItemList>
+            </motion.div>
           </section>
           <section>
-            <RecommendItemList
-              text="연재작 중 추천 웹툰"
-              dataList={result?.resultNbtiWebtoon?.filter(
-                (item: RecomWebtoonType) => item.endFlag === 0
-              )}
-            ></RecommendItemList>
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+            >
+              <RecommendItemList
+                text="연재작 중 추천 웹툰"
+                dataList={result?.resultNbtiWebtoon?.filter(
+                  (item: RecomWebtoonType) => item.endFlag === 0
+                )}
+              ></RecommendItemList>
+            </motion.div>
           </section>
         </StyledSection>
+        {/* 사용자가 즐겨보는 키워드 */}
         <StyledSection>
-          <Text size="1.2rem">사용자가 즐겨보는 키워드</Text>
-          <StyledKeywordDiv>
-            {result?.myKeyword[0].myKeywordName.map((el: string) => {
-              return <StyledKeyword key={el}>#{el}</StyledKeyword>;
-            })}
-          </StyledKeywordDiv>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Text size="1.2rem">사용자가 즐겨보는 키워드</Text>
+            <StyledKeywordDiv>
+              {result?.myKeyword[0].myKeywordName.map((el: string) => {
+                return <StyledKeyword key={el}>#{el}</StyledKeyword>;
+              })}
+            </StyledKeywordDiv>
+          </motion.div>
         </StyledSection>
+        {/* 사용자가 선호하는 키워드의 작품 */}
         <StyledSection>
-          <RecommendItemList
-            type="keyword"
-            keyword={result?.myKeyword[0].myKeywordName[0]}
-            text="내가 선호하는 키워드의 작품"
-            dataList={result?.keywordSimilarWebtoon}
-          ></RecommendItemList>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <RecommendItemList
+              type="keyword"
+              keyword={result?.myKeyword[0].myKeywordName[0]}
+              text="내가 선호하는 키워드의 작품"
+              dataList={result?.keywordSimilarWebtoon}
+            ></RecommendItemList>
+          </motion.div>
         </StyledSection>
+        {/* 사용자가 좋아할 것 같은 작가 */}
         {result?.authorWebtoon?.[0] && (
           <StyledSection>
             <Text bold="true">
@@ -585,6 +648,7 @@ export default function AnalysisResult() {
             <Text size="0.9rem">대표작 -{result?.authorWebtoon[0].title}</Text>
           </StyledSection>
         )}
+        {/* 하단 버튼 */}
         <StyledSection>
           <BtnContainer direction="vertical">
             <StyledButton
@@ -632,14 +696,6 @@ const TitleText = styled.h1`
   margin: 0 auto;
   font-size: 1.5rem;
 `;
-// const CallOutDiv = styled.div`
-//   border-radius: 10px;
-//   background-color: ${({ theme }) => theme.colors.yellowbg};
-//   min-height: 80px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
 const StyledButton = styled(Button)`
   width: 100%;
   height: 50px;
@@ -712,7 +768,7 @@ const GradientText = styled.span`
   font-size: 1.5rem;
   font-weight: 700;
   display: block;
-  background: linear-gradient(to right,#FF7B7B 0%, #FFD7D7 100%);
+  background: linear-gradient(to right, #ff7b7b 0%, #ffd7d7 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -770,16 +826,21 @@ const StyledText = styled.p`
   color: black;
   font-size: 1.1rem;
   font-weight: 700;
-  animation: motion 1s /* 속도 */
-               linear 0s   /* 처음부터 끝까지 일정 속도로 진행 */
-               infinite alternate; /* 무한 반복 */
-  }
-  @keyframes motion {
-    0%{transform:translateY(10px);}
+  animation: motion 1s /* 속도 */ linear 0s
+    /* 처음부터 끝까지 일정 속도로 진행 */ infinite alternate; /* 무한 반복 */
 
-    50%{transform:translateY(-10px);}
-    
-    100%{transform:translateY(10px);}
+  @keyframes motion {
+    0% {
+      transform: translateY(10px);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(10px);
+    }
   }
 `;
 

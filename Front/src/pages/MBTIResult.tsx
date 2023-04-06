@@ -67,41 +67,28 @@ export default function MBTIResult() {
         {res?.myType?.image ? (
           <MainImage
             src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
-<<<<<<< HEAD
-            size={80}
-=======
             size={50}
->>>>>>> fd73f39 (style : design 작업중)
           />
         ) : (
-          <StyledPlayer
-            autoplay
-            loop
-            src={`/spinner.json`}
-          ></StyledPlayer>
+          <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
         )}
 
         <TextContainer>
           <StyledTypeName>
-            <TypeName>
-              {res?.myType?.userType}
-<<<<<<< HEAD
-              <br></br>
+            <TypeName>{res?.myType?.userType}</TypeName>
+            <StyledTitle>
               {res?.myType?.thumbnailTitle} {" - "}
               {res?.myType?.thumbnailCharacter}
-            </StyledHeader>
-=======
-            </TypeName>
-            <StyledTitle>
-              {getTypeName(res?.myType?.userType as Mbti)[0]} {" - "}
-              {getTypeName(res?.myType?.userType as Mbti)[1]}
             </StyledTitle>
->>>>>>> fd73f39 (style : design 작업중)
           </StyledTypeName>
 
           <StyledList>
             {res?.myType?.description?.split("\\n").map((line: string) => {
-              return <div style={{textAlign:"center"}} key={line}>{line}</div>;
+              return (
+                <div style={{ textAlign: "center" }} key={line}>
+                  {line}
+                </div>
+              );
             })}
           </StyledList>
         </TextContainer>
@@ -109,13 +96,15 @@ export default function MBTIResult() {
 
       <Row gutter={[16, 16]}>
         {[
-          {id: 0,
+          {
+            id: 0,
             text: "나와 잘 맞는 유형",
             mbti: res?.bestType?.userType,
             typeName: res?.bestType?.thumbnailCharacter,
             img: res?.bestType?.image,
           },
-          {id: 1,
+          {
+            id: 1,
             text: "나와 안 맞는 유형",
             mbti: res?.worstType?.userType,
             typeName: res?.worstType?.thumbnailCharacter,
@@ -140,10 +129,26 @@ export default function MBTIResult() {
                   ></StyledPlayer>
                 )}
 
-                <StyledTypeName style={el.id === 0  ?{color :'#FF9999'} : {color: "#82C9FF"}}>
-                  <StyledStrong color={el.id === 0  ?'lightpk' : "lightbl"} style={{fontSize:'1.1rem'
-              }}>{el.mbti}</StyledStrong>
-                  <p style={{color:'black', margin: 'auto'}}>{el.typeName}</p>
+                <StyledTypeName
+                  style={
+                    el.id === 0 ? { color: "#FF9999" } : { color: "#82C9FF" }
+                  }
+                >
+                  <StyledStrong
+                    color={el.id === 0 ? "lightpk" : "lightbl"}
+                    style={{ fontSize: "1.1rem" }}
+                  >
+                    {el.mbti}
+                  </StyledStrong>
+                  <p
+                    style={{
+                      color: "black",
+                      margin: "auto",
+                      lineHeight: "1rem",
+                    }}
+                  >
+                    {el.typeName}
+                  </p>
                 </StyledTypeName>
               </StyledCol>
             )
@@ -189,7 +194,15 @@ export default function MBTIResult() {
                     <StyledStrong>
                       {el.mbti} ({el.per} %)
                     </StyledStrong>
-                    {el.typeName}
+                    <p
+                      style={{
+                        color: "black",
+                        margin: "auto",
+                        lineHeight: "1rem",
+                      }}
+                    >
+                      {el.typeName}
+                    </p>
                   </StyledTypeName>
                 </StyledCol>
               )
@@ -215,8 +228,10 @@ export default function MBTIResult() {
 
         <BtnContainer direction="vertical">
           <StyledButton onClick={clickHandler} color="pink">
-            <StyledStrong style={{color: 'white'}}>웹툰 취향 분석하기</StyledStrong>
-            <SwapRightOutlined style={{color: 'white'}}/>
+            <StyledStrong style={{ color: "white" }}>
+              웹툰 취향 분석하기
+            </StyledStrong>
+            <SwapRightOutlined style={{ color: "white" }} />
           </StyledButton>
           <StyledButton onClick={clickHomeHandler}>
             독자 유형 테스트 다시하기
@@ -241,22 +256,23 @@ const BtnContainer = styled(Space)`
 `;
 
 const StyledTitle = styled.p`
-margin: 0 auto;
-font-size: 16px;
-font-weight: 700;
-`
+  margin: 0 auto;
+  font-size: 16px;
+  font-weight: 700;
+`;
 
 const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   width: 100%;
   height: 50px;
   height: ${(props) => (props.height ? props.height + "0px" : "50px")};
   background-color: ${(props) =>
-    props.color ==='pink' ? ({ theme }) => theme.colors.pink : null};
+    props.color === "pink" ? ({ theme }) => theme.colors.pink : null};
   border-color: ${(props) =>
-    props.color === 'pink' ? ({ theme }) => theme.colors.pink : null};
+    props.color === "pink" ? ({ theme }) => theme.colors.pink : null};
   border-radius: 10px;
-  :active, :hover{
-    border: 1px solid #FF6C6C;
+  :active,
+  :hover {
+    border: 1px solid #ff6c6c;
   }
 `;
 
@@ -269,12 +285,12 @@ const StyledHeader = styled(Title)`
 `;
 
 const TypeName = styled.h2`
-color : #FF6C6C;
-font-weight: 700;
-font-size: 1.5rem;
-line-height: 2rem;
-margin: 10px;
-`
+  color: #ff6c6c;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin: 10px;
+`;
 
 const StyledContent = styled(Text)`
   text-align: center;
@@ -327,9 +343,9 @@ const StyledTypeName = styled.div`
   margin: 10px 0px;
 `;
 
-const StyledStrong = styled.span<{color?: string}>`
+const StyledStrong = styled.span<{ color?: string }>`
   font-size: 1rem;
-  font-weight :700;
+  font-weight: 700;
 `;
 
 const StyledPlayer = styled(Player)`
