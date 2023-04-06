@@ -11,7 +11,7 @@ import java.io.*;
 @RequiredArgsConstructor
 public class ResultService {
     private final Logger logger = LoggerFactory.getLogger(ResultService.class);
-    private String path = "/root/ubuntu/result"; //TODO:: path
+    private String path = "/home/ubuntu/result"; //TODO:: path
 
     /**
      * 사용자 결과 정보 파일로 저장
