@@ -80,7 +80,6 @@ def get_from_spring(user_pk):
 def get_from_spring2(user_pk):
     result = pts.get_ranking(user_pk)
     if result:
-        print(result)
         return result.json()['data']['getRanking']
     return None
 
