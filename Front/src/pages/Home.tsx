@@ -16,8 +16,8 @@ export default function Home() {
   return (
     <div style={{ overflow: "hidden", height: "100vw", width: "100vw" }}>
       <HomeBackgroundImage />
-      <StyledBlackDiv></StyledBlackDiv>
       <Layout type="home">
+        <StyledBox>
         <StyledHeader>
           당신이
           <br /> 웹툰 주인공이라면?
@@ -28,6 +28,7 @@ export default function Home() {
           당신에게 어울리는 웹툰 캐릭터와 웹툰을 <br />
           추천해드릴게요!{" "}
         </StyledP>
+        </StyledBox>
         <BtnContainer>
           <Button
             onClick={() => navigate("/mbti")}
@@ -62,20 +63,21 @@ export default function Home() {
   );
 }
 
-const StyledBlackDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: rgb(0, 0, 0, 0.75);
-  z-index: 200;
-  position: absolute;
-`;
 
 const StyledBox = styled.div`
+<<<<<<< HEAD
   position: absolute;
   right: 0;
   left: 0;
   top: 30%;
 `;
+=======
+position: absolute;
+right: 0;
+left: 0;
+top: 40%;
+`
+>>>>>>> fd73f39 (style : design 작업중)
 const StyledP = styled.p`
   color: white;
   font-size: 12px;

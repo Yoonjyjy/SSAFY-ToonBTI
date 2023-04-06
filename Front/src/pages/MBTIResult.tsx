@@ -62,49 +62,60 @@ export default function MBTIResult() {
   return (
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
-        <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
+        <StyledHeader level={4}>당신의 독자 유형은?</StyledHeader>
 
         {res?.myType?.image ? (
           <MainImage
             src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
+<<<<<<< HEAD
             size={80}
+=======
+            size={50}
+>>>>>>> fd73f39 (style : design 작업중)
           />
         ) : (
           <StyledPlayer
             autoplay
             loop
-            src={`/simple-spinner.json`}
+            src={`/spinner.json`}
           ></StyledPlayer>
         )}
 
-        <TextContainer direction="vertical" size={5}>
+        <TextContainer>
           <StyledTypeName>
-            <StyledHeader level={4}>
+            <TypeName>
               {res?.myType?.userType}
+<<<<<<< HEAD
               <br></br>
               {res?.myType?.thumbnailTitle} {" - "}
               {res?.myType?.thumbnailCharacter}
             </StyledHeader>
+=======
+            </TypeName>
+            <StyledTitle>
+              {getTypeName(res?.myType?.userType as Mbti)[0]} {" - "}
+              {getTypeName(res?.myType?.userType as Mbti)[1]}
+            </StyledTitle>
+>>>>>>> fd73f39 (style : design 작업중)
           </StyledTypeName>
 
           <StyledList>
             {res?.myType?.description?.split("\\n").map((line: string) => {
-              return <StyledLi key={line}>{line}</StyledLi>;
+              return <div style={{textAlign:"center"}} key={line}>{line}</div>;
             })}
           </StyledList>
-          <br />
         </TextContainer>
       </StyledDiv>
 
       <Row gutter={[16, 16]}>
         {[
-          {
+          {id: 0,
             text: "나와 잘 맞는 유형",
             mbti: res?.bestType?.userType,
             typeName: res?.bestType?.thumbnailCharacter,
             img: res?.bestType?.image,
           },
-          {
+          {id: 1,
             text: "나와 안 맞는 유형",
             mbti: res?.worstType?.userType,
             typeName: res?.worstType?.thumbnailCharacter,
@@ -125,20 +136,21 @@ export default function MBTIResult() {
                   <StyledPlayer
                     autoplay
                     loop
-                    src={`/simple-spinner.json`}
+                    src={`/spinner.json`}
                   ></StyledPlayer>
                 )}
 
-                <StyledTypeName>
-                  <StyledStrong>{el.mbti}</StyledStrong>
-                  {el.typeName}
+                <StyledTypeName style={el.id === 0  ?{color :'#FF9999'} : {color: "#82C9FF"}}>
+                  <StyledStrong color={el.id === 0  ?'lightpk' : "lightbl"} style={{fontSize:'1.1rem'
+              }}>{el.mbti}</StyledStrong>
+                  <p style={{color:'black', margin: 'auto'}}>{el.typeName}</p>
                 </StyledTypeName>
               </StyledCol>
             )
         )}
       </Row>
 
-      <TextContainer direction="vertical" size={5}>
+      <TextContainer>
         <StyledHeader level={4}>지금까지 가장 많은 유형은?</StyledHeader>
         <Row gutter={[16, 16]}>
           {[
@@ -170,7 +182,7 @@ export default function MBTIResult() {
                     <StyledPlayer
                       autoplay
                       loop
-                      src={`/simple-spinner.json`}
+                      src={`/spinner.json`}
                     ></StyledPlayer>
                   )}
                   <StyledTypeName>
@@ -191,7 +203,7 @@ export default function MBTIResult() {
       </TextContainer>
 
       <StyledDiv>
-        <TextContainer direction="vertical" size={5}>
+        <TextContainer>
           <StyledContent>
             잠깐!
             <br />
@@ -202,9 +214,9 @@ export default function MBTIResult() {
         </TextContainer>
 
         <BtnContainer direction="vertical">
-          <StyledButton onClick={clickHandler} color="yellow">
-            <StyledStrong>웹툰 취향 분석하기</StyledStrong>
-            <SwapRightOutlined />
+          <StyledButton onClick={clickHandler} color="pink">
+            <StyledStrong style={{color: 'white'}}>웹툰 취향 분석하기</StyledStrong>
+            <SwapRightOutlined style={{color: 'white'}}/>
           </StyledButton>
           <StyledButton onClick={clickHomeHandler}>
             독자 유형 테스트 다시하기
@@ -228,15 +240,24 @@ const BtnContainer = styled(Space)`
   // margin-bottom: 60px;
 `;
 
+const StyledTitle = styled.p`
+margin: 0 auto;
+font-size: 16px;
+font-weight: 700;
+`
+
 const StyledButton = styled(Button)<{ color?: string; height?: number }>`
   width: 100%;
   height: 50px;
   height: ${(props) => (props.height ? props.height + "0px" : "50px")};
   background-color: ${(props) =>
-    props.color ? ({ theme }) => theme.colors.yellow : null};
+    props.color ==='pink' ? ({ theme }) => theme.colors.pink : null};
   border-color: ${(props) =>
-    props.color ? ({ theme }) => theme.colors.yellow : null};
+    props.color === 'pink' ? ({ theme }) => theme.colors.pink : null};
   border-radius: 10px;
+  :active, :hover{
+    border: 1px solid #FF6C6C;
+  }
 `;
 
 const StyledHeader = styled(Title)`
@@ -246,6 +267,14 @@ const StyledHeader = styled(Title)`
   line-height: 2rem;
   margin: 10px;
 `;
+
+const TypeName = styled.h2`
+color : #FF6C6C;
+font-weight: 700;
+font-size: 1.5rem;
+line-height: 2rem;
+margin: 10px;
+`
 
 const StyledContent = styled(Text)`
   text-align: center;
@@ -279,10 +308,9 @@ const StyledCol = styled(Col)`
   margin: 10px 0px;
 `;
 
-const TextContainer = styled(Space)`
+const TextContainer = styled.div`
   line-height: 1rem;
   width: 100%;
-  color: black;
   padding-bottom: 0px;
 `;
 
@@ -299,8 +327,9 @@ const StyledTypeName = styled.div`
   margin: 10px 0px;
 `;
 
-const StyledStrong = styled.strong`
+const StyledStrong = styled.span<{color?: string}>`
   font-size: 1rem;
+  font-weight :700;
 `;
 
 const StyledPlayer = styled(Player)`

@@ -9,13 +9,14 @@ export default function HomeBackgroundImage() {
   const { data, error } = useQuery(GET_IMAGES);
   const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
-    console.log(data);
     setImages(data?.getRanImgSet as string[]);
   }, [data]);
   if (error) navigate("/404");
   if (data) {
     return (
       <>
+      
+      <StyledBlackDiv></StyledBlackDiv>
         <StyledGrid>
           {images?.map((i, idx) => (
             <StyledDiv key={i} url={i} idx={idx}></StyledDiv>
@@ -26,6 +27,14 @@ export default function HomeBackgroundImage() {
   }
   return null;
 }
+
+const StyledBlackDiv = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0, 0, 0, 0.75);
+  z-index: 200;
+  position: absolute;
+`;
 
 const StyledDiv = styled.div<{ url: string; idx: number }>`
   background-image: url(${(props) => props.url});
@@ -39,10 +48,17 @@ const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   overflow: hidden;
+<<<<<<< HEAD
   position: fixed;
+=======
+>>>>>>> fd73f39 (style : design 작업중)
   top: -60px;
   left: -30px;
   width: 120vw;
   height: 120vh;
   gap: 8px;
+  
+  position: relative;
+  overflow: hidden;
+  
 `;

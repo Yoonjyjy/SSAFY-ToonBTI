@@ -10,7 +10,7 @@ export default function NotFound() {
 
   return (
     <Layout hasPrevious type="home">
-      <Title>페이지를 찾을 수 없어요!</Title>
+      {/* <Title>페이지를 찾을 수 없어요!</Title> */}
       <StyledPlayer autoplay loop src="/404-error.json"></StyledPlayer>
       <BtnContainer direction="vertical">
         <StyledButton onClick={() => navigate("/", { replace: true })}>
@@ -30,7 +30,7 @@ const StyledPlayer = styled(Player)`
 
 const Title = styled.h1`
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 `;
 
 const BtnContainer = styled(Space)`
@@ -41,7 +41,8 @@ const BtnContainer = styled(Space)`
 `;
 
 const StyledButton = styled(Button)`
-  width: 100%;
+  width: 80%;
   height: 50px;
-  background-color: ${(props) => props.theme.colors.yellow};
+  background-color: ${({theme}) => theme.colors.pink};
+  color: white;
 `;

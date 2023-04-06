@@ -39,8 +39,6 @@ export default function Survey(props: PropType) {
       />
       <BtnContainer direction="vertical">
         <StyledButton
-          color="yellow"
-          height={3}
           onClick={(e) => {
             e.preventDefault();
             const webtoons = [];
@@ -81,7 +79,7 @@ const SelectedNumDiv = styled.div`
 `;
 
 const CountSpan = styled.span`
-  color: ${({ theme }) => theme.colors.orange};
+  color: ${({ theme }) => theme.colors.pink};
   font-weight: 700;
 `;
 const BtnContainer = styled(Space)`
@@ -92,12 +90,11 @@ const BtnContainer = styled(Space)`
   margin-top: 2rem;
 `;
 
-const StyledButton = styled(Button)<{ color?: string; height?: number }>`
+const StyledButton = styled(Button)`
   width: 100%;
-  height: ${(props) => (props.height ? props.height + "rem" : "3rem")};
-  background-color: ${(props) =>
-    props.color ? ({ theme }) => theme.colors.yellow : null};
-  border-color: ${(props) =>
-    props.color ? ({ theme }) => theme.colors.yellow : null};
+  height: 3rem;
+  background-color: ${({ theme }) => theme.colors.pink};
+  border-color: ${({ theme }) => theme.colors.pink};
   border-radius: 10px;
+  color: white;
 `;

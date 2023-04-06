@@ -33,7 +33,7 @@ export default function Text(props: PropType) {
 const ResponsiveText = styled.p<{ bold?: string; color?: string }>`
   margin: 0;
   display: flex;
-  word-wrap: break-word;
+  word-break: keep-all;
   font-size: calc(1vw + 1vh + 1vmin);
   font-weight: ${(props) => (props.bold ? "700" : "500")};
   color: ${(props) => (props.color ? props.color : "black")};
@@ -41,6 +41,7 @@ const ResponsiveText = styled.p<{ bold?: string; color?: string }>`
 const KeywordText = styled(Typography.Text)<{ bold?: string }>`
   display: flex;
   margin: 0.25rem;
+  word-break: keep-all;
   font-weight: ${(props) => (props.bold ? "600" : "500")};
 `;
 const StyledText = styled.p<{
@@ -51,12 +52,11 @@ const StyledText = styled.p<{
   font-size: ${(props) => (props.size ? props.size : "1rem")};
   font-weight: ${(props) => (props.bold ? "700" : "500")};
   margin: 0.75rem auto;
+  word-break: keep-all;
   color: ${(props) => (props.color ? props.color : "black")};
-  /* line-height: 1rem; */
   align-items: center;
-  word-wrap: break-word;
 `;
 const DescText = styled(Typography.Text)`
+  word-break: keep-all;
   line-height: 1rem;
-  word-wrap: break-word;
 `;

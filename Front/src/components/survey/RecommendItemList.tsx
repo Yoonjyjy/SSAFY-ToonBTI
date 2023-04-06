@@ -59,9 +59,6 @@ const ItemListBox = styled(Row)`
   flex-wrap: nowrap;
 `;
 
-const StyledSpan = styled.span`
-  color: ${({ theme }) => theme.colors.orange};
-`;
 
 const StyledHeader = styled.h5`
   text-align: left;

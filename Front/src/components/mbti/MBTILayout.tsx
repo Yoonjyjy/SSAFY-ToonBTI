@@ -53,7 +53,7 @@ export default function CommonLayout(props: PropType) {
           <StyledPlayer
             autoplay
             loop
-            src={`/simple-spinner.json`}
+            src={`/spinner.json`}
           ></StyledPlayer>
         )}
         <StyledTypeName>
@@ -82,7 +82,7 @@ export default function CommonLayout(props: PropType) {
             <StyledPlayer
               autoplay
               loop
-              src={`/simple-spinner.json`}
+              src={`/spinner.json`}
             ></StyledPlayer>
           )}
           <TextContainer direction="vertical" size={5}>
@@ -135,7 +135,7 @@ export default function CommonLayout(props: PropType) {
                     <StyledPlayer
                       autoplay
                       loop
-                      src={`/simple-spinner.json`}
+                      src={`/spinner.json`}
                     ></StyledPlayer>
                   )}
                   <StyledTypeName>

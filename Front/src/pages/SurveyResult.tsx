@@ -297,12 +297,12 @@ export default function AnalysisResult() {
 
   if (loading) {
     return (
-      <Layout hasPrevious type="home">
+      <Layout type="home">
         <StyledText>
           당신의 TooNBTI를 분석중이에요.
           <br /> 잠시만 기다려주세요.
         </StyledText>
-        <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
+        <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
       </Layout>
     );
   }
@@ -326,35 +326,43 @@ export default function AnalysisResult() {
           size={80}
         />
       ) : (
-        <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
+        <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
       )}
       <article>
         <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
+<<<<<<< HEAD
           <Text bold="true" size="1rem">
             {result?.getFromSpring[0]?.myType?.thumbnailTitle +
               " - " +
               result?.getFromSpring[0]?.myType?.thumbnailCharacter}
           </Text>
           <Text bold="true" size="1.7rem">
+=======
+          <Text bold="true" size="1.7rem" color="#FF6C6C">
+>>>>>>> fd73f39 (style : design 작업중)
             {result?.getFromSpring[0].myType.userType}
           </Text>
         </StyledSection2>
         <StyledSection>
-          <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
-          <CallOutDiv>
+          <Text size="0.9rem">내가 지금까지 읽은 웹툰의 수는?</Text>
+          <div>
             <Text size="1.5rem">
               <PointSpan>{webtoonPk.length}</PointSpan>개
             </Text>
-          </CallOutDiv>
+          </div>
           {webtoonPk.length < 10 ? (
+<<<<<<< HEAD
             <Text>재밌는 웹툰들을 더 추천해드릴게요!</Text>
+=======
+            <Text>유명한 것만 보셨나요?<br/>저희 추천작도 한 번 보실래요?</Text>
+>>>>>>> fd73f39 (style : design 작업중)
           ) : webtoonPk.length < 30 ? (
             <Text>제법 많이 보셨군요!</Text>
           ) : webtoonPk.length < 50 ? (
-            <Text>웹툰계의 대학원생이에요.</Text>
+            <Text>이제는 현생을 사시길 바라요.</Text>
           ) : (
-            <Text>혹시 웹툰학과 교수신가요?</Text>
+            <Text>혹시 예일대 웹툰학과 교수신가요?</Text>
           )}
 
           {/* 읽은 권수에 따른 다른 text */}
@@ -364,7 +372,7 @@ export default function AnalysisResult() {
           <Text>
             현재&nbsp;
             <PointSpan>{userCount?.countAllUsers}</PointSpan>명의 분석 독자들
-            중...
+            중
           </Text>
           <div style={{ width: "90%", margin: "auto" }}>
             <ProgressiveBar
@@ -393,7 +401,7 @@ export default function AnalysisResult() {
           </Text>
         </StyledSection>
         <StyledSection>
-          <Text size="1.3rem">나의 전문가 수치</Text>
+          <Text size="1.2rem">나의 전문가 수치</Text>
           <RoundBoxDiv>
             {/* TODO: 전문가 수치 */}
             {reader_expert_value.map((item) => (
@@ -408,7 +416,7 @@ export default function AnalysisResult() {
           </RoundBoxDiv>
         </StyledSection>
         <StyledSection>
-          <Text size="1.3rem">플랫폼 비율</Text>
+          <Text size="1.2rem">플랫폼 비율</Text>
           <div>
             <RatioTextBox space>
               <RatioText color="kakao">카카오페이지 {kakaoRatio}%</RatioText>
@@ -433,7 +441,7 @@ export default function AnalysisResult() {
           </div>
         </StyledSection>
         <StyledSection>
-          <Text size="1.3rem">완결작 비율</Text>
+          <Text size="1.2rem">완결작 비율</Text>
           <div>
             <RatioTextBox space>
               <RatioText color="finished">완결작 {finishedRatio}%</RatioText>
@@ -446,7 +454,7 @@ export default function AnalysisResult() {
             {finishedRatio < unfinishedRatio ? (
               <RatioTextBox>
                 <RatioText color="finished"> 완결작</RatioText>
-                <RatioText>보다 더&nbsp;</RatioText>
+                <RatioText>보다&nbsp;</RatioText>
                 <RatioText color="ongoing"> 연재작</RatioText>
                 <RatioText>을 더 선호해요.</RatioText>
               </RatioTextBox>
@@ -465,7 +473,7 @@ export default function AnalysisResult() {
           </div>
         </StyledSection>
         <StyledSection>
-          <Text size="1.3rem">사용자가 많이 본 장르</Text>
+          <Text size="1.2rem">사용자가 많이 본 장르</Text>
           <div>
             {result?.getFromSpring?.[0] && (
               <GenreGraphSection className="genre_graph">
@@ -521,7 +529,7 @@ export default function AnalysisResult() {
         </StyledSection>
         <StyledSection>
           <Text size="1.1rem">
-            <BoldSpan color="yellow">
+            <BoldSpan color="pink">
               {result?.getFromSpring[0].myType.userType}
             </BoldSpan>
             &nbsp; 유형의 독자들이 좋아하는 작품
@@ -544,7 +552,7 @@ export default function AnalysisResult() {
           </section>
         </StyledSection>
         <StyledSection>
-          <Text size="1.1rem">사용자가 즐겨보는 키워드</Text>
+          <Text size="1.2rem">사용자가 즐겨보는 키워드</Text>
           <StyledKeywordDiv>
             {result?.myKeyword[0].myKeywordName.map((el: string) => {
               return <StyledKeyword key={el}>#{el}</StyledKeyword>;
@@ -621,24 +629,24 @@ const StyledSection = styled.section`
   margin: 5rem auto;
 `;
 const TitleText = styled.h1`
-  margin: 0 auto 2rem auto;
+  margin: 0 auto;
   font-size: 1.5rem;
 `;
-const CallOutDiv = styled.div`
-  border-radius: 10px;
-  background-color: ${({ theme }) => theme.colors.yellowbg};
-  min-height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const CallOutDiv = styled.div`
+//   border-radius: 10px;
+//   background-color: ${({ theme }) => theme.colors.yellowbg};
+//   min-height: 80px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 const StyledButton = styled(Button)`
   width: 100%;
   height: 50px;
   border-radius: 10px;
 `;
 const PointSpan = styled.span`
-  color: ${({ theme }) => theme.colors.orange};
+  color: ${({ theme }) => theme.colors.pink};
 `;
 
 const RoundBoxDiv = styled.div`
@@ -704,7 +712,7 @@ const GradientText = styled.span`
   font-size: 1.5rem;
   font-weight: 700;
   display: block;
-  background: linear-gradient(#72e5ec 0%, #a7ffba 100%);
+  background: linear-gradient(to right,#FF7B7B 0%, #FFD7D7 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -744,7 +752,7 @@ const GenreGraphSection = styled.section`
 `;
 const BoldSpan = styled.span<{ color?: string }>`
   font-weight: 700;
-  color: ${({ color, theme }) => (color ? theme.colors.orange : "black")};
+  color: ${({ color, theme }) => (color ? theme.colors.pink : "black")};
 `;
 
 const BtnContainer = styled(Space)`
@@ -760,14 +768,25 @@ const StyleSpan = styled.span`
 `;
 const StyledText = styled.p`
   color: black;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
+  animation: motion 1s /* 속도 */
+               linear 0s   /* 처음부터 끝까지 일정 속도로 진행 */
+               infinite alternate; /* 무한 반복 */
+  }
+  @keyframes motion {
+    0%{transform:translateY(10px);}
+
+    50%{transform:translateY(-10px);}
+    
+    100%{transform:translateY(10px);}
+  }
 `;
 
 const StyledPlayer = styled(Player)`
-  width: 75vw;
-  max-width: 800px;
-  max-height: 800px;
+  width: 30vw;
+  max-width: 600px;
+  max-height: 600px;
 `;
 
 const StyledKeywordDiv = styled.div`
