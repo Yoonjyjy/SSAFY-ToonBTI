@@ -34,5 +34,9 @@ Nbti {
     @Column(name = "worst_type_id")
     private Long worstTypeId;
 
+    @Column(name = "thumbnail_title")
+    private String thumbnailTitle;
 
+    @Column(name = "thumbnail_character")
+    private String thumbnailCharacter;
 }

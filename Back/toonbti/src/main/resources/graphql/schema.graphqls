@@ -54,6 +54,8 @@ type User {
     description: String
     image: String
     count: Long
+    thumbnailTitle: String
+    thubnailCharacter: String
 }
 
 type TypeResult {
