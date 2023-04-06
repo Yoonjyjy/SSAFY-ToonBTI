@@ -195,11 +195,14 @@ def my_keyword(webtoon_pk):
                 # 태그 이름을 result에 담아서 반환한다
                 result.append(serializer.data)
             return result
-        # else:
-        #     tag_ids = [2,3,7,12,13,16,111,110,109,108]
-        #     tag_id = random.sample(tag_ids, 4)
-        #     result = 
-    return None
+        else:
+            # 태그 안 뽑힐 시 인기 태그 10개 중 랜덤 4개 뽑아서 반환
+            tag_ids = [2,3,7,12,13,16,111,110,109,108]
+            tag_pk = random.sample(tag_ids, 4)
+            res = Tag.objects.filter(tag_id__in=tag_pk)
+            serializer = TagsSerializer(res, many=True)
+            result = serializer.data
+        return result
 
 
 # 내 장르면서 내가 읽지 않은 웹툰, 내가 읽은 웹툰의 작가가 아닌 작가의 웹툰 중 하나와 작가를 추천

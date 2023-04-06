@@ -81,14 +81,10 @@ class SaveWebtoonMutation(Mutation):
             # DB에 저장하기 전에 중복되는 데이터가 있는지 확인
             if not Userwebtoon.objects.filter(user_id=user_pk, webtoon_id=web_pk).exists():
                 # 중복된 데이터가 없으면 DB에 저장
-                try:
-                    with transaction.atomic():
-                        added_select_webtoon.save()
-                    flag = True
-                except:
-                    flag = False
+                added_select_webtoon.save()
+                flag =True
         # 저장됐다면 success = true
-        if flag:        
+        if flag: 
             # 정상저장 시 success = true
             success = True
         # 저장 안됐다면  success = false
