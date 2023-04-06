@@ -56,7 +56,7 @@ export default function DoughnutChart({ dataList }: PropType) {
     const rankList = newDataList.slice().sort((a, b) => b.count - a.count);
     originData.labels = rankList.slice(0, 10).map((row) => row.name);
     originData.datasets[0].data = rankList.map((row) => row.count);
-  }, []);
+  }, [dataList]);
 
   return (
     <DoughnutDiv>
