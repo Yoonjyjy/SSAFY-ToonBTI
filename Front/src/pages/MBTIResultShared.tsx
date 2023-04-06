@@ -131,7 +131,7 @@ export default function MBTIResultShared() {
             <StyledPlayer
               autoplay
               loop
-              src={`/simple-spinner.json`}
+              src={`/spinner.json`}
             ></StyledPlayer>
           )}
 
@@ -190,7 +190,7 @@ export default function MBTIResultShared() {
                     <StyledPlayer
                       autoplay
                       loop
-                      src={`/simple-spinner.json`}
+                      src={`/spinner.json`}
                     ></StyledPlayer>
                   )}
 
@@ -239,7 +239,7 @@ export default function MBTIResultShared() {
                       <StyledPlayer
                         autoplay
                         loop
-                        src={`/simple-spinner.json`}
+                        src={`/spinner.json`}
                       ></StyledPlayer>
                     )}
                     <StyledTypeName>

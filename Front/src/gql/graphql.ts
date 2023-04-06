@@ -293,6 +293,11 @@ export type WebtoonUser = {
   myRank?: Maybe<Scalars['Int']>;
 };
 
+export type GetImagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetImagesQuery = { __typename?: 'Query', getRanImgSet?: Array<string> | null };
+
 export type GetQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -395,6 +400,7 @@ export type GetResultJsonFileQueryVariables = Exact<{
 export type GetResultJsonFileQuery = { __typename?: 'Query', getResultJsonFile?: string | null };
 
 
+export const GetImagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetImages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getRanImgSet"}}]}}]} as unknown as DocumentNode<GetImagesQuery, GetImagesQueryVariables>;
 export const GetQuestionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getQuestions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"questionNo"}},{"kind":"Field","name":{"kind":"Name","value":"question"}},{"kind":"Field","name":{"kind":"Name","value":"answersList"}}]}}]}}]} as unknown as DocumentNode<GetQuestionsQuery, GetQuestionsQueryVariables>;
 export const CountAllUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CountAllUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"countAllUsers"}}]}}]} as unknown as DocumentNode<CountAllUserQuery, CountAllUserQueryVariables>;
 export const GetAllTypesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTypes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAllTypes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"userType"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailTitle"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnailCharacter"}}]}}]}}]} as unknown as DocumentNode<GetAllTypesQuery, GetAllTypesQueryVariables>;

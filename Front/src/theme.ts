@@ -8,6 +8,9 @@ const colors = {
   green: "#2DB400",
   pink: "#FF6C6C",
   blue: "#1E9EFF",
+  lightpk: "#FF9999",
+  lightbl: "#82C9FF",
+  
 };
 const deviceSizes = {
   desktop: "1920px",

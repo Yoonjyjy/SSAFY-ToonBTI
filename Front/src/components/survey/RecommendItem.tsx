@@ -19,7 +19,7 @@ export default function RecommendItem({ type, item }: ItemProps) {
           <StyledPlayer
             autoplay
             loop
-            src={`/simple-spinner.json`}
+            src={`/spinner.json`}
           ></StyledPlayer>
         )}
         {item.title!.length > 11 ? (
@@ -72,7 +72,7 @@ const StyledText = styled.p`
 const StyledTextColor = styled.p`
   font-size: 0.7rem;
   line-height: 0.5rem;
-  color: ${({ theme }) => theme.colors.orange};
+  color: ${({ theme }) => theme.colors.pink};
   text-align: left;
 `;
 

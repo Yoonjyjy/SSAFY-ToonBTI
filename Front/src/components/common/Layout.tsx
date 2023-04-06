@@ -3,7 +3,7 @@ import { Layout } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
-import background from "../../assets/background.jpg";
+// import background from "../../assets/background.jpg";
 
 const { Header, Content } = Layout;
 
@@ -57,11 +57,6 @@ const StyledLayout = styled(Layout)`
   background-color: inherit;
   background-size: 80%;
   background-repeat: repeat;
-  background-image: linear-gradient(
-      rgba(256, 256, 256, 0.9),
-      rgba(256, 256, 256, 0.9)
-    ),
-    url(${background});
 `;
 
 const StyledHeader = styled(Header)`
@@ -74,7 +69,6 @@ const StyledHeader = styled(Header)`
 
   font-weight: bold;
   font-size: 1rem;
-
   position: fixed;
   width: 100%;
   top: 0;
@@ -84,7 +78,6 @@ const StyledHeader = styled(Header)`
 const LeftButton = styled(LeftOutlined)`
   position: absolute;
   top: 0.5rem;
-  // top: 0.5rem;
   left: 0.5rem;
   font-size: 1rem;
   padding: 1rem;
@@ -105,32 +98,15 @@ const StyledContent = styled(Content)`
 
 const StyledHomeContent = styled(Content)`
   text-align: center;
-  padding: 2rem;
-
+  /* position: absolute; */
+  /* bottom: 5%; */
+  left: 0;
+  right: 0;
+  z-index: 300;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
 `;
-
-// const StyledTestContent = styled(Content)`
-//   height: auto;
-//   text-align: center;
-//   padding: 2rem;
-//   padding-top: 5rem;
-
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1rem;
-// `;
-
 const SurveyPageContent = styled(StyledContent)`
   gap: 5px;
 `;
-
-// const KeywordPageContent = styled(Content)`
-//   text-align: center;
-//   min-height: 120;
-//   padding: 2rem;
-//   padding-top: 8rem;
-// `;
