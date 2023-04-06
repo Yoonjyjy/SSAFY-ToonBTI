@@ -6,4 +6,4 @@ if [ $( docker ps -a | grep ${CONTAINER_NAME} | wc -l ) -gt 0 ]; then
 fi
 
 docker build -t spring-server .
-docker run -d --name ${CONTAINER_NAME} -p 8080:8080 spring-server
+docker run -d -v /home/ubuntu/result:/home/ubuntu/result --name ${CONTAINER_NAME} -p 8080:8080 spring-server
