@@ -11,7 +11,7 @@ import java.io.*;
 @RequiredArgsConstructor
 public class ResultService {
     private final Logger logger = LoggerFactory.getLogger(ResultService.class);
-    private String path = "/home/ubuntu/result"; //TODO:: path
+    private String path = "/home/ubuntu/result/"; //TODO:: path
 
     /**
      * 사용자 결과 정보 파일로 저장
@@ -36,7 +36,8 @@ public class ResultService {
      */
     public String getResultJsonFile(String uuid) {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path+uuid+".txt"))) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path+uuid+".txt"));
             sb.append(reader.readLine());
             logger.info("file data : {}", sb.toString());
         } catch (IOException e) {
