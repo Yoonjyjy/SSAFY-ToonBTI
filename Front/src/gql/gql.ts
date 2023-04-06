@@ -26,6 +26,7 @@ const documents = {
     "\n  query RESULT2(\n    $keywords: [Int!]!\n    $topN: Int!\n    $genrePk: Int!\n    $webtoonPk: [Int!]!\n  ) {\n    keywordSimilarWebtoon(keywords: $keywords, topN: $topN) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n    authorWebtoon(genrePk: $genrePk, webtoonPk: $webtoonPk) {\n      webtoonId\n      genreId\n      image\n      title\n      platform\n      rate\n      endFlag\n      searchTitle\n      view\n      authorName\n    }\n  }\n": types.Result2Document,
     "\n  query GetAdditional3Webtoons($webtoonPk: Int!, $genrePk: Int!) {\n    additionalWebtoon(webtoonPk: $webtoonPk, genrePk: $genrePk) {\n      webtoonId\n      genreId\n      title\n      image\n      platform\n      endFlag\n      rate\n      view\n    }\n  }\n": types.GetAdditional3WebtoonsDocument,
     "\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n": types.SaveResultJsonFileDocument,
+    "\n  query GetResultJSONFile($uuid: String) {\n    getResultJsonFile(uuid: $uuid)\n  }\n": types.GetResultJsonFileDocument,
 };
 
 /**
@@ -94,6 +95,10 @@ export function graphql(source: "\n  query GetAdditional3Webtoons($webtoonPk: In
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n"): (typeof documents)["\n  mutation SaveResultJSONFile($data: String, $uuid: String) {\n    saveResultJsonFile(data: $data, uuid: $uuid)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetResultJSONFile($uuid: String) {\n    getResultJsonFile(uuid: $uuid)\n  }\n"): (typeof documents)["\n  query GetResultJSONFile($uuid: String) {\n    getResultJsonFile(uuid: $uuid)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

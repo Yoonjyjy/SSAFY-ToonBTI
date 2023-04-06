@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React from "react";
+import React, { useState } from "react";
 import { Button, Space } from "antd";
 import styled from "styled-components";
 import { DoughnutChart, Layout, ProgressiveBar } from "../components/common";
@@ -16,6 +16,8 @@ import {
   MyKeyword,
   MyGenre,
 } from "../gql/graphql";
+import { useQuery } from "@apollo/client";
+import { GET_RESULT_JSON_FILE } from "../api/survey";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 
@@ -25,20 +27,29 @@ interface GenreListType {
   count: number;
 }
 
-const RATIO = {
+interface RatioType {
+  kakaoRatio: number;
+  naverRatio: number;
+  finishedRatio: number;
+  unfinishedRatio: number;
+}
+
+const RATIO: RatioType = {
   kakaoRatio: 1,
   naverRatio: 1,
   finishedRatio: 1,
   unfinishedRatio: 1,
 };
 
-const USER: {
+interface UserType {
   countAllUsers: number;
   topN: number;
   webtoonPk: number[];
   rankList: GenreListType[];
   genreAnalysis: GenreListType[];
-} = {
+}
+
+const USER: UserType = {
   countAllUsers: 21414,
   topN: 5,
   webtoonPk: [1],
@@ -46,7 +57,7 @@ const USER: {
   genreAnalysis: [{ name: "", count: 4, id: 2514 }],
 };
 
-const RESULT: {
+interface ResultType {
   getFromSpring: GetFromSpring[];
   getFromSpring2: GetFromSpring2[];
   resultNbtiWebtoon: Webtoon[];
@@ -54,7 +65,9 @@ const RESULT: {
   authorWebtoon: Webtoon[];
   keywordSimilarWebtoon: Webtoon[];
   myGenre: MyGenre[];
-} = {
+}
+
+const RESULT: ResultType = {
   getFromSpring: [
     {
       doneRatio: [43, 22],
@@ -121,37 +134,59 @@ const RESULT: {
 
 export default function SurveyResultView() {
   const navigate = useNavigate();
+  const [userState, setUserState] = useState(USER);
+  const [ratioState, setRatioState] = useState(RATIO);
+  const [resultState, setResultState] = useState(RESULT);
+
+  useQuery(GET_RESULT_JSON_FILE, {
+    variables: {
+      uuid: window.location.href.split("/result/")[1],
+    },
+    onCompleted(data) {
+      const {
+        USER: user,
+        RATIO: ratio,
+        RESULT: result,
+      }: {
+        USER: UserType;
+        RATIO: RatioType;
+        RESULT: ResultType;
+      } = JSON.parse(data?.getResultJsonFile as string);
+
+      setUserState(user);
+      setRatioState(ratio);
+      setResultState(result);
+    },
+  });
 
   const reader_expert_value = [
     {
       id: 1,
       title:
-        (USER.rankList[0]?.name == "로맨스판타지"
+        (userState.rankList[0]?.name == "로맨스판타지"
           ? "로판"
-          : USER.rankList[0]?.name) + " 전문가",
+          : userState.rankList[0]?.name) + " 전문가",
       color: "#99CCFF",
     },
     {
       id: 2,
       title:
-        (RATIO.kakaoRatio > RATIO.naverRatio ? "카카오" : "네이버") + " 매니아",
+        (ratioState.kakaoRatio > ratioState.naverRatio ? "카카오" : "네이버") +
+        " 매니아",
       color:
-        RATIO.kakaoRatio > RATIO.naverRatio
+        ratioState.kakaoRatio > ratioState.naverRatio
           ? theme.colors.kakao
           : theme.colors.green,
     },
     {
       id: 3,
       title:
-        (RATIO.finishedRatio > RATIO.unfinishedRatio ? "완결작" : "연재작") +
-        " 킬러",
+        (ratioState.finishedRatio > ratioState.unfinishedRatio
+          ? "완결작"
+          : "연재작") + " 킬러",
       color: "#757575",
     },
   ];
-
-  // useEffect(() => {
-  //   console.log(result);
-  // }, [result]);
 
   function calPercent(count: number, total: number) {
     return ((count / total) * 100).toFixed(2);
@@ -164,8 +199,11 @@ export default function SurveyResultView() {
       hasPrevious
     >
       <TitleText>당신의 독자 유형은?</TitleText>
-      {RESULT.getFromSpring[0].myType?.image ? (
-        <Image type="userType" url={RESULT.getFromSpring[0].myType.image} />
+      {resultState.getFromSpring[0].myType?.image ? (
+        <Image
+          type="userType"
+          url={resultState.getFromSpring[0].myType.image}
+        />
       ) : (
         <StyledPlayer autoplay loop src={`/simple-spinner.json`}></StyledPlayer>
       )}
@@ -173,21 +211,21 @@ export default function SurveyResultView() {
         <StyledSection2>
           <Text>웹툰 취향 분석 결과는...</Text>
           <Text bold="true" size="1.7rem">
-            {RESULT.getFromSpring[0].myType?.userType}
+            {resultState.getFromSpring[0].myType?.userType}
           </Text>
         </StyledSection2>
         <StyledSection>
           <Text>내가 지금까지 읽은 웹툰의 수는?</Text>
           <CallOutDiv>
             <Text size="1.5rem">
-              <PointSpan>{USER.webtoonPk.length}</PointSpan>개
+              <PointSpan>{userState.webtoonPk.length}</PointSpan>개
             </Text>
           </CallOutDiv>
-          {USER.webtoonPk.length < 10 ? (
+          {userState.webtoonPk.length < 10 ? (
             <Text>웹툰에 더 관심을 가져보시는 건 어떨까요?</Text>
-          ) : USER.webtoonPk.length < 30 ? (
+          ) : userState.webtoonPk.length < 30 ? (
             <Text>제법 많이 보셨군요!</Text>
-          ) : USER.webtoonPk.length < 50 ? (
+          ) : userState.webtoonPk.length < 50 ? (
             <Text>웹툰계의 대학원생이에요.</Text>
           ) : (
             <Text>혹시 웹툰학과 교수신가요?</Text>
@@ -199,7 +237,8 @@ export default function SurveyResultView() {
         <StyledSection>
           <Text>
             현재&nbsp;
-            <PointSpan>{USER.countAllUsers}</PointSpan>명의 분석 독자들 중...
+            <PointSpan>{userState.countAllUsers}</PointSpan>명의 분석 독자들
+            중...
           </Text>
           <div style={{ width: "90%", margin: "auto" }}>
             <ProgressiveBar
@@ -207,8 +246,8 @@ export default function SurveyResultView() {
               progress={
                 100 -
                 Math.round(
-                  (RESULT.getFromSpring2[0].myRank! /
-                    RESULT.getFromSpring2[0].allUser!) *
+                  (resultState.getFromSpring2[0].myRank! /
+                    resultState.getFromSpring2[0].allUser!) *
                     100
                 )
               }
@@ -218,8 +257,8 @@ export default function SurveyResultView() {
             <GradientText>
               상위{" "}
               {Math.round(
-                (RESULT.getFromSpring2[0].myRank! /
-                  RESULT.getFromSpring2[0].allUser!) *
+                (resultState.getFromSpring2[0].myRank! /
+                  resultState.getFromSpring2[0].allUser!) *
                   100
               )}
               %
@@ -247,16 +286,18 @@ export default function SurveyResultView() {
           <div>
             <RatioTextBox space>
               <RatioText color="kakao">
-                카카오페이지 {RATIO.kakaoRatio}%
+                카카오페이지 {ratioState.kakaoRatio}%
               </RatioText>
-              <RatioText color="naver">네이버 {RATIO.naverRatio}%</RatioText>
+              <RatioText color="naver">
+                네이버 {ratioState.naverRatio}%
+              </RatioText>
             </RatioTextBox>
             <ProgressiveBar
               type="platform"
-              progress={RATIO.kakaoRatio}
+              progress={ratioState.kakaoRatio}
             ></ProgressiveBar>
             <RatioTextBox>
-              {RATIO.kakaoRatio > RATIO.naverRatio ? (
+              {ratioState.kakaoRatio > ratioState.naverRatio ? (
                 <RatioText color="kakao">카카오페이지</RatioText>
               ) : (
                 <RatioText color="naver">네이버</RatioText>
@@ -270,17 +311,17 @@ export default function SurveyResultView() {
           <div>
             <RatioTextBox space>
               <RatioText color="finished">
-                완결작 {RATIO.finishedRatio}%
+                완결작 {ratioState.finishedRatio}%
               </RatioText>
               <RatioText color="ongoing">
-                연재작 {RATIO.unfinishedRatio}%
+                연재작 {ratioState.unfinishedRatio}%
               </RatioText>
             </RatioTextBox>
             <ProgressiveBar
               type="endedOrOngoin"
-              progress={RATIO.finishedRatio}
+              progress={ratioState.finishedRatio}
             ></ProgressiveBar>
-            {RATIO.finishedRatio < RATIO.unfinishedRatio ? (
+            {ratioState.finishedRatio < ratioState.unfinishedRatio ? (
               <RatioTextBox>
                 <RatioText color="finished"> 완결작</RatioText>
                 <RatioText>보다 더&nbsp;</RatioText>
@@ -302,7 +343,7 @@ export default function SurveyResultView() {
           <div>
             <GenreGraphSection className="genre_graph">
               <DoughnutChart
-                dataList={RESULT.getFromSpring[0].genreRatio as number[]}
+                dataList={resultState.getFromSpring[0].genreRatio as number[]}
               />
             </GenreGraphSection>
             <section className="genre_table">
@@ -310,16 +351,16 @@ export default function SurveyResultView() {
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
               </GenreTableTitleDiv>
               <GenreSect>
-                {USER.genreAnalysis?.map((item) => {
+                {userState.genreAnalysis?.map((item) => {
                   return (
                     <GenreDiv key={item.id}>
-                      <GenreText preferred={USER.rankList.includes(item)}>
+                      <GenreText preferred={userState.rankList.includes(item)}>
                         #{item.name}
                       </GenreText>
-                      <GenreHr preferred={USER.rankList.includes(item)} />
-                      <GenreText preferred={USER.rankList.includes(item)}>
+                      <GenreHr preferred={userState.rankList.includes(item)} />
+                      <GenreText preferred={userState.rankList.includes(item)}>
                         {item.count} (
-                        {calPercent(item.count, USER.webtoonPk.length)}
+                        {calPercent(item.count, userState.webtoonPk.length)}
                         %)
                       </GenreText>
                     </GenreDiv>
@@ -330,10 +371,11 @@ export default function SurveyResultView() {
             <RatioTextBox>
               <Text bold="true" size="1.1rem">
                 주로&nbsp;
-                {USER.rankList.map((item, idx) => {
+                {userState.rankList.map((item, idx) => {
                   return (
                     <PointSpan key={item.id}>
-                      {item.name} {idx !== USER.rankList.length - 1 && ", "}
+                      {item.name}{" "}
+                      {idx !== userState.rankList.length - 1 && ", "}
                     </PointSpan>
                   );
                 })}{" "}
@@ -346,14 +388,14 @@ export default function SurveyResultView() {
         <StyledSection>
           <Text size="1.1rem">
             <BoldSpan color="yellow">
-              {RESULT.getFromSpring[0].myType!.userType}
+              {resultState.getFromSpring[0].myType!.userType}
             </BoldSpan>
             &nbsp; 유형의 독자들이 좋아하는 작품
           </Text>
           <section style={{ marginTop: "16px" }}>
             <RecommendItemList
               text="완결작 중 추천 웹툰"
-              dataList={RESULT.resultNbtiWebtoon?.filter(
+              dataList={resultState.resultNbtiWebtoon?.filter(
                 (item) => item.endFlag === 1
               )}
             ></RecommendItemList>
@@ -361,7 +403,7 @@ export default function SurveyResultView() {
           <section>
             <RecommendItemList
               text="연재작 중 추천 웹툰"
-              dataList={RESULT.resultNbtiWebtoon?.filter(
+              dataList={resultState.resultNbtiWebtoon?.filter(
                 (item) => item.endFlag === 0
               )}
             ></RecommendItemList>
@@ -372,7 +414,7 @@ export default function SurveyResultView() {
           <StyledKeywordDiv>
             {/* {rankList.map} */}
             {/* mykeyword */}
-            {RESULT.myKeyword[0].myKeywordName!.map((el) => {
+            {resultState.myKeyword[0].myKeywordName!.map((el) => {
               return <StyledKeyword key={el}>#{el}</StyledKeyword>;
             })}
           </StyledKeywordDiv>
@@ -380,28 +422,31 @@ export default function SurveyResultView() {
         <StyledSection>
           <RecommendItemList
             type="keyword"
-            keyword={RESULT.myKeyword[0].myKeywordName![0]!}
+            keyword={resultState.myKeyword[0].myKeywordName![0]!}
             text="내가 선호하는 키워드의 작품"
             // text="# 키워드와 유사한 키워드의 작품"
-            dataList={RESULT.keywordSimilarWebtoon}
+            dataList={resultState.keywordSimilarWebtoon}
           ></RecommendItemList>
         </StyledSection>
-        {RESULT.authorWebtoon?.[0] && (
+        {resultState.authorWebtoon?.[0] && (
           <StyledSection>
             <Text bold="true">
-              {RESULT.myGenre[0].genreName} 장르 독자들이 선호하는 대표 작가
+              {resultState.myGenre[0].genreName} 장르 독자들이 선호하는 대표
+              작가
             </Text>
             <Image
-              url={RESULT.authorWebtoon[0].image as string}
+              url={resultState.authorWebtoon[0].image as string}
               width="10rem"
               height="14rem"
               borderRadius={4}
             ></Image>
             <Text>
-              <BoldSpan>{RESULT.authorWebtoon[0].authorName}</BoldSpan>
+              <BoldSpan>{resultState.authorWebtoon[0].authorName}</BoldSpan>
               &nbsp;작가
             </Text>
-            <Text size="0.9rem">대표작 -{RESULT.authorWebtoon[0].title}</Text>
+            <Text size="0.9rem">
+              대표작 -{resultState.authorWebtoon[0].title}
+            </Text>
           </StyledSection>
         )}
         <StyledSection>
