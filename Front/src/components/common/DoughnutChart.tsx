@@ -6,7 +6,7 @@ import styled from "styled-components";
 ChartJS.register(ArcElement, Tooltip, Legend);
 const ORIGIN_DATA = {
   type: "doughnut",
-  labels: [] as string[],
+  // labels: [] as string[],
   datasets: [
     {
       label: "My Genre Chart",
@@ -58,12 +58,10 @@ export default function DoughnutChart({ dataList }: PropType) {
       }
       setNewDataList(newDataList2);
     }
-    const rankList = newDataList2.slice().sort((a, b) => b.count - a.count);
-    const originData2 = { ...originData };
-    originData2.labels = rankList.slice(0, 10).map((row) => row.name);
-    originData2.datasets[0].data = rankList.map((row) => row.count);
-    setOriginData(originData2);
-  }, [dataList]);
+    const rankList = newDataList.slice().sort((a, b) => b.count - a.count);
+    // originData.labels = rankList.map((row) => row.name);
+    originData.datasets[0].data = rankList.map((row) => row.count);
+  }, []);
 
   return (
     <DoughnutDiv>

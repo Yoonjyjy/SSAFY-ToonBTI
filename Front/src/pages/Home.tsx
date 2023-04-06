@@ -1,13 +1,11 @@
 import React from "react";
-import { Button, Space, Typography } from "antd";
+import { Space, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Layout } from "../components/common";
-import { Player } from "@lottiefiles/react-lottie-player";
+import { HomeBackgroundImage, Layout } from "../components/common";
 import { useQuery } from "@apollo/client";
 import { COUNT_ALL_USERS } from "../api/mbti";
-
-const { Title } = Typography;
+import { Button } from "@mui/material";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -16,61 +14,109 @@ export default function Home() {
   if (error) navigate("/404");
 
   return (
-    <Layout type="home">
-      <StyledHeader level={3}>당신의 독자 유형은?</StyledHeader>
-      <StyledPlayer autoplay loop src="/home.json"></StyledPlayer>
-      <BtnContainer direction="vertical">
-        <StyledButton onClick={() => navigate("/mbti")}>
-          <SpanTitle>시작하기</SpanTitle>
-          <br />
-          지금까지 {data?.countAllUsers} 명이 참여 했어요!
-        </StyledButton>
-      </BtnContainer>
+    <div style={{ overflow: "hidden", height: "100vw", width: "100vw" }}>
+      <HomeBackgroundImage />
+      <StyledBlackDiv></StyledBlackDiv>
+      <Layout type="home">
+        <StyledHeader>
+          당신이
+          <br /> 웹툰 주인공이라면?
+        </StyledHeader>
+        {/* <StyledPlayer autoplay loop src="/home.json"></StyledPlayer> */}
+        <StyledP>
+          독자 유형 테스트를 통해 <br />
+          당신에게 어울리는 웹툰 캐릭터와 웹툰을 <br />
+          추천해드릴게요!{" "}
+        </StyledP>
+        <BtnContainer>
+          <Button
+            onClick={() => navigate("/mbti")}
+            variant="contained"
+            sx={{
+              width: "100%",
+              height: "80px",
+              backgroundColor: `#FF6C6C`,
+              borderRadius: "50px",
+              zIndex: "300",
+              fontSize: "0.8rem",
+              display: "block",
+              color: "white",
+              ":active": {
+                backgroundColor: `#ff4646`,
+              },
+            }}
+          >
+            <SpanTitle>시작하기</SpanTitle>
+            <div>지금까지 {data?.countAllUsers} 명이 참여 했어요!</div>
+          </Button>
+          {/* </StyledButton> */}
+        </BtnContainer>
 
-      <StyleSpan>
-        @SSAFY 8기 특화 3반 A302
-        <br></br>
-        FE: 김태원 노현정 윤지영 / BE: 권성은 김진호 전주영
-      </StyleSpan>
-    </Layout>
+        {/* <StyleSpan>
+          @SSAFY 8기 특화 3반 A302
+          <br></br>
+          FE: 김태원 노현정 윤지영 / BE: 권성은 김진호 전주영
+        </StyleSpan> */}
+      </Layout>
+    </div>
   );
 }
 
-const StyledPlayer = styled(Player)`
-  width: 80vw;
-  height: 80vw;
-  max-width: 800px;
-  max-height: 800px;
+const StyledBlackDiv = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0, 0, 0, 0.75);
+  z-index: 200;
+  position: absolute;
 `;
 
-const SpanTitle = styled.span`
+const StyledBox = styled.div`
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 30%;
+`;
+const StyledP = styled.p`
+  color: white;
+  font-size: 12px;
+  z-index: 300;
+  line-height: 1.2rem;
+`;
+
+const SpanTitle = styled(Space)`
   font-size: 1.5rem;
   font-weight: bold;
+  z-index: 300;
 `;
 
-const BtnContainer = styled(Space)`
+const BtnContainer = styled.div`
   line-height: 4rem;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
+  position: fixed;
+  bottom: 7%;
+  left: 0;
+  right: 0;
 `;
-
-const StyledButton = styled(Button)`
-  width: 100%;
-  height: 80px;
-  border: none;
-  background-color: ${({ theme }) => theme.colors.yellow};
-  border-radius: 10px;
-`;
-
-const StyledHeader = styled(Title)`
+const StyledHeader = styled.h1`
+  color: white;
   text-align: center;
+  font-size: 1.5rem;
   font-weight: bold;
-  font-size: 1rem;
   margin: 10px;
+  line-height: 2rem;
+  z-index: 300;
 `;
 
 const StyleSpan = styled.span`
   margin-top: 2rem;
   white-space: pre-line;
   display: block;
-  color: gray;
+  color: lightgrey;
+  z-index: 300;
+
+  position: fixed;
+  bottom: 3%;
+  left: 0;
+  right: 0;
 `;

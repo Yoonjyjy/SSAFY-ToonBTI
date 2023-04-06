@@ -12,7 +12,9 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@apollo/client": "^3.7.10",
+    "@emotion/styled": "^11.10.6",
     "@lottiefiles/react-lottie-player": "^3.5.3",
+    "@mui/material": "^5.11.16",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/lodash": "^4.14.191",
     "antd": "^5.3.1",

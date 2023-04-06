@@ -1,5 +1,11 @@
 import { graphql } from "../../src/gql";
 
+const GET_IMAGES = graphql(`
+  query GetImages {
+    getRanImgSet
+  }
+`);
+
 const GET_QUESTIONS = graphql(`
   query GetQuestions {
     getQuestions {
@@ -151,6 +157,7 @@ const CREATE_RESULT = graphql(`
 `);
 
 export {
+  GET_IMAGES,
   GET_QUESTIONS,
   ADD_USER_RESPONSE,
   COUNT_ALL_USERS,

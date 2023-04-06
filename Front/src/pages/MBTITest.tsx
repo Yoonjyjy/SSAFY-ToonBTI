@@ -44,7 +44,7 @@ export default function MBTITest() {
         <Progress
           percent={(step + 1) * 10}
           showInfo={false}
-          strokeColor="#FFB202"
+          strokeColor="#FF6C6C"
         />
       </StyledDiv>
       <StyleSpan>
@@ -54,7 +54,23 @@ export default function MBTITest() {
             return <div key={line}>{line}</div>;
           })}
       </StyleSpan>
-      <StyledPlayer autoplay loop src={`/${step + 1}.json`}></StyledPlayer>
+      {/* <StyledPlayer autoplay loop src={`/${step + 1}.json`}></StyledPlayer> */}
+      {step === 2 ? (
+        <img
+          src={`/test${step + 1}.jpg`}
+          style={{ width: "80%", margin: "auto" }}
+        ></img>
+      ) : step === 1 || step === 3 || step === 8 ? (
+        <img
+          src={`/test${step + 1}.jpeg`}
+          style={{ width: "80%", margin: "auto" }}
+        ></img>
+      ) : step === 4 ? (
+        <img src={`/test${step + 1}.gif`} style={{}}></img>
+      ) : (
+        <img src={`/test${step + 1}.png`} style={{}}></img>
+      )}
+
       <BtnContainer direction="vertical">
         {data?.getQuestions?.[step].answersList?.map((el) => {
           if (!el) return <></>;
@@ -81,6 +97,16 @@ export default function MBTITest() {
   );
 }
 
+const StyledImage = styled.img<{ url: string }>`
+  /* width: 80%; */
+  /* height: 100px; */
+  background-image: url(${(props) => props.url});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border: none;
+`;
+
 const StyledPlayer = styled(Player)`
   width: 75vw;
   height: 40vw;
@@ -100,7 +126,10 @@ const StyledButton = styled(Button)`
   border-radius: 10px;
   //FIXME: 포커싱 이슈 해결 안 됨
   &:focus {
-    outline: none;
+    border: 1px solid #ff6c6c;
+  }
+  &:active {
+    border: 1px solid #ff6c6c;
   }
 `;
 

@@ -26,6 +26,19 @@ import theme from "../theme";
 
 type ColorType = "kakao" | "naver" | "ongoing" | "finished";
 
+const colorPalette = [
+  "rgb(255, 99, 132)",
+  "rgb(255, 159, 64)",
+  "rgb(255, 205, 86)",
+  "#1ec997",
+  "rgb(75, 192, 192)",
+  "rgb(54, 162, 235)",
+  "rgb(153, 102, 255)",
+  "rgb(237, 204, 255)",
+  "rgb(248, 202, 255)",
+  "rgb(255, 204, 207)",
+];
+
 const GENRE = [
   "판타지",
   "드라마",
@@ -65,6 +78,7 @@ export default function AnalysisResult() {
   const nbtiPk = Number(localStorage.getItem("nbtiPk"));
   const navigate = useNavigate();
   const { state: webtoonPk } = useLocation();
+
   const [result, setResult] = useState<any>(); // TODO: type 지정
   const [kakaoRatio, setKaKaoRatio] = useState<number>(0);
   const [naverRatio, setNaverRatio] = useState<number>(0);
@@ -103,7 +117,6 @@ export default function AnalysisResult() {
         webtoonPk: webtoonPk,
         userPk: userPk,
       },
-      // { variables: { webtoonPk: state.webtoonPk, userPk: state.userPk } }
       client: django,
     }
   );
@@ -467,14 +480,17 @@ export default function AnalysisResult() {
                 <GenreTableTitle>장르 성분표</GenreTableTitle>
               </GenreTableTitleDiv>
               <GenreSect>
-                {genreAnalysis?.map((item) => {
+                {genreAnalysis?.map((item, idx) => {
+                  if (item.count === 0) {
+                    return null;
+                  }
                   return (
                     <GenreDiv key={item.id}>
-                      <GenreText preferred={rankList.includes(item)}>
+                      <GenreText color={colorPalette[idx]}>
                         #{item.name}
                       </GenreText>
-                      <GenreHr preferred={rankList.includes(item)} />
-                      <GenreText preferred={rankList.includes(item)}>
+                      <GenreHr color={colorPalette[idx]} />
+                      <GenreText color={colorPalette[idx]}>
                         {item.count} (
                         {calPercent(
                           item.count,
@@ -693,14 +709,13 @@ const GradientText = styled.span`
   -webkit-background-clip: text;
   color: transparent;
 `;
-const GenreText = styled.p<{ preferred?: boolean }>`
-  color: ${({ preferred, theme }) =>
-    preferred ? theme.colors.orange : "black"};
+const GenreText = styled.p<{ color?: string }>`
+  color: ${({ color }) => color};
+  font-weight: 700;
   margin: auto 0.5rem;
 `;
-const GenreHr = styled.hr<{ preferred?: boolean }>`
-  background: ${({ preferred, theme }) =>
-    preferred ? theme.colors.orange : "black"};
+const GenreHr = styled.hr<{ color?: string }>`
+  background: ${({ color }) => color};
   border: 1px;
   height: 1px;
   flex-grow: 1;
