@@ -35,7 +35,7 @@ export default function Item({ item, onClickItem, isClicked }: ItemProps) {
 const ItemBox = styled.div<{ selected: boolean; url: string }>`
   border: ${(props) => (props.selected ? "3px solid" : "1px solid")};
   border-color: ${(props) =>
-    props.selected ? ({ theme }) => theme.colors.orange : "white"};
+    props.selected ? ({ theme }) => theme.colors.pink : "white"};
   height: 36vw;
   background-image: url(${(props) => props.url});
   background-position: center;

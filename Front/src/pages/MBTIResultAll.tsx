@@ -6,7 +6,6 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_TYPES } from "../api/mbti";
 import { MBTITypeDesc } from "../components/mbti";
 import { useNavigate } from "react-router-dom";
-
 const { Title, Text } = Typography;
 
 export default function MBTIResultAll() {

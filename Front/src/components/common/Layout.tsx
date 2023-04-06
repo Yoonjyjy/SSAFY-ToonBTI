@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { LeftOutlined } from "@ant-design/icons";
 // import background from "../../assets/background.jpg";
+import { AnimateSharedLayout, motion } from "framer-motion";
 
 const { Header, Content } = Layout;
 
@@ -110,3 +111,20 @@ const StyledHomeContent = styled(Content)`
 const SurveyPageContent = styled(StyledContent)`
   gap: 5px;
 `;
+const animate = {
+  initial: {
+    transform: `translateY(50px)`,
+    opacity: 0,
+    transition: `transform 0.33s ease`,
+  },
+  animate: {
+    transform: `translateY(0px)`,
+    opacity: 1,
+    transition: `transform 0.33s ease`,
+  },
+  exit: {
+    transform: `translateY(50px)`,
+    opacity: 0,
+    transition: `transform 0.33s ease`,
+  },
+};

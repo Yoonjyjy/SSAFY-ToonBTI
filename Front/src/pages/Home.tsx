@@ -6,6 +6,7 @@ import { HomeBackgroundImage, Layout } from "../components/common";
 import { useQuery } from "@apollo/client";
 import { COUNT_ALL_USERS } from "../api/mbti";
 import { Button } from "@mui/material";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -18,10 +19,25 @@ export default function Home() {
       <HomeBackgroundImage />
       <Layout type="home">
         <StyledBox>
-          <StyledHeader>
-            당신이
-            <br /> 웹툰 주인공이라면?
-          </StyledHeader>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.3,
+              ease: [0, 0.71, 0.2, 1.01],
+              scale: {
+                type: "spring",
+                damping: 5,
+                stiffness: 100,
+                restDelta: 0.001,
+              },
+            }}
+          >
+            <StyledHeader>
+              당신이
+              <br /> 웹툰 주인공이라면?
+            </StyledHeader>
+          </motion.div>
           {/* <StyledPlayer autoplay loop src="/home.json"></StyledPlayer> */}
           <StyledP>
             독자 유형 테스트를 통해 <br />
@@ -30,27 +46,29 @@ export default function Home() {
           </StyledP>
         </StyledBox>
         <BtnContainer>
-          <Button
-            onClick={() => navigate("/mbti")}
-            variant="contained"
-            sx={{
-              width: "100%",
-              height: "80px",
-              backgroundColor: `#FF6C6C`,
-              borderRadius: "50px",
-              zIndex: "300",
-              fontSize: "0.8rem",
-              display: "block",
-              color: "white",
-              ":active": {
-                backgroundColor: `#ff4646`,
-              },
-            }}
-          >
-            <SpanTitle>시작하기</SpanTitle>
-            <div>지금까지 {data?.countAllUsers} 명이 참여 했어요!</div>
-          </Button>
-          {/* </StyledButton> */}
+          <motion.div whileTap={{ scale: 1.1 }}>
+            <Button
+              onClick={() => navigate("/mbti")}
+              variant="contained"
+              sx={{
+                width: "100%",
+                height: "80px",
+                backgroundColor: `#FF6C6C`,
+                borderRadius: "50px",
+                zIndex: "300",
+                fontSize: "0.8rem",
+                display: "block",
+                color: "white",
+                ":active": {
+                  backgroundColor: `#ff4646`,
+                },
+              }}
+            >
+              <SpanTitle>시작하기</SpanTitle>
+              <div>지금까지 {data?.countAllUsers} 명이 참여 했어요!</div>
+            </Button>
+            {/* </StyledButton> */}
+          </motion.div>
         </BtnContainer>
 
         {/* <StyleSpan>

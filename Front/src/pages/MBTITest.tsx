@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS } from "../api/mbti";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { motion } from "framer-motion";
 
 const { Text } = Typography;
 
@@ -75,20 +76,21 @@ export default function MBTITest() {
           if (!el) return <></>;
 
           return (
-            <StyledButton
-              key={el}
-              className="testButtons"
-              onClick={() => {
-                handleSelect(el);
-              }}
-            >
-              {el
-                .split(". ")[1]
-                .split("\\n")
-                .map((line: string) => {
-                  return <div key={line}>{line}</div>;
-                })}
-            </StyledButton>
+            <motion.div key={el} whileTap={{ scale: 1.1 }}>
+              <StyledButton
+                className="testButtons"
+                onClick={() => {
+                  handleSelect(el);
+                }}
+              >
+                {el
+                  .split(". ")[1]
+                  .split("\\n")
+                  .map((line: string) => {
+                    return <div key={line}>{line}</div>;
+                  })}
+              </StyledButton>
+            </motion.div>
           );
         })}
       </BtnContainer>

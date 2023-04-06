@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_USER_RESPONSE, COUNT_ALL_USERS, GET_ALL_TYPES } from "../api/mbti";
 import { Mbti } from "../gql/graphql";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { motion } from "framer-motion";
 
 const { Title, Text } = Typography;
 
@@ -62,36 +63,42 @@ export default function MBTIResult() {
   return (
     <Layout title="웹툰 독자 유형 결과" hasPrevious>
       <StyledDiv>
-        <StyledHeader level={4}>당신의 독자 유형은?</StyledHeader>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <StyledHeader level={4}>당신의 독자 유형은?</StyledHeader>
 
-        {res?.myType?.image ? (
-          <MainImage
-            src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
-            size={50}
-          />
-        ) : (
-          <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
-        )}
+          {res?.myType?.image ? (
+            <MainImage
+              src={`${import.meta.env.VITE_IMAGE_URL}${res?.myType?.image}`}
+              size={50}
+            />
+          ) : (
+            <StyledPlayer autoplay loop src={`/spinner.json`}></StyledPlayer>
+          )}
 
-        <TextContainer>
-          <StyledTypeName>
-            <TypeName>{res?.myType?.userType}</TypeName>
-            <StyledTitle>
-              {res?.myType?.thumbnailTitle} {" - "}
-              {res?.myType?.thumbnailCharacter}
-            </StyledTitle>
-          </StyledTypeName>
+          <TextContainer>
+            <StyledTypeName>
+              <TypeName>{res?.myType?.userType}</TypeName>
+              <StyledTitle>
+                {res?.myType?.thumbnailTitle} {" - "}
+                {res?.myType?.thumbnailCharacter}
+              </StyledTitle>
+            </StyledTypeName>
 
-          <StyledList>
-            {res?.myType?.description?.split("\\n").map((line: string) => {
-              return (
-                <div style={{ textAlign: "center" }} key={line}>
-                  {line}
-                </div>
-              );
-            })}
-          </StyledList>
-        </TextContainer>
+            <StyledList>
+              {res?.myType?.description?.split("\\n").map((line: string) => {
+                return (
+                  <div style={{ textAlign: "center" }} key={line}>
+                    {line}
+                  </div>
+                );
+              })}
+            </StyledList>
+          </TextContainer>
+        </motion.div>
       </StyledDiv>
 
       <Row gutter={[16, 16]}>
@@ -115,41 +122,46 @@ export default function MBTIResult() {
             el.mbti && (
               <StyledCol key={el.mbti + "me"} span={12}>
                 <b>{el.text}</b>
-
-                {el.img ? (
-                  <MainImage
-                    src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
-                    size={40}
-                  />
-                ) : (
-                  <StyledPlayer
-                    autoplay
-                    loop
-                    src={`/spinner.json`}
-                  ></StyledPlayer>
-                )}
-
-                <StyledTypeName
-                  style={
-                    el.id === 0 ? { color: "#FF9999" } : { color: "#82C9FF" }
-                  }
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
                 >
-                  <StyledStrong
-                    color={el.id === 0 ? "lightpk" : "lightbl"}
-                    style={{ fontSize: "1.1rem" }}
+                  {el.img ? (
+                    <MainImage
+                      src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
+                      size={40}
+                    />
+                  ) : (
+                    <StyledPlayer
+                      autoplay
+                      loop
+                      src={`/spinner.json`}
+                    ></StyledPlayer>
+                  )}
+
+                  <StyledTypeName
+                    style={
+                      el.id === 0 ? { color: "#FF9999" } : { color: "#82C9FF" }
+                    }
                   >
-                    {el.mbti}
-                  </StyledStrong>
-                  <p
-                    style={{
-                      color: "black",
-                      margin: "auto",
-                      lineHeight: "1rem",
-                    }}
-                  >
-                    {el.typeName}
-                  </p>
-                </StyledTypeName>
+                    <StyledStrong
+                      color={el.id === 0 ? "lightpk" : "lightbl"}
+                      style={{ fontSize: "1.1rem" }}
+                    >
+                      {el.mbti}
+                    </StyledStrong>
+                    <p
+                      style={{
+                        color: "black",
+                        margin: "auto",
+                        lineHeight: "1rem",
+                      }}
+                    >
+                      {el.typeName}
+                    </p>
+                  </StyledTypeName>
+                </motion.div>
               </StyledCol>
             )
         )}
@@ -177,68 +189,85 @@ export default function MBTIResult() {
             (el) =>
               el.mbti && (
                 <StyledCol key={el.mbti + "popularity"} span={12}>
-                  <b>{el.text}</b>
-                  {el.img ? (
-                    <MainImage
-                      src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
-                      size={40}
-                    />
-                  ) : (
-                    <StyledPlayer
-                      autoplay
-                      loop
-                      src={`/spinner.json`}
-                    ></StyledPlayer>
-                  )}
-                  <StyledTypeName>
-                    <StyledStrong>
-                      {el.mbti} ({el.per} %)
-                    </StyledStrong>
-                    <p
-                      style={{
-                        color: "black",
-                        margin: "auto",
-                        lineHeight: "1rem",
-                      }}
-                    >
-                      {el.typeName}
-                    </p>
-                  </StyledTypeName>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                  >
+                    <b>{el.text}</b>
+                    {el.img ? (
+                      <MainImage
+                        src={`${import.meta.env.VITE_IMAGE_URL}${el.img}`}
+                        size={40}
+                      />
+                    ) : (
+                      <StyledPlayer
+                        autoplay
+                        loop
+                        src={`/spinner.json`}
+                      ></StyledPlayer>
+                    )}
+                    <StyledTypeName>
+                      <StyledStrong>
+                        {el.mbti} ({el.per} %)
+                      </StyledStrong>
+                      <p
+                        style={{
+                          color: "black",
+                          margin: "auto",
+                          lineHeight: "1rem",
+                        }}
+                      >
+                        {el.typeName}
+                      </p>
+                    </StyledTypeName>
+                  </motion.div>
                 </StyledCol>
               )
           )}
         </Row>
-        <StyledButton onClick={clickResultAllHandler} height={7}>
-          나와 같은 유형은 몇 %일까요?
-          <br />
-          <StyledStrong>전체 유형 순위 보기</StyledStrong>
-        </StyledButton>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <StyledButton onClick={clickResultAllHandler} height={7}>
+            나와 같은 유형은 몇 %일까요?
+            <br />
+            <StyledStrong>전체 유형 순위 보기</StyledStrong>
+          </StyledButton>
+        </motion.div>
       </TextContainer>
 
       <StyledDiv>
-        <TextContainer>
-          <StyledContent>
-            잠깐!
-            <br />
-            지금까지 본 웹툰을 알려주시면
-            <br />
-            <b>나의 웹툰 취향 분석 결과</b>를 알 수 있어요!
-          </StyledContent>
-        </TextContainer>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <TextContainer>
+            <StyledContent>
+              잠깐!
+              <br />
+              지금까지 본 웹툰을 알려주시면
+              <br />
+              <b>나의 웹툰 취향 분석 결과</b>를 알 수 있어요!
+            </StyledContent>
+          </TextContainer>
 
-        <BtnContainer direction="vertical">
-          <StyledButton onClick={clickHandler} color="pink">
-            <StyledStrong style={{ color: "white" }}>
-              웹툰 취향 분석하기
-            </StyledStrong>
-            <SwapRightOutlined style={{ color: "white" }} />
-          </StyledButton>
-          <StyledButton onClick={clickHomeHandler}>
-            독자 유형 테스트 다시하기
-          </StyledButton>
-        </BtnContainer>
+          <BtnContainer direction="vertical">
+            <StyledButton onClick={clickHandler} color="pink">
+              <StyledStrong style={{ color: "white" }}>
+                웹툰 취향 분석하기
+              </StyledStrong>
+              <SwapRightOutlined style={{ color: "white" }} />
+            </StyledButton>
+            <StyledButton onClick={clickHomeHandler}>
+              독자 유형 테스트 다시하기
+            </StyledButton>
+          </BtnContainer>
+        </motion.div>
       </StyledDiv>
-
       <ShareButton
         text="웹툰 독자 유형 공유하기"
         src={`${import.meta.env.VITE_TEST_URL}`}
@@ -252,7 +281,7 @@ export default function MBTIResult() {
 const BtnContainer = styled(Space)`
   line-height: 3rem;
   width: 100%;
-  // margin-bottom: 60px;
+  margin-top: 20px;
 `;
 
 const StyledTitle = styled.p`
