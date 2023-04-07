@@ -1,6 +1,5 @@
-# 🐶 TOGETDOG : 강아지 산책 SNS
+# TOONBTI : 웹툰 취향 분석 테스트
 
-![togetdog.png](C:\Users\SSAFY\Downloads\제목을%20입력해주세요_-001%20(1).png)
 
 ### **_지금 TOONBTI으로 👉🏻 https://j8a302.p.ssafy.io/_**
 
