@@ -500,15 +500,12 @@ export default function AnalysisResult() {
         </StyledSection>
         {/* 사용자가 많이 본 장르 - 파이차트 */}
         <StyledSection>
-          {/* <motion.div
-          // initial={{ opacity: 0 }}
-          // whileInView={{ opacity: 1 }}
-          // viewport={{ once: true }}> */}
           <Text size="1.2rem">사용자가 많이 본 장르</Text>
           <div>
             {result?.getFromSpring?.[0] && (
               <GenreGraphSection className="genre_graph">
-                <DoughnutChart dataList={result.getFromSpring[0].genreRatio} />
+                {/* //FIXME: doughnut chart 안나옴 */}
+                {/* <DoughnutChart dataList={result.getFromSpring[0].genreRatio} /> */}
               </GenreGraphSection>
             )}
             <section className="genre_table">
