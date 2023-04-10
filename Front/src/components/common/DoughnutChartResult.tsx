@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { Chart, Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
 const ORIGIN_DATA = {
   type: "doughnut",
   // labels: [] as string[],
@@ -29,7 +30,12 @@ const ORIGIN_DATA = {
 };
 
 interface PropType {
-  dataList: number[];
+  // dataList: number[];
+  dataList: {
+    id: number;
+    name: string;
+    count: number;
+  }[];
 }
 
 const Genre = [
@@ -45,22 +51,19 @@ const Genre = [
   "스포츠",
 ];
 
-export default function DoughnutChart({ dataList }: PropType) {
+export default function DoughnutChartResult({ dataList }: PropType) {
   const [originData, setOriginData] = useState(ORIGIN_DATA);
   const [newDataList, setNewDataList] = useState<
     { id: number; name: string; count: number }[]
   >([]);
   useEffect(() => {
-    const newDataList2 = [...newDataList];
-    if (newDataList2.length < 10) {
-      for (let i = 0; i < dataList?.length; i++) {
-        newDataList2.push({ id: i + 1, name: Genre[i], count: dataList[i] });
-      }
-      setNewDataList(newDataList2);
-    }
-    const rankList = newDataList.slice().sort((a, b) => b.count - a.count);
-    // originData.labels = rankList.map((row) => row.name);
-    originData.datasets[0].data = rankList.map((row) => row.count);
+    console.log(dataList);
+    setNewDataList(dataList);
+    const temp: number[] = [];
+    dataList.map((el) => {
+      temp.push(el.count);
+    });
+    ORIGIN_DATA.datasets[0].data = temp as number[];
   }, []);
 
   return (

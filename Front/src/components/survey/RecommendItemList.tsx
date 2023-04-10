@@ -59,7 +59,6 @@ const ItemListBox = styled(Row)`
   flex-wrap: nowrap;
 `;
 
-
 const StyledHeader = styled.h5`
   text-align: left;
   font-weight: bold;
